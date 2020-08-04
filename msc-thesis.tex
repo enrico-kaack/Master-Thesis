@@ -1,0 +1,192 @@
+% This template was initially provided by Dulip Withanage.
+% Modifications 
+% were made by Conny Junghans and Jannik Strötgen
+% and Sascha Hunold
+
+\documentclass[
+     12pt,                    % font size
+     a4paper,             % paper format
+     BCOR10mm,     % binding correction
+     DIV14,                 % stripe size for margin calculation
+     listof=totoc,                    % table listing in toc
+     bibliography=totoc,       % bibliography in toc
+     index=totoc,              % index in toc
+%     parskip            % paragraph skip instead of paragraph indent
+     twoside,
+     headsepline
+     ]{scrreprt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% PACKAGES:
+
+% Use German :
+% make sure texlive-lang-german is installed (for TexLive)
+\usepackage[english]{babel}
+% Input encoding
+\usepackage[utf8]{inputenc}
+% Font encoding
+\usepackage[T1]{fontenc}
+% Index-generation
+\usepackage{makeidx}
+% Einbinden von URLs:
+\usepackage{url}
+% Special \LaTex symbols (e.g. \BibTeX):
+\usepackage{doc}
+% Include Graphic-files:
+\usepackage{graphicx}
+
+% Fuer anderthalbzeiligen Textsatz
+\usepackage{setspace}
+
+% hyperrefs in the documents
+\usepackage[bookmarks=true,colorlinks,pdfpagelabels,pdfstartview = FitH,bookmarksopen = true,bookmarksnumbered = true,linkcolor = black,plainpages = false,hypertexnames = false,citecolor = black,urlcolor=black]{hyperref} 
+
+%for quoting
+\usepackage{csquotes}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% OTHER SETTINGS:
+
+% Pagestyle:
+\pagestyle{headings}
+
+% Choose language
+\newcommand{\setlang}[1]{\selectlanguage{#1}\nonfrenchspacing}
+
+
+\begin{document}
+
+% TITLE:
+\pagenumbering{roman} 
+\begin{titlepage}
+
+
+\vspace*{1cm}
+\begin{center}
+\vspace*{3cm}
+\textbf{ 
+\Large Ruprecht-Karls-Universität Heidelberg\\
+\smallskip
+\Large Institut für Informatik\\
+\smallskip
+\Large Lehrstuhl für Parallele und Verteilte Systeme\\
+\smallskip
+}
+
+\vspace{3cm}
+
+\textbf{\large Masterarbeit} 
+
+\vspace{0.5\baselineskip}
+{\huge
+Design and Implementation of a tool for automatic,non-trivial code guideline checking
+}
+\end{center}
+
+\vfill 
+
+{\large
+\begin{tabular}[l]{ll}
+Name: & Enrico Kaack\\
+Matrikelnummer: & 3534472\\
+Betreuer: & Name des Betreuers\\
+Datum der Abgabe: & dd.mm.yyyy
+\end{tabular}
+}
+
+\end{titlepage}
+
+\onehalfspacing
+
+\thispagestyle{empty}
+
+\vspace*{100pt}
+\noindent
+Ich versichere, dass ich diese Master-Arbeit selbstständig verfasst und nur die angegebenen
+Quellen und Hilfsmittel verwendet habe.
+
+\vspace*{50pt}
+
+\noindent
+Heidelberg, dd.mm.yyyy
+\cleardoublepage
+
+\section*{Zusammenfassung}
+
+Abstract auf Deutsch
+
+\section*{Abstract}
+
+This is the abstract.
+
+\cleardoublepage
+
+\tableofcontents
+\cleardoublepage
+\pagenumbering{arabic} 
+
+% List of figures (Abbildungsverzeichnis):
+\listoffigures
+% List of tables (Tabellenverzeichnis):
+\listoftables
+\cleardoublepage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Introduction}\label{intro}
+This chapter contains an overview of the topic as well as the goals and contributions of your work.
+Description of the domain
+Description of the problem
+Summary of the approach
+Outline of own contributions and results
+\section{Motivation}
+
+\section{Goals}
+
+\section{Structure}
+Here you describe the structure of the thesis. For example:
+
+In Kapitel~\ref{background} werden grundlegende Methoden für diese Arbeit vorgestellt.
+
+
+\chapter{Background and Related Work}\label{background}
+General description of the relevant methods/techniques
+
+What has been done so far to address the problem (closer related work)
+
+Possible weaknesses of the existing approaches
+
+\input{tex/background.tex}
+
+\chapter{Approach}
+Approach(es) without the quantitative results (or only selected results to motivate the choices/the problems)
+
+What has possibly failed (short)
+
+What has worked and why
+
+What could be possible method extensions/improvements
+
+\chapter{Quantitative Evaluation}
+Research questions
+Description of the evaluation environment/setup
+Results/answers per research question
+Optional comparison to prior work
+Discussion and analysis of strengths/problems
+Note: see 
+
+
+\chapter{Conclusion}
+An overall short summary of results
+What was successful, what not (and hypotheses why)
+Hints for further future work/extension
+
+\clearpage
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

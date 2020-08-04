@@ -1,0 +1,20 @@
+{
+    "grammarly.overrides": [
+        {
+            "files": [
+                "**/msc-thesis.tex"
+            ],
+            "config": {
+                "audience": "knowledgeable",
+                "dialect": "american",
+                "domain": "academic",
+                "emotions": [],
+                "goals": [
+                    "inform",
+                    "describe"
+                ],
+                "emotion": "mild"
+            }
+        }
+    ]
+}

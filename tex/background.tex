@@ -1,0 +1,41 @@
+\section{Code Quality}
+Code Quality describes the quality of source code with regard to understandability and readability. Developers can understand well-written code easily. 
+High-quality code has an impact on onboarding new developers, writing new code and maintaining the existing code.
+
+The onboarding of new developers is an investment of time and money in the developer. The faster a new developer can understand an existing code base, the faster the developer can start writing productive code and providing value.
+
+Maintaining existing code and adding features is part of most software today (TODO source). Agile development is a methodology used in software development that reflects this requirement. Source Code is improved and changed with runnable software versions at the end of each iteration.
+From a business standpoint, the always-changing code is modeled by subscription-based contracts that include new features and bugfixes. The easiness to change source code is business-critical, and a high-quality code can affect this requirement in the following kinds \cite{baggen_standardized_2012}:
+
+\begin{enumerate}
+    \item Well-written code makes it easy to determine the location and the way source code has to be changed.
+    \item A developer can implement changes more efficient in good code.
+    \item Easy to understand code can prevent unexpected side-effects and bugs when applying a change.
+    \item Changes can be validated easier. 
+\end{enumerate}
+
+The International Organization for Standardization provides the standard ISO/IEC 25000:2014 for \enquote{Systems and software Quality Requirements and Evaluation (SQuaRE)}\cite{iso_central_secretary_systems_2014}.
+
+Code Quality is measured by the following code characteristics:
+\begin{enumerate}
+    \item Reliability
+    \item Performance efficiency
+    \item Security
+    \item Maintainability
+\end{enumerate}
+
+Besides the mentioned maintainability characteristics, Code Quality also depends on reliability (like multi-threading and resource allocation handling), performance efficiency for efficient code execution, and security (like vulnerabilities to frequent attacks like SQL-injection).
+
+\section{Clean Code}
+Clean Code is a concept for high-quality code, coined by the book Clean Code by Robert C. Martin \cite{martin_clean_2009}. The root cause for unclean code is chaotic code. Developers produce chaotic code in a conflict between deadline pressure based on the visible output (the functionality of the software) and extra effort to make code more intuitive. The latter is not directly visible as productive output, although an accumulation of chaotic code reduces the productivity over time \cite{martin_clean_2009}. A bigger legacy system with chaotic code will slow down later modifications or additions of code. By following the Clean Code guidelines and best-practices, this productivity loss can be minimized. 
+
+The Clean Code techniques focus mainly on maintainability by provididng intuitive code. This has a positive effect on the security and reliability aspect as well, since developers can find edge cases in non-logical behaviour more easily in intuitive code. Some of the following Clean Code principles may decrease the performance efficiency, but in many software projects, developer performance is a more valuable ressource than actual runtime performance (TODO source).
+
+
+
+\section{Quantitative Metrics for Code Quality}
+
+
+??Teaching clean code, the paper from one german university
+
+Tools review for all tools that check different stuff
