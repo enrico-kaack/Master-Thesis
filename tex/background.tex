@@ -29,12 +29,35 @@ Besides the mentioned maintainability characteristics, Code Quality also depends
 \section{Clean Code}
 Clean Code is a concept for high-quality code, coined by the book Clean Code by Robert C. Martin \cite{martin_clean_2009}. The root cause for unclean code is chaotic code. Developers produce chaotic code in a conflict between deadline pressure based on the visible output (the functionality of the software) and extra effort to make code more intuitive. The latter is not directly visible as productive output, although an accumulation of chaotic code reduces the productivity over time \cite{martin_clean_2009}. A bigger legacy system with chaotic code will slow down later modifications or additions of code. By following the Clean Code guidelines and best-practices, this productivity loss can be minimized. 
 
-The Clean Code techniques focus mainly on maintainability by provididng intuitive code. This has a positive effect on the security and reliability aspect as well, since developers can find edge cases in non-logical behaviour more easily in intuitive code. Some of the following Clean Code principles may decrease the performance efficiency, but in many software projects, developer performance is a more valuable ressource than actual runtime performance (TODO source).
+The Clean Code techniques focus mainly on maintainability by provididng intuitive code. This has a positive effect on the security and reliability aspect as well, since developers can find edge cases in non-logical behaviour more easily in intuitive code. Some of the following Clean Code principles may decrease performance efficiency. Still, in many software projects, developer performance is a more valuable ressource than actual runtime performance (TODO source).
 
+
+The following sections explain the clean code guidelines following the book by Robert C. Martin \cite{martin_clean_2009}.
+Since these rules are based on experience of the author, they are controversial. The critique will be explained in section TODO.
+
+\subsection{General Rules}
+Developers should follow the general rules consistently for developing new features or fixing bugs. They are the essential building blocks for the understandability and reliability of the code. 
+
+Follow standard conventions is the first rule. Programming languages have conventions on formatting, naming, etc (e.g. python\footnote{\url{https://www.python.org/dev/peps/pep-0008/}}). If developers follow these conventions, the code feels more familiar for other developers using the same conventions. It is also common practice for big open-source projects to have their own contributing guidelines with coding conventions. The Visual Studio Code GitHub repository contains a "How to contribute" documentation and a section on coding guidelines\footnote{\url{https://github.com/Microsoft/vscode/wiki/Coding-Guidelines}}.  Especially in such large open-source projects, many developers are working asynchronously on code. Therefore, having conventions and enforcing the compliance of the guidelines by rejecting pull requests prevents the code from becoming a mosaic of different coding styles.
+
+The rule keep it simple is a summary of most rules in clean code. Simplicity in code makes it simpler and faster to understand for developers. A simpler software architecture enables a developer to modify code and checking all dependencies for potential side effects. Unnecessary complexity increases the time to understand and modify code and introduces bugs by having complex, non-obvious behaviors.
+
+
+Everytime a developer touches the code, he should also improve the quality of the code or at least not worsen it. By doing a small fix and postponing the clean code principles, the code will become more chaotic until it is refactored. As a result, every change should keep at least keep the code level quality if not improving it.  
+
+\section{Naming}
+It is important for understandable code to have good namings for variables, functions, types and classes. "Good" naming is an opinionated topic; The author describes the key components to good naming as follows:
+Names should be descriptive for the object. Abbreviations or mathematical annotations like \textit{a1, a2} are not descriptive and do not provide information about the meaning. Implementations of mathematical expressions intentionally use the same terms as the expression itself. Since this increases the understandability for developers familiar with the mathematical expression, this can be seen as a valid exception. 
+Descriptive names should include a verb or verb expression for functions, since functions express an action. Conversely, class names should contain a noun to emphasize the object character of a class.
+
+If the descriptive names are pronouncable too, it is easier to read and it is easier to talk about the code with other developers. Therefore, it is useful to make name longer but descriptive and pronouncable, especially since the autocomplete feature of IDEs will free the developer from typing the long name. Additionally, searching for long names works better than for short names, since long names are more likely to be unambigious compared to shorter names. Short variables in a small scope (e.g. variable \textit{i} in a loop) are not problematic, but using \textit{i} in a large scope could be ambigious and troubleful for searching.
+
+An old naming convention is the Hungarian naming convention. In Hungarian naming, the type is encoded as a prefix of a variable name. Nowadays, this is seen as mostly redundant, since IDEs can infer and show the type automatically. The automatic type inference also prevents confusion for the reader if the type in the notation and the actual type are inconsistent. The same logic applies to a prefix for member variables and methods, since a IDE can automatically highlight those tokens.
 
 
 \section{Quantitative Metrics for Code Quality}
 
+Kritik an Clean Code
 
 ??Teaching clean code, the paper from one german university
 
