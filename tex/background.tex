@@ -45,7 +45,7 @@ The rule keep it simple is a summary of most rules in clean code. Simplicity in 
 
 Everytime a developer touches the code, he should also improve the quality of the code or at least not worsen it. By doing a small fix and postponing the clean code principles, the code will become more chaotic until it is refactored. As a result, every change should keep at least keep the code level quality if not improving it.  
 
-\section{Naming}
+\subsection{Naming}\label{sec:naming}
 It is important for understandable code to have good namings for variables, functions, types and classes. "Good" naming is an opinionated topic; The author describes the key components to good naming as follows:
 Names should be descriptive for the object. Abbreviations or mathematical annotations like \textit{a1, a2} are not descriptive and do not provide information about the meaning. Implementations of mathematical expressions intentionally use the same terms as the expression itself. Since this increases the understandability for developers familiar with the mathematical expression, this can be seen as a valid exception. 
 Descriptive names should include a verb or verb expression for functions, since functions express an action. Conversely, class names should contain a noun to emphasize the object character of a class.
@@ -53,6 +53,12 @@ Descriptive names should include a verb or verb expression for functions, since 
 If the descriptive names are pronouncable too, it is easier to read and it is easier to talk about the code with other developers. Therefore, it is useful to make name longer but descriptive and pronouncable, especially since the autocomplete feature of IDEs will free the developer from typing the long name. Additionally, searching for long names works better than for short names, since long names are more likely to be unambigious compared to shorter names. Short variables in a small scope (e.g. variable \textit{i} in a loop) are not problematic, but using \textit{i} in a large scope could be ambigious and troubleful for searching.
 
 An old naming convention is the Hungarian naming convention. In Hungarian naming, the type is encoded as a prefix of a variable name. Nowadays, this is seen as mostly redundant, since IDEs can infer and show the type automatically. The automatic type inference also prevents confusion for the reader if the type in the notation and the actual type are inconsistent. The same logic applies to a prefix for member variables and methods, since a IDE can automatically highlight those tokens.
+
+\subsection{Functions}
+Functions should be small in length. Exceeding 20 lines should not be neccessary in most cases. If a function is small, it can be read more easily and without scrolling. Inside a function, if-, else- and while-statements should contain a function call for the condition and one function call for the body.  By following the naming schemas in section \ref{sec:naming}, the function calls document the meaning of the condition in an intuitive way without the need for additional comments. Consequently, function calls replaces nested structures in a more readable way.
+
+A general guideline for functions is to fullfill one purpose. This is a rather unpractical view, since functions may have to call several functions subsequently to perform the required computation. Therefore, Robert C. Martin specifies that to one abstraction level per function. A low abstraction level handles data access and manipulation, e.g. string manipulation. On a middle abstraction layer, these low-level operations are orchestrated. On the next higher level, the mid-level functions are arranged etc. Switch-Statements violate the one purpose rule and is prone to be duplicated in several other code locations. Since they are a sometimes neccessary construct, placing switch-statements into an Abstract Factory and creating different Subclasses for the different behaviours, the switch-statement can be replaced by polymorphism. 
+
 
 
 \section{Quantitative Metrics for Code Quality}
@@ -62,3 +68,6 @@ Kritik an Clean Code
 ??Teaching clean code, the paper from one german university
 
 Tools review for all tools that check different stuff
+
+Single Responsible principle, Open-Closed principle
+
