@@ -84,6 +84,19 @@ In brief, before writing a comment, the developer should think about expressing 
     \item[Emphasize:] A comment to emphasize a seemingly unimportant part of the code prevents breaking modifications of the code. 
 \end{description}
 
+\subsection{Data Structures and Objects}
+Data Structures and Objects can be easily mixed together, but there purpose is converse. Objects hide data behind abstractions and has funcitons that work with these data. Conversely, data structures expose the data and do not provide functionality. Based on this definition, the Law of Demeter (TODO source) is defined: Objects should know as little as possible about the implementaion of objects it manipulates. As a result, code becomes decoupled, since objects do not depend on specific data strucutres of other objects.
+In object-oriented programming, a method m of an object O may only call methods of the following components:
+\begin{itemize}
+    \item the object O itself
+    \item the parameters of the method
+    \item objects that are created within m's scope
+    \item instance variables of O
+\end{itemize}
+The method should not call methods of objects, that are returned from the allowed objects. If a method calls specific functions of this objects, it assumes this behaviour. As a result, the two objects are closely coupled. 
+Such bad code practice is called train wreck, since subsequent method calls look like multiple train carriages. A split in multiple variables and method calls improves the Train Wreck. Nevertheless, method calls on objects assume knowledge of the internal implemenation of the objects and would violate the Law of Demeter. However, if the methods are accessor functions, it would not violate the law, since the method calls are just an access to the data structure. Instead of calling a method of an object and calling a method on the returning object, the first called object could provide a function that takes care of calling the other object. This reduces the coupling between the three objects and would preserver the Law of Demeter in all objects.
+
+Data structures are often used as Data Transfer Object (DTO) to communicate with other processes or services. These objects do not contain any functions, they only have accessible member varaiable. A sepcialisation of DTOs are Active Records, that contain additional methods for data storage, since they are used to represent a data source like a database. For both types, it is bad practice to insert business logic into this objects, since they should be treated as data structures. This creates a hybrid between an object and a data structure that should be avoided.
 
 \section{Quantitative Metrics for Code Quality}
 
