@@ -67,7 +67,23 @@ A particular bad practice in the function body are side-effects. Side-effects ha
 
 Following the one purpose per function guideline, a function should either perform an action or retrieve information. Especially actions that return a value are unintuitive, since it is not clear if the return value encodes the success state or indicate something else.
 Furthermore, returning error codes violates this rule and errors should be indicated by raising an exception, if the language supports it. This allows a better seperation between aplication logic and error handling code. The code for catching and handling an exception may be seperated into an additional function, to provide a clean structure for higher level functions. In this case, error handling counts the one purpose of this function.
-A general, important principle for software engineering applies directly to functions: Don't repeat yourself. Repeated Code is dangerous and chaotic, since it requires changes in multiple locations if has to be modified. This makes duplicated code very prone to copy and paste errors and small mistakes that may not be obvious during development but will lead to a fatal crash at runtime. Many patterns and tools have been developed to mitigate duplicated code (TODO: some references to duplicated code detection etc)
+A general, important principle for software engineering applies directly to functions: Don't repeat yourself. Repeated Code is dangerous and chaotic, since it requires changes in multiple locations if it has to be modified. This makes duplicated code very prone to copy and paste errors and small mistakes that may not be obvious during development but will lead to a fatal crash at runtime. Many patterns and tools have been developed to mitigate duplicated code (TODO: some references to duplicated code detection etc).
+
+\subsection{Comments}
+Comments are part of every programming language and can play an important role in code quality. Good comments clarify the meaning of the code and help to understand the code. However, comments can become outdated and wrong or provide useless information. In a perfect world, the programming language and the programmer would be expressive enough that commenting is not required for clarity. Following the clean code guidelines for naming and functions makes many descriptive comments obsolete, since the function description is encoded in the function name.
+
+Comments will not help to turn chaotic code into clean code. If a developer explains a line of code by a comment, it is often more helpful to call a function with a descriptive name to replace the comment. Since comments are not part of the programm logic, if the explaining comment is not updated with the code, the comment gives missinformation to the reader like described before.
+
+In brief, before writing a comment, the developer should think about expressing the same in code. Robert C. Martin gives some exceptions for good comments \cite{martin_clean_2009}:
+
+\begin{description}
+    \item[Legal notes:] Legal notes like copyright or license information and author mentions may be necessary. Although they should be short in link to an external licensing document in full extent.
+    \item[Explaining comments:] Some explaining comments can be helpful and are not easy to encode in normal code. For instance an explanation of special encodings or file formats are better to understand.
+    \item[Intention:] Explaining an intention in a comment that is not obvious by the source code is also a valid use for a comment and can help to understand code that otherwise would not make any sense.
+    \item[Warning for consequences:] Some parts of the code can have special consequences like not being thread safe or using many system ressources. A warning can help a developer from using a function and having trouble.
+    \item[Emphasize:] A comment to emphasize a seemingly unimportant part of the code prevents breaking modifications of the code. 
+\end{description}
+
 
 \section{Quantitative Metrics for Code Quality}
 
