@@ -118,6 +118,89 @@ Robert C. Martin describes more guidelines for system design, multi-threading, t
 
 
 \section{Quantitative Metrics for Code Quality}
+Quantitative metrics  express code quality as a quantitative unit. 
+This provides multiple advantages:
+\begin{itemize}
+    \item A metric sums up the quality of a project in a single unit.
+    \item A quantitative approach tracks the changes in code quality over time. Therefore, it is obvious if code quality improves or not. In case the quality  undercuts a threshold, special measures like mandatory refactoring can be undertaken.
+    \item A developers performance can be evaluated  based on the code quality. Since the maintainability and reliability of the software depends on the code quality, this is a good incentive to enforce high quality work.
+    \item A certain level of code quality can be required by a contract. As a result, a customer can expect less bugs and a smaller maintenance effort.
+\end{itemize}
+Metrics for code quality are a subset of more general software metrics. The following sections describe software metrics that express code quality.
+
+\subsection{Cyclomatic Complextiy}
+Cyclomatic Complexity is a metric for the complexity of a section of code. It was introduced by Thomas McCabe, Sr.  Is is measured by counting the number of linearly independent execution paths. (TODO source)
+
+To compute  the Cyclomatic Complexity, the control-flow graph is required. The control-flow graph represents possible execution paths. A node represents  a basic block, a code sequence without branching. A directed edge represent jumps in the control flow; e.g. an if-statement without an else-case has two edges. One edge to the basic block in the if-branch  and one edge to the basic block after the if-statement. Beside cyclomatic complexity, the control-flow graph is used for compiler optimisation techniques like dead code elimination and loop optimization (\url{https://ag-kastens.cs.uni-paderborn.de/lehre/material/compii/folien/c101-217a.pdf}).
+
+The cyclomatic complexity on a control-flow graph is defined as:
+\begin{displaymath}
+    M = E - N + 2P
+\end{displaymath}
+
+E is the number of edges, N the numder of nodes and P the number of connected components.  A connected graph is a subgraph, in which all nodes are connected to each other by a path. P represents the number of subprograms (like multiple functions or classes will).
+Following this definition, the cyclomatic complexity can be calculated.. See figure TODO for a visualisation.
+
+MacCabe recommends to limit the cyclomatic complexity to 10. NIST confirms this recommendation in TODO. A lower cyclomatic complexity improves testability, since the complexity represents the number of execution paths that need to be tested. Therefore, $M$ is the upper bound for number of test cases for full branch coverage. 
+Furthermore, studies suggest a positive correlation between cyclomatic complexity and defects in functions. TODO source
+Safety standards like ISO 26262 (for electronics in automobiles) or IEC 62304 (for medical devices) mandates a low cyclomatic complexity TODO source.
+
+\subsection{Halstead complexity measures}
+Maurice Halstead introduced the Halstead complexity measures in 1977. It is a collection of multiple countable measure and relations.
+
+The Halstead  metrics operates on a sequence of tokens that are classified to be an operator or an operand.
+
+The classification enables to count the following properties:
+\begin{itemize}
+    \item $\eta_1$ as the number of distinct operators 
+    \item $\eta_2$ as the number of distinct operands
+    \item $N_1$ is the sum of all operators
+    \item $N_2$ is the sum of all operands  
+\end{itemize}
+The total program vocabulary can be computed as:
+\begin{displaymath}
+    \eta = \eta_1 + \eta_2
+\end{displaymath}
+The program length is not calculated by the lines of code, but as a sum of all operators and operands:
+\begin{displaymath}
+    N = N_1 + N_2
+\end{displaymath}
+The voume of a program in terms of program length and program vocabulary is defined as: 
+\begin{displaymath}
+    V = N * \log_2{\eta}
+\end{displaymath}
+An important metric is the difficulty of understanding a program, defined as:
+\begin{displaymath}
+    D = \frac{\eta_1}{2} * \frac{N_2}{\eta2}
+\end{displaymath}
+The major contribution to difficulty is the number of distinct operators $\eta_1$.
+The combination of difficulty and volumes is the effort for udnerstanding or changing code:
+\begin{displaymath}
+    E = D * V
+\end{displaymath}
+The effort translates into real coding time following the relation
+\begin{displaymath}
+    T = \frac{E}{18}s.
+\end{displaymath}
+
+The number of  bugs correlates with the effor following
+\begin{displaymath}
+    B = \frac{E^{\frac{2}{3}}}{3000}
+\end{displaymath}
+
+(TODO general critique etc. on this metric since it seems to be arbitrary)
+
+\subsection{Software Maintainability Index}
+The software maintainability index was developed by Dan Coleman and Paul Oman in 1994. 16 HP engineers evaluated 16 software systems and scored it in a range from 0 to 100, with 100 representing best maintainability. 
+Following a regression analysis, they identified the following equation to match the maintainability of the evaluated systems (TODO source from Using metrics to evaluate software system maintainability):
+\begin{displaymath}
+MI = 171 - 5.2 *\ln{\overline{V}} - 0.23 * \overline{M} - 16.2 * \ln{\overline{LOC}} + 50 * \sin{\sqrt{2.4 * C}}
+\end{displaymath}
+where $\overline{V}$ is the average Halstead Volume, $\overline{M}$ the average cyclic complexity, $LOC$ the lines of code and $C$ as fraction of comments.
+
+This metric got some critiques.
+
+Kritik an Maintainability Index: https://www.mn.uio.no/ifi/personer/vit/dagsj/sjoberg.anda.mockus.esem.2012.pdf
 
 Kritik an Clean Code
 
