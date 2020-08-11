@@ -101,7 +101,7 @@ Data structures are often used as Data Transfer Object (DTO) to communicate with
 \subsection{Classes}
 A Class should be small like functions. Instead of counting lines, the size of a class is the number of responsibilities. The name of the class should describe its responsibility, therefore, a single responsibility per class is intended. This is called Single-Responsibility-Principle and it restricts a class to one responsiility. A class should only have one reason for modification, consequently a class has a single responsibility (TODO source). The Single-Responsibility-Principle lead to a system of many small classes with one, clearly defined responsibility.
 
-In addition, classes should have a high cohesion. Cohesion is high, if a method manipulates many instance variables. If all methods of a class manipulate all instance variables, the class is maximal cohesive. With a high cohesion, the methods and the class can be seen as a logical unit. A low cohesion indicates to split the class into multiple classes, since the methods are not a logical unit. As a result, classes gets smaller and will more likely comply to the Single-Responsibility-Principle.
+In addition, classes should have a high cohesion. Cohesion is high, if a method manipulates many instance variables. If all methods of a class manipulate all instance variables, the class is maximal cohesive. With a high cohesion, the methods and the class can be seen as a logical unit. A low cohesion indicates to split the class into multiple classes, since the methods are not a logical unit. As a result, classes gets smaller and will more likely comply to the Single-Responsibility-Principle. (TODO add metric for cohesion)
 
 Depdendencies of classes are critical, since they may be modified. If the class depends on specific details of the implemenation, it has to be changed, if the dependency changes. Therefore, classes should depend on abstract classes that describe a concept, not the implementation details. Since the concept is unlikly to change if the implementation details change, the dependency is isolated. 
 
@@ -113,13 +113,16 @@ In case of error handling with a thrid-party libary, the library called should b
 
 Another form of exception handling is returning null. Instead of checking for an error code, the caller method checks for a null return value. As easy it is to miss an error code, as easy it is to miss a null checking. Consequently, the programm will terminate with an unhandled NullPointerException at runtime. Tony Hoare introduced the null reference in 1965 and later called it his \enquote{billion-dollar mistake}\cite{hoare_null_2009}, since it lead to many bugs and security vulnerabilities throughout the decades. Languages like Kotlin are designed with Null Safety enforced. Kotlin distinguishes between nullable and non-nullable references, with a compiler enforcing null checking\cite{noauthor_null_nodate}. If a language does not enforce null safety with a compiler, a special case like an empty collection or an optional type can be returned. Passing null to a function as a paramter is also dangerous, since a function would explicitly assert for non-null paramter values. Since this is not a clean way, null paramters should not be used.
 
+\subsection{Code Smells}
+Aforementioned guidelines can be rephrased as code smells. Code smells are a characteristic of code that possibly indicate a problem with the clean code rules and therefore maintainability of the system.
+
 \subsection{Additional Guidelines}
-Robert C. Martin describes more guidelines for system design, multi-threading, testing and third-party code\cite{martin_clean_2009}. These topics are not part of this chapter, since the focus of this work are the aforementioned guidelines and principles.
+Robert C. Martin describes more guidelines for system design, multi-threading, testing and third-party code\cite{martin_clean_2009}. These topics are not part of this chapter, since the focus of this work are the aforementioned guidelines and principles. 
 
 
 \section{Quantitative Metrics for Code Quality}
 Quantitative metrics  express code quality as a quantitative unit. 
-This provides multiple advantages:
+This has multiple advantages:
 \begin{itemize}
     \item A metric sums up the quality of a project in a single unit.
     \item A quantitative approach tracks the changes in code quality over time. Therefore, it is obvious if code quality improves or not. In case the quality  undercuts a threshold, special measures like mandatory refactoring can be undertaken.
@@ -128,7 +131,7 @@ This provides multiple advantages:
 \end{itemize}
 Metrics for code quality are a subset of more general software metrics. The following sections describe software metrics that express code quality.
 
-\subsection{Cyclomatic Complextiy}
+\subsection{Cyclomatic Complextiy}\label{sec:cyclomatic_complexity}
 Cyclomatic Complexity is a metric for the complexity of a section of code. It was introduced by Thomas McCabe, Sr.  Is is measured by counting the number of linearly independent execution paths. (TODO source)
 
 To compute  the Cyclomatic Complexity, the control-flow graph is required. The control-flow graph represents possible execution paths. A node represents  a basic block, a code sequence without branching. A directed edge represent jumps in the control flow; e.g. an if-statement without an else-case has two edges. One edge to the basic block in the if-branch  and one edge to the basic block after the if-statement. Beside cyclomatic complexity, the control-flow graph is used for compiler optimisation techniques like dead code elimination and loop optimization (\url{https://ag-kastens.cs.uni-paderborn.de/lehre/material/compii/folien/c101-217a.pdf}).
@@ -198,13 +201,27 @@ MI = 171 - 5.2 *\ln{\overline{V}} - 0.23 * \overline{M} - 16.2 * \ln{\overline{L
 \end{displaymath}
 where $\overline{V}$ is the average Halstead Volume, $\overline{M}$ the average cyclic complexity, $LOC$ the lines of code and $C$ as fraction of comments.
 
-This metric got some critiques.
+The software maintainability index was defined many years ago with a limited sample size of developers and projects. Additionally, programming languages have changed significantly over time. A study by Sjøberg et. al suggest no correlation between the software maintainability index and actual maintainability effort in a controlled environment\cite{sjoberg_questioning_nodate}. Although the study only analysis four software projects and lacks generalisation, they find a strong anti-correlation with different maintainability metrics. Only the code size seems to correlate with the actual maintainability. The foormer seems to be consistent with a systematic review on software maintainability predictions and metrics by Riaz et. al\cite{riaz_systematic_2009}.
 
-Kritik an Maintainability Index: https://www.mn.uio.no/ifi/personer/vit/dagsj/sjoberg.anda.mockus.esem.2012.pdf
+
 
 Kritik an Clean Code
 
 ??Teaching clean code, the paper from one german university
+
+\section{Tools for Code Quality Analysis}
+It is good practice to use static code analysis tools to improve code quality. A static code analysis examines a program by analysing an abstract syntax tree, the control or data flow, a pointer analysis or an abstract (approximated) execution. In comparison to dynamic analysis, the code is not executed. The result of a static analysis can be based on approximations, so there might be false positive results. An expert has to examine the result and correct results if necessary\cite{prahofer_static_2017}.
+
+Besides the use of static code analysis for compiler and optimisations, it is also helpful for analysing the code quality. Different categories of code quality related principles can be analysed:
+\begin{description}
+    \item[Code Guidelines:] A static code analysis can ensure compliance to structural, naming and formatting code guidelines. 
+    \item[Standard Compliance:] A requiremnt for a software may be compliance to an industry standard like IEC 61508 or ISO 26262 (TODO source). Static code analysis can ensure or at least assist with the compliance.   
+    \item[Code Smells:] Some code smells follow a known pattern and a static code analysis can detect those smells. Since code smells can be an indication for chaotic code, it is best if these smells are detected and removed early on.
+    \item[Bug Detection:] Although bug detection with static analysis can not detect all bugs, every detected bug before a software release is important. Examples for detected bugs are unhandled expressions or concurrency issues \cite{delaitre_evaluating_2015}.
+    \item[Security Vulnerability Detection:] Static code analysis tools can detect some security vulnerabilities like SQL Injection Flaws, buffer overflows and missing input validation with high confidence. Since these are some common, easy to exploit vulnerabilites, a analysis for security vulnerabilities can increase the security of the overall software \cite{wichers_source_nodate}.  
+\end{description}
+
+Integration in continous integration, manual review
 
 Tools review for all tools that check different stuff
 
