@@ -26,7 +26,7 @@ Code Quality is measured by the following code characteristics:
 
 Besides the mentioned maintainability characteristics, Code Quality also depends on reliability (like multi-threading and resource allocation handling), performance efficiency for efficient code execution, and security (like vulnerabilities to frequent attacks like SQL-injection).
 
-\section{Clean Code}
+\section{Clean Code}\label{sec:clean_code}
 Clean Code is a concept for high-quality code, coined by the book Clean Code by Robert C. Martin \cite{martin_clean_2009}. The root cause for unclean code is chaotic code. Developers produce chaotic code in a conflict between deadline pressure based on the visible output (the functionality of the software) and extra effort to make code more intuitive. The latter is not directly visible as productive output, although an accumulation of chaotic code reduces the productivity over time \cite{martin_clean_2009}. A bigger legacy system with chaotic code will slow down later modifications or additions of code. By following the Clean Code guidelines and best-practices, this productivity loss can be minimized. 
 
 The Clean Code techniques focus mainly on maintainability by provididng intuitive code. This has a positive effect on the security and reliability aspect as well, since developers can find edge cases in non-logical behaviour more easily in intuitive code. Some of the following Clean Code principles may decrease performance efficiency. Still, in many software projects, developer performance is a more valuable ressource than actual runtime performance (TODO source).
@@ -221,6 +221,27 @@ Besides the use of static code analysis for compiler and optimisations, it is al
     \item[Security Vulnerability Detection:] Static code analysis tools can detect some security vulnerabilities like SQL Injection Flaws, buffer overflows and missing input validation with high confidence. Since these are some common, easy to exploit vulnerabilites, a analysis for security vulnerabilities can increase the security of the overall software \cite{wichers_source_nodate}.  
 \end{description}
 
+The following sections provide an overview of a few static code analysis tools with focus on code quality and maintainability. I selected them based on popularity and if the projects are still maintained.
+
+\subsection{PyLint}
+PyLint is a code analysis tool for the Python programming language. It is open-source and licensed under the GNU General Public License v2.0 and available for all common plattforms. PyLint can be executed as a standalone program or can be integrated into common IDEs like Eclipse. A continous integration pipeline may include PyLint as well to ensure an analysis on every build.
+
+With PyLint, the developer can make sure the code complies to the PEP8 (TODO) style guide for python coding. This includes name formatting, line length and more. It does not calculate a metric for the code but instead warns about violated principles. Additionally, PyLint can detect common errors like missing import statements that may cause the program to crash at start or later at runtime. To support refactoring, PyLint can detect duplicated code and will suggest to refactor the code.
+
+PyLint can be configured to ignore some checks and to disable specific rules. To expand the rule set, a developer can write a "checker", an algorithm to check for a specific rule. The algorithm can analyse the raw file content, a token stream of the source code or an AST representation.The checker can raise a rule violation by provididng the location information and the problem type to the PyLint framework and it will be included in the PyLint analysis report.
+
+\subsection{PMD Source Code Analyzer Project}
+PMD is an "extensible cross-language static code analyzer" for Java, JavaScript and more. As an open-source project, it is licensed under a BSD-style license and is svailable for MacOS, Linux and Windows based systems. It integrates into build systems like Maven and Gradle as well as into common IDEs like Eclipse and Intelij. PMD can run as part of a continous integration pipeline and is included in the automated code review tool Codacy (see TODO).
+
+Depending on the target language, PMD supports different rules. For Java, PMD has rule in the following categories:
+\begin{description}
+    \item[Best practices:] Best practices include rules like one decleration per line or using a logger instead of a \textit{System.out.print()} in production systems.  
+    \item[Coding Style and Design] Several rules to improve readability of the code like naming conventions, ordering of declerations and design problems like a violation of the law of Demeter, Cyclomatic complexity calculation and detection of god classes.
+    \item[Multihtreading: ]  Rules to mainly prevent the use of not thread safe objects or methods. Due to the nature of multi-threading and unpredictable scheduling of threads, problems like unpredictable values of variables or dead locks may occur. Since they may not occur in every execution, they are hard to spot and to debug. Consequently, warnings of using non thread safe code may save hours of debugging.
+    \item[Performance: ] These rules flag known operations that have hidden performance implications. For example, string concatenation with the plus operator in Java causes the Java Virtual Machine to create an internal String buffer. This can slow down the program execution if numerous String concatenations are performed.
+    \item[Security:] Security wise, PMD only checks for hard coded values for cryptographic operations like keys and initialization vectors.
+    \item[Error Prone Code: ] PMD checks for several known code structures that will or may cause a bug at execution. Some rules are part of the clean code principles described in \ref{sec:clean_code} and some rules are specific to the target language.
+\end{description}
 Integration in continous integration, manual review
 
 Tools review for all tools that check different stuff
