@@ -242,6 +242,30 @@ Depending on the target language, PMD supports different rules. For Java, PMD ha
     \item[Security:] Security wise, PMD only checks for hard coded values for cryptographic operations like keys and initialization vectors.
     \item[Error Prone Code: ] PMD checks for several known code structures that will or may cause a bug at execution. Some rules are part of the clean code principles described in \ref{sec:clean_code} and some rules are specific to the target language.
 \end{description}
+
+A user can expand the PMD ruleset in two ways: A XPath expression can be spezified and will be validated against the AST by the PMD framework. For more control, it is possible to write a Java-based plugin that implements a custom AST traverser. The latter allows for more sofisticated rules and checks.
+
+\subsection{Codacy}
+Codacy is a software to "automate your code quality" (TODO source) for more than 30 programming languages. It is available as a cloud-based subscription service with a free tier for open-source projects and a self-host option for enterprise customers.  Codacy runs as a cloud software and a user can connect a GitHub, GitLab or Bitbucket repository that will be scanned automatically on every push or trigger a scan of local files with a command-line program. Additionally, a badge can be added to the readme page to show off the analysis results.
+
+Codacy can be seen as a plattform that runs multiple different "analysis engines". These analysis engines combine multiple tools depending on the langauge. For Python, Codacy uses  PyLint, Bandit (a scanner for security issues) and a metric plugin.
+Due to the licensing of those analysis engines, the engines are open-sourced, wheras the Codacy platform is propriatary.
+
+Depending on the language, Codacy supports scanning for common security and maintainability issues. The later is faced with scanning for Code Standardization, Test Coverage and Code Smells to reduce technical debt.
+
+Codacy allow customization by disableing certain rules and changing rule paramters like the pattern to fit the rules to the projects preference. 
+
+\subsection{Sonarqube}
+Sonarqube is a analysis tool to maintain high code quality and security. It supports 15 programming languages in the open-source version licensed under the GNU Lesser General Public License, Version 3.0. In the Developer Edition, Sonarqube supports 22 languages and 27 languages in the enterprise edition. Sonarqube is a self-hostable server application with an SonarScanner client module that can be integrated in build pipelineslike Gradle and Maven as well as a command-line tool for other build pipelines. With the Developer Edition, branch and pull request analysis are possible and a pull request will be annotated with the analysis results.
+
+For Python, Sonarqube offers more than 170 rules. These rules are in the following categories:
+\begin{description}
+    \item[Code Smells:] Code Smells like duplicated String literals are flagged with four different levels of severity (from higher to lower severity): Blocker, Critical, Major, Minor. Explanations and examples are accessible for the developer to understand and fix the issue. The analysis is more in-depth than AST-based solutions, since it additionally uses control and data-flow analysis.
+    \item[Bug:] Multiple rules cover bugs that would definetively result in a runtime exception and program termination. As an example, calling a function with the wrong number of arguments will be flagged with the highest severity, since it will raise a TypeError during runtime. Although programmers may notice issues like this during coding and testing, the issue can remain hidden if it only triggers in a special execution path of the system.
+    \item[Security Hotspot: ] The Security Hotspot analysis unfolds pieces of code that may be a real vulnerability and requires a human review. The scanning has a hotspot detection for seven out of the OWASP Top Ten Web Application security risks (TODO src). A flagged hotspot contain a detailed explanation of the reason for being flagged and a guide on how to review this hotspot. The recommendation to double check a piece of code can help to prevent a security vulnerabiliy from being deployed to production.
+    \item[Security Vulnerabilities: ]  A security vulnerabilites analysis reveal code that is at risk of being exploited and has to be fixed immediately. Especially misconfiguration of cryptographic libraries can be revealed easily and future damage prevented.   
+\end{description}
+
 Integration in continous integration, manual review
 
 Tools review for all tools that check different stuff
