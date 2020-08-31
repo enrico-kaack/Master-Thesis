@@ -266,6 +266,25 @@ For Python, Sonarqube offers more than 170 rules. These rules are in the followi
     \item[Security Vulnerabilities: ]  A security vulnerabilites analysis reveal code that is at risk of being exploited and has to be fixed immediately. Especially misconfiguration of cryptographic libraries can be revealed easily and future damage prevented.   
 \end{description}
 
+Additionally, Sonarqube offers several metrics like test coverage and an custom derivate of Cyclomatic Complexity named Cognitive Complexity. The authors sees several shortcommings in the original Cyclomatic Complexity model:
+\begin{itemize}
+    \item Parts of code with the same Cyclomatic Complexity do not neccessarily represent equal difficulty for maintenance.
+    \item  Cyclomatic Complexity does not include modern language features like try/catch and lambdas. Therefore, the score can not be accurate.
+    \item Cyclomatic Complexity lacks useability on a class or module level. Since the minimum complexity of a method is one and a high aggregated Cyclomatic Complexity for a class is measured for small classes with complex methods or large classes with low complexity per method (e.g. a domain class with just getter/setter).
+\end{itemize}
+Cognitive Complexity adresses these points, especially the incorporation of modern langauge features and meaningfullness on class and module level.
+
+The calculation is based on three rules:
+\begin{description}
+    \item[Ignore Shorthand Structures]: Method calls condense multiple statements into one easy to understand statement. Therefore, method calls as shorthand are ignored for the score. Similiarly, shorthand strcutures like the null-coalescing operator reduces the Cognitive Complexity compraed to an extensive null check and is therefore ignored for score calculation.
+    \item[Break in the linear control flow]: A break in the expected linear control flow by loop structures and conditionals adds to Cognitive Complexity as to Cyclomatic Complexity. Additionally, Catches, Switches, sequences of logical operators, recursion and jumps also adds to Cognitive Complexity, since these strcutures break the linear control flow.
+    \item[Nested flow-breaking strcutures]: Flow-breaking structures that are nested additionally increase the Cognitive Complexity, since it is harder to understand than non-nested structures.  
+\end{description}
+The method-level Cognitive Complexity score represents a relative complexity difference between methods that would have the same Cyclomatic Complexity. Furthermore, the aggregated Cognitive Complexity on a class or module level now differentiate between classes with many, simple methods and classes with a few, but complex methods. As a result, domain classes (containing mainly getters/setters) have a lower score compared to classes with complex code behaviour. (TODO source whitepaper multiple times)
+
+
+Developers can extend Sonarqube similiarly to PMD. They can write a Java plugin implementing a custom AST parser. The Java plugin is compiled into a .jar file and placed into the plugin dir of the Sonarqube installation. For simpler rules, XPath exressions are possible through the web interface and allow a quick extension. For instance, if developers observe bad code style during a pull request review, they can quickly write a rule to enforce this rule in all subsequent pull requests automatically.
+
 Integration in continous integration, manual review
 
 Tools review for all tools that check different stuff
