@@ -1,0 +1,20 @@
+This section is divided into the approach for the Clean Code Analysis Plattform and the Clean Code classification.
+
+\chapter{Clean Code Analysis Plattform}
+The goal of the design and implementation of the Clean Code Analysis Plattform (CCAP) is a tool for software developer to imnprove the code quality of existing and new code. The tool accepts an directory containing source code files as input and analyses the input for snippets of improveable code quality. If the analysis classifies a code snippet as problematic, it should help the developer to improve the snippet by providing information about the problem. Ultimately, this should train the developer to spot problematic code by its own and to write clean code by default, so the number of alerts should decrease. At the same time, the overall software quality of a project increases immediately at rewriting a marked snippet and in the long term at training the developer to write code with higher quality.
+
+In order to use the tool effectively, the design and implementation should cover the following requirements:
+\begin{description}
+    \item[Useability]:  The CCAP should be an easy-to-use tool. Developers shall be able to install and run the tool. The extra effort of using this tool should be small and the developer should use the tool in his day-to-day workflow without additional friction. The developers can interpret the issue and localise the problematic code spot immediately.
+    \item[Expandability]: The extension of the detected code problems should be easy. A clear defined interface for extensions is required so an extension developer would not need specific knowledge about the internal architecture of the tool. The expandability allow a desired workflow of a developer finding problematic code in a e.g. peer-review, formalizing it into an extension and sharing this extension with the team. With each iteration, the code quality of all team members would increase.
+    \item[Integration]: The tool should be easy to integrate into different systems. This includes lokal workflows like git pre-commits or build systems and remote continous integration/delivery/deployment pipelines.
+\end{description}
+A more specific requirement is Python as an input language and the expansion langauge. After JavaScript, Python is the second most popular programming language 2019 according to the Github statistics (\url{https://octoverse.github.com/#top-languages}). Besides the general popularity, Python is heavily used in the scientific community for machine learning and in universities for teaching programming. These groups are part of the potential target audience and students in specific can benefit from automated reporting of low quality source code.
+
+
+
+
+
+
+
+Vorteil: läuft lokal, time to feedback ist geringer als bei cloud-basierten ansätzen wie codacy. (läuft bspw als git pre-commit hook oder direkt als VSCode plugin)
