@@ -56,6 +56,43 @@ In order to expand the CCAP with an analysis plugin, the following steps are req
 Whereas these are the minimum required steps to implement the plugin, the developer is free to add additional methods, classes or import libraries as necessary.
 Furthermore, it is adviceable to implement several tests to ensure the plugins correctness. CCAP uses pytest \footnote{\url{https://docs.pytest.org/en/stable/}} for testing, implementing a test is as easy as writing a function with a \enquote{test\_} prefix and running the \textit{pytest} command. TODO: further test instruction after test implementation
 
+\subsection{Return None Plugin}
+A rather simple analysis plugin demonstrate the capabilities of the CCAP: The Return None Plugin scans the source code for functions that return the None value. Returning None may result in runtime exceptions, if the function caller does not expect and handle a potential None return. Although the None can be returned directly or as a value of the returning variable, this plugin only focus on the explicit \textit{return None} statement to showcase the options for the developer to analyse the source code.
+
+Detecting \textit{return None} is possible in multiple ways. The following shows the possibilities for developer to implement such a detector:
+\begin{description}
+    \item[Regular Expression]: In the \textit{do\_analysis} method, a developer has access to the source code as a string. Therefore, it is straitforward to use a regular expression to detect a \textit{return None} statement.
+    \begin{lstlisting}[language=Python]
+        import re
+        matches = re.finditer(r"return None", source_file.content, re.MULTILINE | re.DOTALL)
+    \end{lstlisting}
+    Since the regex library only returns the start and end index of matches, these have to be converted to line numbers. Afterwards a \textit{ReturnNullProblem} instance can be created for every match and added to the \textit{AnalysisReport} for this plugin.
+
+    This approach uses  regular expressions to match patterns in a string without utilizing the structureness of the code. It is a simple but powerful way and most developers are familiar with regular expression. On the flip-side, source code may have various ways syntactic ways to express a semantic. Consequently, the regular expressions have to be designed carefully to cover all variations. For instance, it is possible to encounter a doubled whitespace, that would break the afforementioned regular expression. Additionally, regular expressions do not operate on the structure of the code, therefore they can not detect high level patterns on the code structure.
+    \item[Tokenization]: The process of dividing a character stream into a sequence of tokens is called tokenization (also know as lexical analysis). With the python tokenizer, a token can contain multiple characters and has a token type like name, operator or intendation. A token sequence provides more information about the code structure that can be used to detect problematic patterns. 
+    A token sequence for a \textit{return None} statemant would be the following: 
+    \begin{lstlisting}
+    [...(type: NAME, value: return), (type: NAME, value: None)...]
+    \end{lstlisting}
+    A simple algorithm would scan the sequence for two subsequent name tokens with the values "return" and "None". The abstraction level of a token sequence is higher than of a character sequence. Since the whitespace between "return" and "None" provide no semantic meaning, it is removed on this abstraction level. Whereas the regular expression based approach would have to deal with problems as the doubled whitespace, the token-based approach profits from the higher abstraction level and can access meaningful tokens directly.
+    \item[Abstract Syntax Tree]: After tokenization, a parser takes the token stream and prases it into a hierachical datastructure like an Abstract Syntax Tree. With an AST the code is represented in an structural way and it is possible to traverse the tree following the structure of the code. The AST consists of nodes with different type and children, for example a node representing an if statement. It is possible to access the condition and the body of the if statement as descendant nodes in the AST. Analysing an AST allows an higher abstraction level then analysing the token string, since the  code strucutre is represented. Therefore, more abstract rules that analyse the code structure are possible.
+
+    To detect a \textit{return None} statement in the abstract syntax tree, an algorithm would traverse all AST nodes looking for a return-typed node. If found, the value descendant contains the statement part after the return keyword. A \textit{None} value would be represented as a node of type constant or name constant (depending on the parser version). The value descendant of the constant node may then be checked for equality to \textit{None}. All AST nodes contain the corresponding line number, that are necessary for creating a problem message:
+    \begin{lstlisting}[language=Python]
+        for node in ast.walk(a.ast):
+            if isinstance(node, ast.Return):
+                return_value = node.value
+                if isinstance(return_value, ast.Constant) or isinstance(return_value, ast.NameConstant):
+                    if return_value.value is None:
+                        problems.append(ReturnNullProblem(a.file_path, return_value.lineno))
+    \end{lstlisting}
+
+    Analysing the AST is best for problems in the code structure, since the AST represents the code structure in a well-defined, traversable datastructure. Although simpler patterns like the \textit{return None} could be detected using regular expressions, a detection on AST level allows to detect the semantic meaning instead of the syntactic representation of a problem. For more complex problems, it is inevitable to use the AST most of the time.
+\end{description}
+
+Since detection alone is not a great help for the user, a usefull description of the problem is neccessary. 
+TODO: BEtter alternatives
+
 \subsection{Output Plugins}
 With output plugins, CCAP adds additional flexibility towards the output format. Depending on environmental requirements, the output can be addapted with custom logic by defining an output plugin. For instance, running the tool localy could write the results to the standard output in an human-readable way or create a formatted html file to be displayed in the browser. Running inside automated workflow, a machine-readable json output may be preferred.
 
