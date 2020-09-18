@@ -256,7 +256,7 @@ Depending on the language, Codacy supports scanning for common security and main
 Codacy allow customization by disableing certain rules and changing rule paramters like the pattern to fit the rules to the projects preference. 
 
 \subsection{Sonarqube}
-Sonarqube is a analysis tool to maintain high code quality and security. It supports 15 programming languages in the open-source version licensed under the GNU Lesser General Public License, Version 3.0. In the Developer Edition, Sonarqube supports 22 languages and 27 languages in the enterprise edition. Sonarqube is a self-hostable server application with an SonarScanner client module that can be integrated in build pipelineslike Gradle and Maven as well as a command-line tool for other build pipelines. With the Developer Edition, branch and pull request analysis are possible and a pull request will be annotated with the analysis results.
+Sonarqube is a analysis tool to maintain high code quality and security. It supports 15 programming languages in the open-source version licensed under the GNU Lesser General Public License, Version 3.0. In the Developer Edition, Sonarqube supports 22 languages and 27 languages in the enterprise edition. Sonarqube is a self-hostable server application with an SonarScanner client module that can be integrated in build pipelines like Gradle and Maven as well as a command-line tool for other build pipelines.The SonarScanner reports the result to the server, that serves a website to review the results. With the Developer Edition, branch and pull request analysis are possible and a pull request will be annotated with the analysis results.
 
 For Python, Sonarqube offers more than 170 rules. These rules are in the following categories:
 \begin{description}
@@ -283,7 +283,7 @@ The calculation is based on three rules:
 The method-level Cognitive Complexity score represents a relative complexity difference between methods that would have the same Cyclomatic Complexity. Furthermore, the aggregated Cognitive Complexity on a class or module level now differentiate between classes with many, simple methods and classes with a few, but complex methods. As a result, domain classes (containing mainly getters/setters) have a lower score compared to classes with complex code behaviour. (TODO source whitepaper multiple times)
 
 
-Developers can extend Sonarqube similiarly to PMD. They can write a Java plugin implementing a custom AST parser. The Java plugin is compiled into a .jar file and placed into the plugin dir of the Sonarqube installation. For simpler rules, XPath exressions are possible through the web interface and allow a quick extension. For instance, if developers observe bad code style during a pull request review, they can quickly write a rule to enforce this rule in all subsequent pull requests automatically.
+Developers can extend Sonarqube similiarly to PMD. They can write a Java plugin that can acces the AST but also a semantic model of the code. Additional, extensions can be created that provide funcitonality to other extensions. The Java plugin is compiled into a .jar file and placed into the plugin dir of the Sonarqube installation. For simpler rules, XPath exressions are possible through the web interface and allow a quick extension. For instance, if developers observe bad code style during a pull request review, they can quickly write a rule to enforce this rule in all subsequent pull requests automatically.
 
 Integration in continous integration, manual review
 
