@@ -175,5 +175,28 @@ Continuing on configuration possibilities, having configuration possibilities fo
 
 Lastly, a feature to disable problem reporting for a specific code location could bring a boost in user acceptance. While some clean code rules are objective and can be measured precisely, some rules are more general recommendations that may not apply to every occurrence of this situation. For instance, the clean code guidelines generally suggest not to have more than three function arguments; it may be necessary or even inevitable to have four arguments. The CCAP should report this as a problem, but the user should be able to decide if it is acceptable. In this case, the problem type on this specific location should not be reported in the future. In the current version, the user has no way to ignore a specific problem. Consequently, over time the number of problems the user has to ignore will accumulate until the user abandons the tool since it does not provide an added value over the frustration of manually ignoring problems.
 
+\chapter{Clean Code Classification}
+In the previous chapter, we have presented a platform to check for clean code rules. This platform requires analysis plugins to detect certain problems. These handwritten rules work well on certain rules, but certain rules may require a complicated analysis of the AST, the data-flow or the inter-module dependencies. Some rules on the other hand are subjective and we do not see a way of detection those rule violations with an algorithm.
+Therefore, this chapter introduces an approach to evaluate different supervised machine learning models to classify code into clean code or problematic code. Furthermore, we describe how we modify the code to test the generalisation capabilities of the models. The mentioned machine learning models include random forest classifier, support-vector-Machines, gradient boosting classifier and a recurrent neural network based on Long short-term memory units. 
 
-Vorteil: läuft lokal, time to feedback ist geringer als bei cloud-basierten ansätzen wie codacy. (läuft bspw als git pre-commit hook oder direkt als VSCode plugin)
+The objectives are to train, evaluate and compare Source Code Snippet Classification models and to modify the input data to represent a problematic code in an unseen way.
+
+In the following we describe the approach in detail. The strucutre follows a machine-learning typical pipeline of data collection, preprocessing, encoding, splitting and training. 
+
+\section{Challenges}
+\chapter{Lack of datasets}
+The most crucial components of every machine learning experiment are labeled datasets. For clean code detection, our research has shown no datasets with labeled clean code violations that could be used.
+As a result, we evaluated differnent different appraoches:
+
+Related research fields like code completion often use the py150 (TODO source ) dataset to train models. This dataset contains 150.000 python files, sourced from GitHub. For supervised classification tasks, this dataset is inadequate due to its missing labels.  
+
+Another possible data source would be git commit histories. We could scan the history for commits that fixed unclean code. The previous code could than be labeled \enquote{unclean} and the commited code would be \enquote{clean}.
+Same applies to issues and referenced pull requests on GitHub.
+We dismissed this approach for several reasons:
+\begin{enumerate}
+    \item There is no annotation in neither issues descriptions nor git commit messages that would reliably tell, if the change is changing a violation of the clean code rules. (TODO screenshot of two differnt commit messages with clean code improvement?)
+    \item Even if we would be able to find commits that improve chaotic code, we could not ensure automatically, that the commit message is correct and only the improvement is included in the commit.
+    \item Searching for commits, we several clean code improvements and refactorings of large portions of the code base in one commit. Additionally, it is often not explicitly mentioned, which rule applied for the improvement. Consequently, a training with such data could only lead to binary classification into clean code or unclean code. From a practical standpoint, it is advantagous to name the explicit rule violation and to explain how to improve.
+\end{enumerate}
+
+
