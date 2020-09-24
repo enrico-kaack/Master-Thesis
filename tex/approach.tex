@@ -184,12 +184,14 @@ The objectives are to train, evaluate and compare Source Code Snippet Classifica
 In the following we describe the approach in detail. The strucutre follows a machine-learning typical pipeline of data collection, preprocessing, encoding, splitting and training. 
 
 \section{Challenges}
-\chapter{Lack of datasets}
+\paragraph{Lack of datasets}
 The most crucial components of every machine learning experiment are labeled datasets. For clean code detection, our research has shown no datasets with labeled clean code violations that could be used.
 As a result, we evaluated differnent different appraoches:
 
+\subparagraph{Solution 1:}
 Related research fields like code completion often use the py150 (TODO source ) dataset to train models. This dataset contains 150.000 python files, sourced from GitHub. For supervised classification tasks, this dataset is inadequate due to its missing labels.  
 
+\subparagraph{Solution 2:}
 Another possible data source would be git commit histories. We could scan the history for commits that fixed unclean code. The previous code could than be labeled \enquote{unclean} and the commited code would be \enquote{clean}.
 Same applies to issues and referenced pull requests on GitHub.
 We dismissed this approach for several reasons:
@@ -198,5 +200,45 @@ We dismissed this approach for several reasons:
     \item Even if we would be able to find commits that improve chaotic code, we could not ensure automatically, that the commit message is correct and only the improvement is included in the commit.
     \item Searching for commits, we several clean code improvements and refactorings of large portions of the code base in one commit. Additionally, it is often not explicitly mentioned, which rule applied for the improvement. Consequently, a training with such data could only lead to binary classification into clean code or unclean code. From a practical standpoint, it is advantagous to name the explicit rule violation and to explain how to improve.
 \end{enumerate}
+\subparagraph{Solution 3:}
+Although Python code is available in abundance in form of open-source projects, it is possible to manually label source code that violates clean code guidelines. 
+For the following reasons, we dismissed this approach:
+\begin{enumerate}
+    \item Curating a hand-labeled dataset is a lot of work that takes time. 
+    \item Manual labeling does not ensure correct labeling. A human can make mistakes or can subjectivly misinterpret chaotic code as clean code. The quality of the dataset could suffer and limit the machine learning models performance.
+\end{enumerate}
+\subparagraph{Solution 4:}
+Given any amount of Python files, we could use the analysis plugins from section TODO analysis plugin to reliably detect violations of the corresponding rule. Based on this labeled data, we can train the classifier to detect these rules. If there would be a labeled dataset for more complex clean code rules, we could transfer the findings to these more complex rules. We choose this solution as to solve to solve the dataset problem and train classifier, with more details given in chapter TODO. As a second step, we manipulated the input data, so the original analysis plugin could not detect the still existing problems anymore. With the second step, we show that the classifier generalise well enough to may work on complex clean code rules.
 
+\paragraph{Inbalanced dataset}
+A second challenge is a major inbalance between the classes labeled as problematic code and clean code. For the three different problem types, RETURN NONE, CONDITION COMPARISON SIMPLE and CONDITION COMPARISON, the class distribution is shown in table \ref{tab:class_distribution_in_dataset}.
+
+\begin{table}[]
+    \begin{tabular}{|l|l|l|l|}
+        \hline
+                             & RETURN NONE & CONDITION SIMPLE & CONDITION COMPARISON \\ \hline
+    0       & 99.79\%      & 97.32\%                       & 95.11\%               \\ \hline
+    1 & 0.21\%       & 2.68\%                        & 4.89\%            \\ \hline
+    \end{tabular}
+    \caption{Class distribution for the dataset. Label [0] represents clean code and label [1] makrs problematic code of the corresponding category.}
+    \label{tab:class_distribution_in_dataset}
+\end{table}
+
+\subparagraph{Solution 1:}
+Due to the inbalance, we do not choose accuracy as a suitable evaluation metric, since classifiying all samples as clean code would result in a accuracy of 99.79\% for the RETURN NONE problem type. Instead, we use precision and recall as metric, with a f1 score as single, weighted metric. More details about the metrics are in chapter TODO.
+
+\subparagraph{Solution 2:}
+We will apply undersampling and oversampling techniques on the data and evalaute the difference in model performance. Undersampling removes random samples from the majority class and thus balance class labels. Oversampling replicates random samples from the minority class to balance class labels while also increasing the overall amount of data. This technique is only used on the trainings data. Since it changes the data distribution, an additional train-dev dataset is used as an additional test set to evaluate the impact of the resampling on the model performance. 
+
+\subparagraph{Solution 3:}
+Our approach of training different classifier is a solution to the data inbalance, since different classifier have a different sensitivity to data balance. 
+
+\paragraph{SVM quadratic complexity in training}
+Support-Vector Machines have a quadratic time complexity on the number of trainings data. Consequently, the training takes a lot of time and the oversampling strategy worsen the trainingstime additionally. 
+\subparagraph{Solution:}
+We reduced the number of experiments with SVM and just evaluate some simple cases for baseline performance. 
+
+source: 
+Time Complexity Analysis of Support Vector Machines
+(SVM) in LibSVM
 
