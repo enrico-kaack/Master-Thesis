@@ -210,19 +210,22 @@ For the following reasons, we dismissed this approach:
 \subparagraph{Solution 4:}
 Given any amount of Python files, we could use the analysis plugins from section TODO analysis plugin to reliably detect violations of the corresponding rule. Based on this labeled data, we can train the classifier to detect these rules. If there would be a labeled dataset for more complex clean code rules, we could transfer the findings to these more complex rules. We choose this solution as to solve to solve the dataset problem and train classifier, with more details given in chapter TODO. As a second step, we manipulated the input data, so the original analysis plugin could not detect the still existing problems anymore. With the second step, we show that the classifier generalise well enough to may work on complex clean code rules.
 
-\paragraph{Inbalanced dataset}
+\paragraph{Inbalanced Dataset}
 A second challenge is a major inbalance between the classes labeled as problematic code and clean code. For the three different problem types, RETURN NONE, CONDITION COMPARISON SIMPLE and CONDITION COMPARISON, the class distribution is shown in table \ref{tab:class_distribution_in_dataset}.
 
+
+
 \begin{table}[]
-    \begin{tabular}{|l|l|l|l|}
-        \hline
-                             & RETURN NONE & CONDITION SIMPLE & CONDITION COMPARISON \\ \hline
-    0       & 99.79\%      & 97.32\%                       & 95.11\%               \\ \hline
-    1 & 0.21\%       & 2.68\%                        & 4.89\%            \\ \hline
+    \begin{tabular}{@{}llll@{}}
+    \toprule
+    Label  & RETURN NONE & CONDITION SIMPLE & CONDITION COMPARISON \\ \midrule
+    0 & 99.79\%     & 97.32\%          & 95.11\%              \\
+    1 & 0.21\%      & 2.68\%           & 4.89\%               \\ \bottomrule
     \end{tabular}
-    \caption{Class distribution for the dataset. Label [0] represents clean code and label [1] makrs problematic code of the corresponding category.}
+    \caption{Class distribution for the train/ test dataset before the split. Label [0] represents clean code and label [1] marks problematic code of the corresponding category.}
     \label{tab:class_distribution_in_dataset}
-\end{table}
+    \end{table}
+
 
 \subparagraph{Solution 1:}
 Due to the inbalance, we do not choose accuracy as a suitable evaluation metric, since classifiying all samples as clean code would result in a accuracy of 99.79\% for the RETURN NONE problem type. Instead, we use precision and recall as metric, with a f1 score as single, weighted metric. More details about the metrics are in chapter TODO.
@@ -242,3 +245,39 @@ source:
 Time Complexity Analysis of Support Vector Machines
 (SVM) in LibSVM
 
+\section{Dataset}
+The source of our dataset are open-source python projects on GitHub. We queried the top starred python repositories and handselected 18 repositories. Although most top stared repositories are data science frameworks, we additional choose projects from domains such as web server, automation and containerisation. See table TODO for a list of all 18 repositories
+A script downlaoded all projects in their main branch with the current head. See table TODO attachment for the corresponding git hashs. Afterwads, we removed all non-python files. 
+Next, we uniformly sampled 20\% of all files and seperated those into a holdout set for final testing. 
+We ensured to not accidentially change the data distribution on the holdout set. Table \ref{tab:general_data_distribution}, shows general and problem specific metrics for the train/test set and the holdout set. The problem specific metrics are collected after processing the code repositories as described in TODO.
+
+The average lines of code per file is similiar with a small difference of 5.5\%. For all problem types, the difference in lines of code containing the problem is smaller than 0.05 percentage point. This metric is important, since this results in compareable label distribution TODO.
+TODO per project analysis table in attachments.
+
+\begin{table}[]
+    \begin{tabular}{@{}llll@{}}
+        \toprule
+    %\cmidrule(l){2-4}
+    \multirow{4}{*}{}                            & Metric                  & Train/Test & Holdout \\ \cmidrule(l){2-4} 
+                                                 & Lines of Code           & 2,789,853  & 658,966 \\
+                                                 & Number of Files         & 14,811     & 3,702   \\
+                                                 & average LOC per File    & 188.36     & 178     \\ \midrule
+    \multirow{2}{*}{Return None}                 & LOCs containing problem & 0.08\%     & 0.08\%  \\
+                                                 & Problems per File       & 0.14       & 0.14    \\ \midrule
+    \multirow{2}{*}{Condition Comparison Simple} & LOCs containing problem & 1.3\%      & 1.25\%  \\
+                                                 & Problems per File       & 2.44       & 2.22    \\ \midrule
+    \multirow{2}{*}{Condition Comparison}        & LOCs containing problem & 2.36\%     & 2.36\%  \\
+                                                 & Problems per File       & 4.44       & 4.19    \\ \bottomrule
+    \end{tabular}
+    \caption{General and problem type specific metrics for the Train/Test (before train-test split) and Holdout set. The lines of code containing a problem and the problems per file are similiar.}
+    \label{tab:general_data_distribution}
+    \end{table}
+
+\section{Processing}
+For the processing steps, we create a pipeline with the d6tflow framework\footnote{\url{https://github.com/d6t/d6tflow}}. Each processing step is a task, that stores its results depending on the parameter configuration in a pickle file. This allows to define a pipeline once and run it with different parameter combinations. The scheduler automatically determines what tasks to run and what task outputs are already stored in pickle files. Consequently, running the pipeline is more efficient and repeatable.
+
+The processing pipeline consists of tasks to read the files into a datastructure, to processes source code and find the problems, to create a vocab dictionary, to convert the data into labeled samples and to split the data into a train, train test and test set. See overview TODO for a schematic representation of the pipeline.
+
+\subsection{Files into internal Data Structure}
+First, a scanner walks recursively in all subdirectories of the input folder to find all files. If the file has a \textit{.py} extension, its file path and the file content will be stored in a dictionary. The dictionaries for all file are collected into a list. 
+Reading all files into main memory increases the performance for downstream tasks, since main memory access is faster than disk access. Although the size of the systems main memory limits the dataset size, a file contains text and is therefore several kilobytes in size. The Train/Test dataset with 14,811 files is 95.36MB in accumulated file size.
