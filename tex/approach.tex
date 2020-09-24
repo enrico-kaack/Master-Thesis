@@ -281,3 +281,22 @@ The processing pipeline consists of tasks to read the files into a datastructure
 \subsection{Files into internal Data Structure}
 First, a scanner walks recursively in all subdirectories of the input folder to find all files. If the file has a \textit{.py} extension, its file path and the file content will be stored in a dictionary. The dictionaries for all file are collected into a list. 
 Reading all files into main memory increases the performance for downstream tasks, since main memory access is faster than disk access. Although the size of the systems main memory limits the dataset size, a file contains text and is therefore several kilobytes in size. The Train/Test dataset with 14,811 files is 95.36MB in accumulated file size.
+
+\subsection{Problem Detection}
+As a next step, the analysis plugins from the CCAP (see chapter TODO) process every file and store the line number along with the problem type. As a result, for every file list of problematic line numbers and the corresponding type is available for further processing.
+
+
+
+\subsection{Data Encoding}\label{sec:data_encoding}
+The data encoding step transform the internal data representation into input vectors x and output vectors y. The transformation is descirbed in the following, multi-stage process.
+
+\paragraph{Fixed Length Sequence}
+The length of source code is dynamic, wheras the input size of our models is fixed. Therefore, the character stream of varaible length has to be transformed into a token stream of fixed size. 
+To extract meaningful tokens from the character stream, we use the python tokenizer from its standard library. The tokenizer seperates the character stream based on the python syntax definition into tokens. All tokens contain a token type (like a name or operator token), the corresponding characters in the source code and a start and end position (line and column number). Next, the token stream is divided into a fixed size token sequence using a sliding window aproach (size: 20, step size: 3).
+\paragraph{Vocabulary Creation}
+To represent a token value with a number, every token value needs a numeric representation. Therefore, the occurence of each token value is counted and the index in an descending ordered list for each token value represents the token as an integer. To ignore potential capitalization missmatches, all token values are lower-case. The overall size of the vocabulary is configurable. If the size is smaller than the size of the distinct token value set, the least common token values will be replaced by an unknown token. The unknown token has a numeric representation one bigger than the vocabulary size.
+\paragraph{Index-Based Encoding}
+The textual token values are encoded with an Index-Based encoding. The most common token values have a numerical representation based on their index in a vocabulary (created with all token values of the train data). Optional, the type of each token is encoded by its numerical representation in the standard library. The type and value encoding are then combined alternating in a final encoding vector that represents an input sample.
+\paragraph{Label Extraction}
+With the internal representation, the ground truth is encoded as a line number. A transformation is necessary to label each sample corresponding to a given problem type. Label 1 is assigned, if the sample contains the given problem type. A sample contains a problem type, if it contains all tokens from the problematic line. If the sample is missing a token of the problematic line at the beginning or end, the label is 0 for non-problematic code. 
+
