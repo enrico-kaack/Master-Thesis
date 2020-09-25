@@ -142,7 +142,8 @@ The Standard Output Plugin writes the formatted output to the stdout stream. It 
 The output is divided into a general part and the problem list. The former contains the input path, all executed plugins, a total runtime and a summary field with the numbers of problems in total. The latter displays the list with problems, grouped by analysis plugin.  
 For each problem, the problem name, file path, line number and description is printed. A colon separates the file path and line number. Some terminals parse the path and line number so that a user can click the path and it opens the default editor with the cursor in the correct line. Sample output is shown in listing \ref{lst:stdout}
 
-\begin{lstlisting}[label=lst:stdout]
+\begin{lstlisting}[basicstyle=\linespread{0.8}
+,  columns=fullflexible, label=lst:stdout]
 Analysis Report on /Users/d064518/MA_CleanCodeAnalyser/test_programs.
 Analyse Plugins: Condition Method Call Plugin, Simple Condition Method Call Plugin, Return None (Null) Plugin, Sample Plugin.
 Total time: None
@@ -271,7 +272,7 @@ TODO per project analysis table in attachments.
     \end{tabular}
     \caption{General and problem type specific metrics for the Train/Test (before train-test split) and Holdout set. The lines of code containing a problem and the problems per file are similiar.}
     \label{tab:general_data_distribution}
-    \end{table}
+\end{table}
 
 \section{Processing}
 For the processing steps, we create a pipeline with the d6tflow framework\footnote{\url{https://github.com/d6t/d6tflow}}. Each processing step is a task, that stores its results depending on the parameter configuration in a pickle file. This allows to define a pipeline once and run it with different parameter combinations. The scheduler automatically determines what tasks to run and what task outputs are already stored in pickle files. Consequently, running the pipeline is more efficient and repeatable.
