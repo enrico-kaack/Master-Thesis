@@ -304,6 +304,12 @@ With the internal representation, the ground truth is encoded as a line number. 
 The data split set is a two-stage process. 
 First, the data is split into a train and test set. As discussed in chapter \ref{sec:inbalanced_dataset}, we used over- and undersampling techniques to combat the inbalanced dataset. This is performed solely on the train data. The test data keeps the original distribution. Next, we split the resampled train data into a final train set and a train\_dev set. We use the latter to test the model performance on data with the same distribution as the trainingsdata to additionally evaluate the influence of the data distribution missmatch.
 
+\begin{figure}
+    \includegraphics[width=1\textwidth]{img/ML/Data_split.pdf}
+    \label{fig:data_split}
+    \caption{Split of the dataset. First, 20\% of all files are seperated into a holdout set for later testing. The remainding 80\% of the files are converted samples. The samples are then split again into 70\% training, 10\% train\_dev and 20\% test data. }
+\end{figure}
+
 \subsection{Code Manipulation}
 In research question TODO, we evaluate the models generalisation. Therefore, we manipulate the code that it is still a rule violation, but the original analysis plugins would not spot them. 
 
