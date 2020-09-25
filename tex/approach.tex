@@ -95,11 +95,11 @@ This implementation covers only the simple case, in which \textit{return None} i
 Since detection alone is not a great help for the user, a useful description of the problem is necessary. 
 As described in section (TODO: background, clean code, return none), there are some alternatives to returning none. If none happens due to an error, it is better to raise an exception and provoke an explicit error handling, which prevents runtime errors. If the standard return type is a collection, an empty list is more appropriate, since the function caller will most likely write the logic for an unknown amount of list items. However, if the standard return type is a single object, it is not apparent what to return. With PEP484 (TODO source), an optional type was introduced for type hints in Python 3. Using a static type checker for Python like mypy (TODO source) outputs a warning if a developer forgets to check an optional for not being none. 
 
-\subsubsection{Condition with Comparison}
+\subsubsection{Condition with Comparison}\label{sec:condition_comparison}
 The second plugin detects a direct comparison in a conditional statement. For better readability and understandability, it is suggested to use a function call with an appropriate name that evaluates to true or false. This function call allows a natural reading of the conditional statement without deciphering the meaning of the boolean logic.
 
-An if-statement consists of a condition and body part. If the condition evaluates to true, the body is executed. For the condition, any logical expression will be evaluated. A simple algorithm would take the AST, search for if nodes and check if the condition part is a compare node. 
-However, negation and logic AND/OR would not be detected by the simple approach. Consequently, a recursive algorithm has to follow logic operators and checks the expressions for comparison nodes.
+An if-statement consists of a condition and body part. If the condition evaluates to true, the body is executed. For the condition, any logical expression will be evaluated. A simple algorithm would take the AST, search for if nodes and check if the condition part is a compare node.
+However, negation and logic AND/OR would not be detected by the simple approach. Consequently, a recursive algorithm has to follow logic operators and checks the expressions for comparison nodes. The simple approach does not provide value for the CCAP but we use if for the machine learning evaluation with the problem type name CONDITION COMPARISON SIMPLE.
 
 Following these considerations, an advanced algorithm would scan for if nodes in the AST. The conditional part as a boolean expression is evaluated in a recursive function that returns true if a direct comparison is made anywhere in a boolean expression.
 The conditional part can be a boolean operation (like AND/OR) or a unary operator (like NOT).  In these cases, the recursive function will be called again with the respective expressions. If the conditional part is neither a boolean operation nor a unary operator, a true is returned if the conditional part is not a method call. The last case would be the base case in the recursion. Listing \ref{lst:condition_coparison} shows the Python implementation of the recursion.
@@ -210,7 +210,7 @@ For the following reasons, we dismissed this approach:
 \subparagraph{Solution 4:}
 Given any amount of Python files, we could use the analysis plugins from section TODO analysis plugin to reliably detect violations of the corresponding rule. Based on this labeled data, we can train the classifier to detect these rules. If there would be a labeled dataset for more complex clean code rules, we could transfer the findings to these more complex rules. We choose this solution as to solve to solve the dataset problem and train classifier, with more details given in chapter TODO. As a second step, we manipulated the input data, so the original analysis plugin could not detect the still existing problems anymore. With the second step, we show that the classifier generalise well enough to may work on complex clean code rules.
 
-\paragraph{Inbalanced Dataset}
+\paragraph{Inbalanced Dataset}\ref{sec:inbalanced_dataset}
 A second challenge is a major inbalance between the classes labeled as problematic code and clean code. For the three different problem types, RETURN NONE, CONDITION COMPARISON SIMPLE and CONDITION COMPARISON, the class distribution is shown in table \ref{tab:class_distribution_in_dataset}.
 
 
@@ -282,8 +282,8 @@ The processing pipeline consists of tasks to read the files into a datastructure
 First, a scanner walks recursively in all subdirectories of the input folder to find all files. If the file has a \textit{.py} extension, its file path and the file content will be stored in a dictionary. The dictionaries for all file are collected into a list. 
 Reading all files into main memory increases the performance for downstream tasks, since main memory access is faster than disk access. Although the size of the systems main memory limits the dataset size, a file contains text and is therefore several kilobytes in size. The Train/Test dataset with 14,811 files is 95.36MB in accumulated file size.
 
-\subsection{Problem Detection}
-As a next step, the analysis plugins from the CCAP (see chapter TODO) process every file and store the line number along with the problem type. As a result, for every file list of problematic line numbers and the corresponding type is available for further processing.
+\subsection{Problem Detection}\label{sec:problem_detection}
+As a next step, the analysis plugins from the CCAP (see chapter TODO) process every file and store the line number along with the problem type. As a result, for every file list of problematic line numbers and the corresponding type is available for further processing. The CCAP only covers the two analysis plugins for the problem types CONDITION COMPARISON and RETURN NONE. For model training, we introduce the simple alogrithm to detect comparisons in conditions as problem type CONDITION COMPARISON SIMPLE (described in chapter \ref{sec:condition_comparison})
 
 
 
@@ -300,3 +300,50 @@ The textual token values are encoded with an Index-Based encoding. The most comm
 \paragraph{Label Extraction}
 With the internal representation, the ground truth is encoded as a line number. A transformation is necessary to label each sample corresponding to a given problem type. Label 1 is assigned, if the sample contains the given problem type. A sample contains a problem type, if it contains all tokens from the problematic line. If the sample is missing a token of the problematic line at the beginning or end, the label is 0 for non-problematic code. 
 
+\subsection{Train/Test Split}
+The data split set is a two-stage process. 
+First, the data is split into a train and test set. As discussed in chapter \ref{sec:inbalanced_dataset}, we used over- and undersampling techniques to combat the inbalanced dataset. This is performed solely on the train data. The test data keeps the original distribution. Next, we split the resampled train data into a final train set and a train\_dev set. We use the latter to test the model performance on data with the same distribution as the trainingsdata to additionally evaluate the influence of the data distribution missmatch.
+
+\subsection{Code Manipulation}
+In research question TODO, we evaluate the models generalisation. Therefore, we manipulate the code that it is still a rule violation, but the original analysis plugins would not spot them. 
+
+\paragraph{Return None}\label{par:manipulation_return_none}
+For the problem type RETURN NONE, we manipulate the code to have an inline if statement that only returns None in one branch. Therefore, a function may still return None, but the analysis plugin would not detect this. Listing \ref{lst:return_none_modified} shows an example for this case. Although a modification of the analysis plugin could cover the variations as well, we want to see how well machine learning models could perform on this task.
+
+To modify the original code, we use the preprocessed code with problems detected as in chapter \ref{sec:problem_detection}. For every source code line containing the RETURN NONE problem, we use regular expressions to replace the \textit{return None} with a variation as seen in \ref{lst:return_none_modified}. 
+
+The following data encoding step is similiar to the one for model training, although this modified samples will only be used during evaluation.
+
+\begin{lstlisting}[language=Python, label=lst:return_none_modified, caption={Samples for returning None. The first return would be flagged by the analysis plugin, the second and third return are modified variations that would be ignored by the analysis plugin. The performance of the machine learning models on detecting the latter will be evaluated.}]
+def f(a,b):
+    #detected by the analysis plugin
+    return None 
+
+    #not detected by the analysis plugin
+    return None if a < b else b 
+
+    #not detected by the analysis plugin
+    return a if a < b else None 
+\end{lstlisting}
+
+\paragraph{Condition Comparison}
+The analysis for the CONDITION COMPARISON problem type is an advancement of the analysis of the CONDITION COMPARISON SIMPLE problem type.  See listing TODO for examples of the different analysis results.
+Since the results of CONDITION COMPARISON are the modification of the CONDITION COMPARISON SIMPLE, we use the first as ground truth for evaluating the generalisation. Since the CONDITION COMPARISON SIMPLE problems are a subset of the CONDITION COMPARISON problems, we use a similar approach as before (see \ref{par:manipulation_return_none}) to transform all problem occurances to be undectable by the CONDITION COMPARISON SIMPLE analysis plugin.
+
+\begin{lstlisting}[language=Python, label=lst:conidtion_comparison_modified, caption={Sample statements for the differnce between the two analysis plugins CONDITION COMPARISON and CONDITION COMPARISON SIMPLE.  }]
+    def f(a,b):
+    #detected by CONDITION COMPARISON SIMPLE
+    #detected by CONDITION COMPARISON
+    if a < b:
+        pass 
+
+    #not detected by CONDITION COMPARISON SIMPLE
+    #detected by CONDITION COMPARISON
+    if not a < b:
+        pass 
+
+    #not detected by CONDITION COMPARISON SIMPLE
+    #detected by CONDITION COMPARISON
+    if isSmaller(a,b) or a < b:
+        pass 
+\end{lstlisting}
