@@ -63,9 +63,8 @@ Detecting \textit{return None} is possible in multiple ways. The following shows
 \begin{description}
     \item[Regular Expression]: In the \textit{do\_analysis} method, a developer has access to the source code as a string. Therefore, it is straitforward to use a regular expression to detect a \textit{return None} statement.
     \begin{lstlisting}[language=Python]
-        import re
-        matches = re.finditer(r"return None", source_file.content, re.MULTILINE | re.DOTALL)
-    \end{lstlisting}
+import re
+matches = re.finditer(r"return None", source_file.content, re.MULTILINE | re.DOTALL) \end{lstlisting}
     Since the regex library only returns the start and end index of matches, these have to be converted to line numbers. Afterwards a \textit{ReturnNullProblem} instance can be created for every match and added to the \textit{AnalysisReport} for this plugin.
 
     This approach uses regular expressions to match patterns in a string without utilising the structures of the code. It is a simple but powerful way and most developers are familiar with regular expression. On the flip-side, source code may have various ways syntactic ways to express a semantic. Consequently, the regular expressions have to be designed carefully to cover all variations. For instance, it is possible to encounter a doubled whitespace, that would break the aforementioned regular expression. Additionally, regular expressions do not operate on the structure of the code; therefore, they can not detect high-level patterns on the code structure.
@@ -79,13 +78,12 @@ Detecting \textit{return None} is possible in multiple ways. The following shows
 
     To detect a \textit{return None} statement in the abstract syntax tree, an algorithm would traverse all AST nodes looking for a return-typed node. If found, the value descendant contains the statement part after the return keyword. A \textit{None} value would be represented as a node of type constant or name constant (depending on the parser version). The value descendant of the constant node may then be checked for equality to \textit{None}. All AST nodes contain the corresponding line number, that are necessary for creating a problem message:
     \begin{lstlisting}[language=Python]
-        for node in ast.walk(a.ast):
-            if isinstance(node, ast.Return):
-                return_value = node.value
-                if isinstance(return_value, ast.Constant) or isinstance(return_value, ast.NameConstant):
-                    if return_value.value is None:
-                        problems.append(ReturnNullProblem(a.file_path, return_value.lineno))
-    \end{lstlisting}
+    for node in ast.walk(a.ast):
+        if isinstance(node, ast.Return):
+            return_value = node.value
+            if isinstance(return_value, ast.Constant) or isinstance(return_value, ast.NameConstant):
+                if return_value.value is None:
+                    problems.append(ReturnNullProblem(a.file_path, return_value.lineno))\end{lstlisting}
 
     Analysing the AST is best for problems in the code structure since the AST represents the code structure in a well-defined, traversable data structure. Although simpler patterns like the \textit{return None} could be detected using regular expressions, a detection on AST level allows detecting the semantic meaning instead of the syntactic representation of a problem. For more complex problems, it is inevitable to use the AST most of the time.
 \end{description}
@@ -103,7 +101,7 @@ However, negation and logic AND/OR would not be detected by the simple approach.
 
 Following these considerations, an advanced algorithm would scan for if nodes in the AST. The conditional part as a boolean expression is evaluated in a recursive function that returns true if a direct comparison is made anywhere in a boolean expression.
 The conditional part can be a boolean operation (like AND/OR) or a unary operator (like NOT).  In these cases, the recursive function will be called again with the respective expressions. If the conditional part is neither a boolean operation nor a unary operator, a true is returned if the conditional part is not a method call. The last case would be the base case in the recursion. Listing \ref{lst:condition_coparison} shows the Python implementation of the recursion.
-
+\begin{minipage}[c]{\linewidth}
 \begin{lstlisting}[language=Python, label=lst:condition_coparison, caption={Recursive function to analyse an if statement for direct comparisons. Since a condition should contain a method call, the function returns False if this is not the case.}]
 def _check_if_direct_comparison(self, node):
     if isinstance(node, ast.BoolOp):
@@ -116,8 +114,8 @@ def _check_if_direct_comparison(self, node):
     elif isinstance(node, ast.UnaryOp):
         return self._check_if_direct_comparison(node.operand)
 
-    return not isinstance(node, ast.Call)
-    \end{lstlisting}
+    return not isinstance(node, ast.Call)\end{lstlisting}
+\end{minipage}
 
 \subsection{Output Plugins}
 With output plugins, CCAP adds additional flexibility towards the output format. Depending on environmental requirements, the output can be adapted with custom logic by defining an output plugin. For instance, running the tool locally could write the results to the standard output in a human-readable way or create a formatted HTML file to be displayed in the browser. A machine-readable JSON output may be preferred when running inside an automated workflow.
@@ -140,10 +138,10 @@ To expand the output capabilities of the CCAP, the following steps are, similiar
 The Standard Output Plugin writes the formatted output to the stdout stream. It is enabled if no output plugin is explicitly specified. 
 
 The output is divided into a general part and the problem list. The former contains the input path, all executed plugins, a total runtime and a summary field with the numbers of problems in total. The latter displays the list with problems, grouped by analysis plugin.  
-For each problem, the problem name, file path, line number and description is printed. A colon separates the file path and line number. Some terminals parse the path and line number so that a user can click the path and it opens the default editor with the cursor in the correct line. Sample output is shown in listing \ref{lst:stdout}
+For each problem, the problem name, file path, line number and description is printed. A colon separates the file path and line number. Some terminals parse the path and line number so that a user can click the path and it opens the default editor with the cursor in the correct line. Sample output is shown in listing \ref{lst:stdout}.
 
-\begin{lstlisting}[basicstyle=\linespread{0.8}
-,  columns=fullflexible, label=lst:stdout]
+\begin{minipage}[c]{\linewidth}
+\begin{lstlisting}[ columns=fullflexible, label=lst:stdout]
 Analysis Report on /Users/d064518/MA_CleanCodeAnalyser/test_programs.
 Analyse Plugins: Condition Method Call Plugin, Simple Condition Method Call Plugin, Return None (Null) Plugin, Sample Plugin.
 Total time: None
@@ -158,6 +156,7 @@ PLUGIN NAME: Return None (Null) Plugin by Enrico Kaack <e.kaack@live.de>
         Found: Returned None in /Users/d064518/MA_CleanCodeAnalyser/test_programs/return_none.py:4
             Returning None is dangerous since the caller has to check for None. Otherwise, a runtime exception may occur.
 \end{lstlisting} 
+\end{minipage}
 
 \subsubsection{HTML Output Plugin}
 For larger projects, the Standard Output Plugin may not be sufficient to get an overview of the project or to generate a report. Therefore, the HTML Output Plugin creates a \textit{report.html} file, that can be opened in every browser and provides a cleaner overview. It has similar general data at the top as the Standard Output Plugin, but it moves the problem description into a tooltip to offer a more compact overview. See figure \ref{fig:screen_html_output} for an example screenshot.
@@ -315,6 +314,7 @@ To modify the original code, we use the preprocessed code with problems detected
 
 The following data encoding step is similiar to the one for model training, although this modified samples will only be used during evaluation.
 
+\begin{minipage}[c]{\linewidth}
 \begin{lstlisting}[language=Python, label=lst:return_none_modified, caption={Samples for returning None. The first return would be flagged by the analysis plugin, the second and third return are modified variations that would be ignored by the analysis plugin. The performance of the machine learning models on detecting the latter will be evaluated.}]
 def f(a,b):
     #detected by the analysis plugin
@@ -324,13 +324,12 @@ def f(a,b):
     return None if a < b else b 
 
     #not detected by the analysis plugin
-    return a if a < b else None 
-\end{lstlisting}
-
+    return a if a < b else None \end{lstlisting}
+\end{minipage}
 \paragraph{Condition Comparison}
 The analysis for the CONDITION COMPARISON problem type is an advancement of the analysis of the CONDITION COMPARISON SIMPLE problem type.  See listing TODO for examples of the different analysis results.
 Since the results of CONDITION COMPARISON are the modification of the CONDITION COMPARISON SIMPLE, we use the first as ground truth for evaluating the generalisation. Since the CONDITION COMPARISON SIMPLE problems are a subset of the CONDITION COMPARISON problems, we use a similar approach as before (see \ref{par:manipulation_return_none}) to transform all problem occurances to be undectable by the CONDITION COMPARISON SIMPLE analysis plugin.
-
+\begin{minipage}[c]{0.95\linewidth}
 \begin{lstlisting}[language=Python, label=lst:conidtion_comparison_modified, caption={Sample statements for the differnce between the two analysis plugins CONDITION COMPARISON and CONDITION COMPARISON SIMPLE.  }]
     def f(a,b):
     #detected by CONDITION COMPARISON SIMPLE
@@ -346,5 +345,5 @@ Since the results of CONDITION COMPARISON are the modification of the CONDITION 
     #not detected by CONDITION COMPARISON SIMPLE
     #detected by CONDITION COMPARISON
     if isSmaller(a,b) or a < b:
-        pass 
-\end{lstlisting}
+        pass \end{lstlisting}
+\end{minipage}
