@@ -251,7 +251,7 @@ A script downlaoded all projects in their main branch with the current head. See
 Next, we uniformly sampled 20\% of all files and seperated those into a holdout set for final testing. 
 We ensured to not accidentially change the data distribution on the holdout set. Table \ref{tab:general_data_distribution}, shows general and problem specific metrics for the train/test set and the holdout set. The problem specific metrics are collected after processing the code repositories as described in TODO.
 
-The average lines of code per file is similiar with a small difference of 5.5\%. For all problem types, the difference in lines of code containing the problem is smaller than 0.05 percentage point. This metric is important, since this results in compareable label distribution TODO.
+The average lines of code per file is similiar with a small difference of 3.26\%. For all problem types, the difference in lines of code containing the problem is smaller than 0.1 percentage point. This metric is important, since this results in compareable label distribution TODO.
 TODO per project analysis table in attachments.
 
 \begin{table}[]
@@ -259,15 +259,15 @@ TODO per project analysis table in attachments.
         \toprule
     %\cmidrule(l){2-4}
     \multirow{4}{*}{}                            & Metric                  & Train/Test & Holdout \\ \cmidrule(l){2-4} 
-                                                 & Lines of Code           & 2,789,853  & 658,966 \\
+                                                 & Lines of Code           & 2,777,268  & 671,554 \\
                                                  & Number of Files         & 14,811     & 3,702   \\
-                                                 & average LOC per File    & 188.36     & 178     \\ \midrule
+                                                 & average LOC per File    & 187.51     & 181.40     \\ \midrule
     \multirow{2}{*}{Return None}                 & LOCs containing problem & 0.08\%     & 0.08\%  \\
                                                  & Problems per File       & 0.14       & 0.14    \\ \midrule
-    \multirow{2}{*}{Condition Comparison Simple} & LOCs containing problem & 1.3\%      & 1.25\%  \\
-                                                 & Problems per File       & 2.44       & 2.22    \\ \midrule
-    \multirow{2}{*}{Condition Comparison}        & LOCs containing problem & 2.36\%     & 2.36\%  \\
-                                                 & Problems per File       & 4.44       & 4.19    \\ \bottomrule
+    \multirow{2}{*}{Condition Comparison Simple} & LOCs containing problem & 1.28\%      & 1.32\%  \\
+                                                 & Problems per File       & 2.4       & 2.4    \\ \midrule
+    \multirow{2}{*}{Condition Comparison}        & LOCs containing problem & 2.34\%     & 2.44\%  \\
+                                                 & Problems per File       & 4.38       & 4.42    \\ \bottomrule
     \end{tabular}
     \caption{General and problem type specific metrics for the Train/Test (before train-test split) and Holdout set. The lines of code containing a problem and the problems per file are similiar.}
     \label{tab:general_data_distribution}
@@ -280,7 +280,7 @@ The processing pipeline consists of tasks to read the files into a datastructure
 
 \subsection{Files into internal Data Structure}
 First, a scanner walks recursively in all subdirectories of the input folder to find all files. If the file has a \textit{.py} extension, its file path and the file content will be stored in a dictionary. The dictionaries for all file are collected into a list. 
-Reading all files into main memory increases the performance for downstream tasks, since main memory access is faster than disk access. Although the size of the systems main memory limits the dataset size, a file contains text and is therefore several kilobytes in size. The Train/Test dataset with 14,811 files is 95.36MB in accumulated file size.
+Reading all files into main memory increases the performance for downstream tasks, since main memory access is faster than disk access. Although the size of the systems main memory limits the dataset size, a file contains text and is therefore several kilobytes in size. The Train/Test dataset with 14,811 files is 94.98MB in accumulated file size.
 
 \subsection{Problem Detection}\label{sec:problem_detection}
 As a next step, the analysis plugins from the CCAP (see chapter TODO) process every file and store the line number along with the problem type. As a result, for every file list of problematic line numbers and the corresponding type is available for further processing. The CCAP only covers the two analysis plugins for the problem types CONDITION COMPARISON and RETURN NONE. For model training, we introduce the simple alogrithm to detect comparisons in conditions as problem type CONDITION COMPARISON SIMPLE (described in chapter \ref{sec:condition_comparison})
