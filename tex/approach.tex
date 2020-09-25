@@ -32,10 +32,22 @@ During the core execution phase, the core receives a list with the file name, fi
 
 The last component in the execution chain is the output plugin handler that will pass the \textit{FullReport} to the specified output plugin. It implements the same algorithm as the analysis plugin handler to find all plugins that inherit from \textit{AbstractOutputPlugin}. Instead of keeping track of all plugins, only the plugin that corresponds to the output format argument is instantiated. The output plugin has an entry point as defined in \textit{AbstractOutputPlugin}  that is called with all the collected results.
 
-\subsection{Analysis Plugins}
+\subsection{Analysis Plugins}\label{sec:analysis_plugins}
 Analysis plugins provide the easy extendability of the platform by developers. All users of the tool can expand the set of problems it can detect by implementing a plugin Python and placing it into the plugin directory of the tool. In order to be compatible with the core components, a plugin has to be a class that inherits from the \textit{AbstractAnalysisPlugin} class. Firstly, the abstract class introduces a class member variable \textit{metadata} of the class \textit{PluginMetaData}. A concrete plugin class sets this class member in the constructor to provide a plugin name, author and optional website. This metadata is used in the output to show more information about the plugin that reported a problem. Secondly, \textit{AbstractAnalysisPlugin} specifies a \textit{do\_analysis} method that serves as a entry point that the platform will call. It accepts a list of \textit{ParsedSourceFile} objects that contains the file path, the file content and the corresponding AST for all input files. With this information, the plugin can implement any logic to detect problems. 
 For example, the plugin can traverse the AST to look for specific node types, it can use a tokeniser on the content of the files and analyse the token stream or it can run sophisticated machine learning algorithms on the source code.
-The plugin can even import third-party libraries, although they have to be installed by the user on the system. After detecting all problems, the plugin returns an \textit{AnalysisReport}. The report contains the plugins metadata and a list of found problems. These problems are instances of a problem class inheriting from \textit{AbstractAnalysisProblem}. The abstract class expects a file path and line number as constructor arguments and requires the plugin developer to override the problem name and description. (TODO Refer to the sample in Return None plugin). The problem name and description will be shown in the final output and should follow the following guidelines:
+The plugin can even import third-party libraries, although they have to be installed by the user on the system. After detecting all problems, the plugin returns an \textit{AnalysisReport}. The report contains the plugins metadata and a list of found problems. These problems are instances of a problem class inheriting from \textit{AbstractAnalysisProblem}. The abstract class expects a file path and line number as constructor arguments and requires the plugin developer to override the problem name and description (see listing \ref{lst:lst:return_none_problem_override} for an example). The problem name and description will be shown in the final output and should follow the following guidelines:
+
+\begin{minipage}[c]{0.95\linewidth}
+
+\begin{lstlisting}[language=Python, label=lst:return_none_problem_override, caption={Example for overwriting the \textit{AbstractAnalysisProblem} with a concete implmentation. The problem name and description are overwritten.}]
+class ReturnNoneProblem(AbstractAnalysisProblem):
+    def __init__(self, file_path, line_number):
+        self.name = "Returned None"
+        self.description = "Returning None is dangerous since the caller has to check for None. Otherwise, a runtime exception may occur."
+        super().__init__(file_path, line_number)
+\end{lstlisting}
+\end{minipage}
+
 \begin{itemize}
     \item Have a proper name that allows the experienced developer to recognise the problem quickly.
     \item Explain what code construct is problematic.
@@ -54,7 +66,7 @@ In order to expand the CCAP with an analysis plugin, the following steps are req
     \item Place the \textit{.py} file into the analysis plugin directory of the tool.
 \end{enumerate}
 Whereas these are the minimum required steps to implement the plugin, the developer is free to add additional methods, classes or import libraries as necessary.
-Furthermore, it is advisable to implement several tests to ensure the plugins correctness. CCAP uses pytest \footnote{\url{https://docs.pytest.org/en/stable/}} for testing, implementing a test is as easy as writing a function with a \enquote{test\_} prefix and running the \textit{pytest} command. TODO: further test instruction after test implementation
+Furthermore, it is advisable to implement several tests to ensure the plugins correctness. CCAP uses pytest \footnote{\url{https://docs.pytest.org/en/stable/}} for testing, implementing a test is as easy as writing a function with a \enquote{test\_} prefix and running the \textit{pytest} command. The plugin can be tested by simulating a call from the CCAP core with a mocked \textit{ParsedSourceFile}. 
 
 \subsubsection{Return None Plugin}
 A rather simple analysis plugin demonstrates the capabilities of the CCAP: The Return None Plugin scans the source code for functions that return the None value. Returning None may result in runtime exceptions if the function caller does not expect and handle a potential None return. Although the None can be returned directly or as a value of the returning variable, this plugin only focus on the explicit \textit{return None} statement to showcase the options for the developer to analyse the source code.
@@ -76,22 +88,26 @@ matches = re.finditer(r"return None", source_file.content, re.MULTILINE | re.DOT
     A simple algorithm would scan the sequence for two subsequent name tokens with the values "return" and "None". The abstraction level of a token sequence is higher than of a character sequence. Since the whitespace between "return" and "None" provide no semantic meaning, it is removed on this abstraction level. Whereas the regular expression based approach would have to deal with problems as the doubled whitespace, the token-based approach profits from the higher abstraction level and can access meaningful tokens directly.
     \item[Abstract Syntax Tree]: After tokenisation, a parser takes the token stream and prases it into a hierarchical data structure like an Abstract Syntax Tree. With an AST the code is represented structurally and it is possible to traverse the tree following the structure of the code. The AST consists of nodes with different type and children, for example, a node representing an if statement. It is possible to access the condition and the body of the if statement as descendant nodes in the AST. Analysing an AST allows a higher abstraction level then analysing the token string since the code structure is represented. Therefore, more abstract rules that analyse the code structure are possible.
 
-    To detect a \textit{return None} statement in the abstract syntax tree, an algorithm would traverse all AST nodes looking for a return-typed node. If found, the value descendant contains the statement part after the return keyword. A \textit{None} value would be represented as a node of type constant or name constant (depending on the parser version). The value descendant of the constant node may then be checked for equality to \textit{None}. All AST nodes contain the corresponding line number, that are necessary for creating a problem message:
-    \begin{lstlisting}[language=Python]
+    To detect a \textit{return None} statement in the abstract syntax tree, an algorithm would traverse all AST nodes looking for a return-typed node. If found, the value descendant contains the statement part after the return keyword. A \textit{None} value would be represented as a node of type constant or name constant (depending on the parser version). The value descendant of the constant node may then be checked for equality to \textit{None}. All AST nodes contain the corresponding line number, that are necessary for creating a problem message. See listing \ref{lst:return_none_detection_algorithm} for a Python implementation. 
+
+
+    Analysing the AST is best for problems in the code structure since the AST represents the code structure in a well-defined, traversable data structure. Although simpler patterns like the \textit{return None} could be detected using regular expressions, a detection on AST level allows detecting the semantic meaning instead of the syntactic representation of a problem. For more complex problems, it is inevitable to use the AST most of the time.
+\end{description}
+
+\begin{minipage}[c]{\linewidth}
+    \begin{lstlisting}[language=Python, label=lst:return_none_detection_algorithm, caption={Detecting RETURN NONE problems by analsing the AST data structure.}]
     for node in ast.walk(a.ast):
         if isinstance(node, ast.Return):
             return_value = node.value
             if isinstance(return_value, ast.Constant) or isinstance(return_value, ast.NameConstant):
                 if return_value.value is None:
                     problems.append(ReturnNullProblem(a.file_path, return_value.lineno))\end{lstlisting}
-
-    Analysing the AST is best for problems in the code structure since the AST represents the code structure in a well-defined, traversable data structure. Although simpler patterns like the \textit{return None} could be detected using regular expressions, a detection on AST level allows detecting the semantic meaning instead of the syntactic representation of a problem. For more complex problems, it is inevitable to use the AST most of the time.
-\end{description}
+    \end{minipage}
 
 This implementation covers only the simple case, in which \textit{return None} is written explicitly. Of course, several modifications are possible, that would not be detected by this plugin and would require more sophisticated algorithms. Evaluating, if machine learning models trained on this simple rule can also detect such modifications is part of the second part in research question 3 (TODO: check, jump link).
 
 Since detection alone is not a great help for the user, a useful description of the problem is necessary. 
-As described in section (TODO: background, clean code, return none), there are some alternatives to returning none. If none happens due to an error, it is better to raise an exception and provoke an explicit error handling, which prevents runtime errors. If the standard return type is a collection, an empty list is more appropriate, since the function caller will most likely write the logic for an unknown amount of list items. However, if the standard return type is a single object, it is not apparent what to return. With PEP484 (TODO source), an optional type was introduced for type hints in Python 3. Using a static type checker for Python like mypy (TODO source) outputs a warning if a developer forgets to check an optional for not being none. 
+As described in section \ref{sec:background:returning_none_and_error_handling}, there are some alternatives to returning none. If none happens due to an error, it is better to raise an exception and provoke an explicit error handling, which prevents runtime errors. If the standard return type is a collection, an empty list is more appropriate, since the function caller will most likely write the logic for an unknown amount of list items. However, if the standard return type is a single object, it is not apparent what to return. With PEP484 (TODO source), an optional type was introduced for type hints in Python 3. Using a static type checker for Python like mypy (TODO source) outputs a warning if a developer forgets to check an optional for not being none. 
 
 \subsubsection{Condition with Comparison}\label{sec:condition_comparison}
 The second plugin detects a direct comparison in a conditional statement. For better readability and understandability, it is suggested to use a function call with an appropriate name that evaluates to true or false. This function call allows a natural reading of the conditional statement without deciphering the meaning of the boolean logic.
@@ -194,12 +210,30 @@ Related research fields like code completion often use the py150 (TODO source ) 
 \subparagraph{Solution 2:}
 Another possible data source would be git commit histories. We could scan the history for commits that fixed unclean code. The previous code could than be labeled \enquote{unclean} and the commited code would be \enquote{clean}.
 Same applies to issues and referenced pull requests on GitHub.
-We dismissed this approach for several reasons:
+We dismissed this approach for several reasons (see figure \ref{fig:commit_messages} for an illustrative example):
 \begin{enumerate}
-    \item There is no annotation in neither issues descriptions nor git commit messages that would reliably tell, if the change is changing a violation of the clean code rules. (TODO screenshot of two differnt commit messages with clean code improvement?)
+    \item There is no annotation in neither issues descriptions nor git commit messages that would reliably tell, if the change is changing a violation of the clean code rules.
     \item Even if we would be able to find commits that improve chaotic code, we could not ensure automatically, that the commit message is correct and only the improvement is included in the commit.
-    \item Searching for commits, we several clean code improvements and refactorings of large portions of the code base in one commit. Additionally, it is often not explicitly mentioned, which rule applied for the improvement. Consequently, a training with such data could only lead to binary classification into clean code or unclean code. From a practical standpoint, it is advantagous to name the explicit rule violation and to explain how to improve.
+    \item Searching for commits, we found several clean code improvements and refactorings of large portions of the code base in one commit. Additionally, it is often not explicitly mentioned, which rule applied for the improvement. Consequently, a training with such data could only lead to binary classification into clean code or unclean code. From a practical standpoint, it is advantagous to name the explicit rule violation and to explain how to improve.
 \end{enumerate}
+
+\begin{figure}
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=1\linewidth]{img/ML/commit_messages/screen_1.png}
+    \end{subfigure}
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=1\linewidth]{img/ML/commit_messages/screen_2.png}
+    \end{subfigure}
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=1\linewidth]{img/ML/commit_messages/screen_3.png}
+    \end{subfigure}
+    \caption[short]%
+    {Example commit messages from different repositories. Those examples highlight (1) the missing naming convention, (2) inclusion of additional performance improvements and (3) several edits in multiple files. Those commits are found by searching GitHub for \enquote{clean code improvements} and filtering for Python language and commits. Sources: \footnotemark[1], \footnotemark[2], \footnotemark[3]  }
+    \label{fig:commit_messages}
+\end{figure}
+\footnotetext[1]{\url{https://github.com/Zadigo/ecommerce_template/commit/db2655c7ba16add17db221761fabda28e0128761}}
+\footnotetext[2]{\url{https://github.com/gbaranski/homeflow/commit/7d06d9f6ea78530e5a542f71f6ddd536e2d55bb7}}
+\footnotetext[3]{\url{https://github.com/ptimofeyeff/distributed-computing/commit/ff5e1322611a0c3b3c62556d7a775441630df252}}
 \subparagraph{Solution 3:}
 Although Python code is available in abundance in form of open-source projects, it is possible to manually label source code that violates clean code guidelines. 
 For the following reasons, we dismissed this approach:
@@ -219,8 +253,8 @@ A second challenge is a major inbalance between the classes labeled as problemat
     \begin{tabular}{@{}llll@{}}
     \toprule
     Label  & RETURN NONE & CONDITION SIMPLE & CONDITION COMPARISON \\ \midrule
-    0 & 99.79\%     & 97.32\%          & 95.11\%              \\
-    1 & 0.21\%      & 2.68\%           & 4.89\%               \\ \bottomrule
+    0 & 99.78\%     & 97.23\%          & 94.9\%              \\
+    1 & 0.22\%      & 2.77\%           & 5.1\%               \\ \bottomrule
     \end{tabular}
     \caption{Class distribution for the train/ test dataset before the split. Label [0] represents clean code and label [1] marks problematic code of the corresponding category.}
     \label{tab:class_distribution_in_dataset}
@@ -283,7 +317,7 @@ First, a scanner walks recursively in all subdirectories of the input folder to 
 Reading all files into main memory increases the performance for downstream tasks, since main memory access is faster than disk access. Although the size of the systems main memory limits the dataset size, a file contains text and is therefore several kilobytes in size. The Train/Test dataset with 14,811 files is 94.98MB in accumulated file size.
 
 \subsection{Problem Detection}\label{sec:problem_detection}
-As a next step, the analysis plugins from the CCAP (see chapter TODO) process every file and store the line number along with the problem type. As a result, for every file list of problematic line numbers and the corresponding type is available for further processing. The CCAP only covers the two analysis plugins for the problem types CONDITION COMPARISON and RETURN NONE. For model training, we introduce the simple alogrithm to detect comparisons in conditions as problem type CONDITION COMPARISON SIMPLE (described in chapter \ref{sec:condition_comparison})
+As a next step, the analysis plugins from the CCAP (see chapter \ref{sec:analysis_plugins}) process every file and store the line number along with the problem type. As a result, for every file list of problematic line numbers and the corresponding type is available for further processing. The CCAP only covers the two analysis plugins for the problem types CONDITION COMPARISON and RETURN NONE. For model training, we introduce the simple alogrithm to detect comparisons in conditions as problem type CONDITION COMPARISON SIMPLE (described in chapter \ref{sec:condition_comparison})
 
 
 
@@ -333,8 +367,9 @@ def f(a,b):
     return a if a < b else None \end{lstlisting}
 \end{minipage}
 \paragraph{Condition Comparison}
-The analysis for the CONDITION COMPARISON problem type is an advancement of the analysis of the CONDITION COMPARISON SIMPLE problem type.  See listing TODO for examples of the different analysis results.
+The analysis for the CONDITION COMPARISON problem type is an advancement of the analysis of the CONDITION COMPARISON SIMPLE problem type.  See listing \ref{lst:conidtion_comparison_modified} for examples of the different analysis results.
 Since the results of CONDITION COMPARISON are the modification of the CONDITION COMPARISON SIMPLE, we use the first as ground truth for evaluating the generalisation. Since the CONDITION COMPARISON SIMPLE problems are a subset of the CONDITION COMPARISON problems, we use a similar approach as before (see \ref{par:manipulation_return_none}) to transform all problem occurances to be undectable by the CONDITION COMPARISON SIMPLE analysis plugin.
+
 \begin{minipage}[c]{0.95\linewidth}
 \begin{lstlisting}[language=Python, label=lst:conidtion_comparison_modified, caption={Sample statements for the differnce between the two analysis plugins CONDITION COMPARISON and CONDITION COMPARISON SIMPLE.  }]
     def f(a,b):
