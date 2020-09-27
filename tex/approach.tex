@@ -344,8 +344,17 @@ First, the data is split into a train and test set. As discussed in chapter \ref
     \caption{Split of the dataset. First, 20\% of all files are seperated into a holdout set for later testing. The remainding 80\% of the files are converted samples. The samples are then split again into 70\% training, 10\% train\_dev and 20\% test data. }
 \end{figure}
 
+\subsection{Models}
+Classifying code samples is a binary classification problem since we consider each problem type as a seperate classification task. We train and evaluate a random forest classifier, a support-vector machine based classifier, a gradient boosting classifier and a neural network with LSTM cells.
+
+\paragraph{Random Forest}
+We use a random forest classifier with 100 decision trees to perform the binary classification. Additionally to over- and uindersampling, we experiment with an automatic class weighting inverse proportional to class frequency. The other hyperparamter follow the default implementation of the scikit-learn library: The quality measure of a split follows the gini function, the tree depth is unlimited and the number of features to consider for each split is the square-root of the number of features overall.
+\paragraph{Support Vector Machine}
+\paragraph{Gradient Boosting Classifier}
+\paragraph{Neural Networks with LSTM Cells}
+
 \subsection{Code Manipulation}
-In research question TODO, we evaluate the models generalisation. Therefore, we manipulate the code that it is still a rule violation, but the original analysis plugins would not spot them. 
+In research question TODO, we evaluate the models generalisation to detect similar pattern the model was not trained on. Therefore, we manipulate the code that it is still a rule violation, but the original analysis plugins would not spot them. 
 
 \paragraph{Return None}\label{par:manipulation_return_none}
 For the problem type RETURN NONE, we manipulate the code to have an inline if statement that only returns None in one branch. Therefore, a function may still return None, but the analysis plugin would not detect this. Listing \ref{lst:return_none_modified} shows an example for this case. Although a modification of the analysis plugin could cover the variations as well, we want to see how well machine learning models could perform on this task.
