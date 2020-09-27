@@ -191,7 +191,7 @@ Continuing on configuration possibilities, having configuration possibilities fo
 
 Lastly, a feature to disable problem reporting for a specific code location could bring a boost in user acceptance. While some clean code rules are objective and can be measured precisely, some rules are more general recommendations that may not apply to every occurrence of this situation. For instance, the clean code guidelines generally suggest not to have more than three function arguments; it may be necessary or even inevitable to have four arguments. The CCAP should report this as a problem, but the user should be able to decide if it is acceptable. In this case, the problem type on this specific location should not be reported in the future. In the current version, the user has no way to ignore a specific problem. Consequently, over time the number of problems the user has to ignore will accumulate until the user abandons the tool since it does not provide an added value over the frustration of manually ignoring problems.
 
-\chapter{Clean Code Classification}
+\chapter{Clean Code Classification}\label{chap:clean_code_classification}
 In the previous chapter, we have presented a platform to check for clean code rules. This platform requires analysis plugins to detect certain problems. These handwritten rules work well on certain rules, but certain rules may require a complicated analysis of the AST, the data-flow or the inter-module dependencies. Some rules on the other hand are subjective and we do not see a way of detection those rule violations with an algorithm.
 Therefore, this chapter introduces an approach to evaluate different supervised machine learning models to classify code into clean code or problematic code. Furthermore, we describe how we modify the code to test the generalisation capabilities of the models. The mentioned machine learning models include random forest classifier, support-vector-Machines, gradient boosting classifier and a recurrent neural network based on Long short-term memory units. 
 
@@ -279,7 +279,7 @@ source:
 Time Complexity Analysis of Support Vector Machines
 (SVM) in LibSVM
 
-\section{Dataset}
+\section{Dataset}\label{chap:clean_code_classification_dataset}
 The source of our dataset are open-source python projects on GitHub. We queried the top starred python repositories and handselected 18 repositories. Although most top stared repositories are data science frameworks, we additional choose projects from domains such as web server, automation and containerisation. See table TODO for a list of all 18 repositories
 A script downlaoded all projects in their main branch with the current head. See table TODO attachment for the corresponding git hashs. Afterwads, we removed all non-python files. 
 Next, we uniformly sampled 20\% of all files and seperated those into a holdout set for final testing. 

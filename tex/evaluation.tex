@@ -2,6 +2,7 @@
 
 \begin{description}
     \item[RQ1] Can the Clean Code Analysis Platform be a useful addition to developers workflow besides existing tools? 
+    \item[RQ2] What models perform well on detecting non-clean code
 \end{description}
 
 \subsection{RQ1: Can the Clean Code Analysis Platform be a useful addition to developers workflow besides existing tools?}
@@ -37,3 +38,24 @@ The maturity and community-support of tools impact the integration of the tools 
 In summary, CCAP offers a good, but not best in class expandability with analysis plugins. It has a high useability for plugin developer and users. The lack of integrations for different workflows reflects the lack of community support and maturity. 
 We see the CCAP as an addition to the powerful Sonarqube. The simple, yet robust expandability of the CCAP could supplement the shortcomings of Sonarqube in its powerful, but complex expandability. For instance, a code reviewer could code problematic code into a simple python plugin, distributes it to the team and would hopefully not reencounter the same problem.
 Additionally, the CCAP could be used to teach about Clean Code and to enforce specific coding rules to students, since the local setup is straightforward. Clean Code rules could be turned into analysis plugins by students or teachers without having to understand a complicated interface.
+
+\subsection{RQ2: What models perform well on detecting non-clean code?}
+\paragraph{Motivation}
+As we have shown with the CCAP and the analysis plugins, it is possible to write an algorithm that can detect certain code patterns like non-clean code patterns. If we are able to write a well tested detection algorithm, we do not need error-prone machine learning models to detect code patterns. Nonetheless, if we can not design an algorithm that detect a desired code pattern reliablely, we may perform better using a machine learning model. Additionally, if we encode a subjective pattern, it may not be possible to design an algorithm to objectively detect such a pattern. As a solution, we could label code parts as our pattern and use machine learning approches to implicitly extract rules to detect such a pattern.
+
+For this research question, we will evaluate different machine learning models on different code patterns and compare the results.
+
+\paragraph{Approach}
+For answering the research question, we will use the approach detailed in chapter \ref{chap:clean_code_classification}.  The dataset, consisting of 18 projects from GitHub, is prepared as described in chapter \ref{chap:clean_code_classification_dataset}. The data is split into 70\% train, 10\% train/dev and 20\% test data. We use the train dataset to train Random Forest, Gradient Boosting Classifier, Support Vector Machines and a LSTM-based neural network. Due to the class inbalance, we will additional train with an oversampled dataset (oversampling rate of 0.5) and an undersampled dataset (undersampling rate of 0.5). The train/dev set follows the same (modified) distribution as the train set but is not used during training. We use it at test time to be able to differentiate a generalisation problem from a data missmatch problem. The former is visible in a difference between the metrics for the train set and the train/dev set whereas the latter is seen in the difference between the metrics for the train/dev and test set.
+
+Our evaluation metrics are recall, precision and the combined f1 score. Due to the data inbalance, accuracy is not a meaningful metric. A high recall means a high detection rate of non-clean code. The cost of a false negative prediction are potential costs in unclean code (maintainability, understandability). With a high precision, a detected non-clean code sample is likely to be a non-clean code sample and the system reports less false positives. The immediate cost of false positive predictions (resulting in a lower precision) are the extra developer time needed. Additionally, the cry wolf effect (TODO source) comes into play. In our case, a developer who has seen a false alarm will take subsequent alarms less serious. Additionally, a study has shown that a higher false alarm rate in advisory warning system in cars results in a lower, subjective evaluation of the system (TODO source Cooperative warning systems: The impact of false and unnecessary alarms on drivers’ compliance). A low subjective evaluation of developers would lead to a decrease in adoption rate which consequently lead to more unfixed problematic code. Since both, recall and precision are important to the success of our models, we decided to use the equally weighted f1 score as single-value evaluation metric.
+Additionally, to compensate the cascading effect of a low precision, we require a precision of 0.8 as a satisficing metric. This means, we accept all models that return two false positive and eight true positive samples. On the other hand, we define the recall as our optimizing metric.
+
+We evaluate all models for the three different problem types RETURN\_NONE, CONDITION\_COMPARISON\_SIMPLE and CONDITION\_COMPARISON.
+
+\paragraph{Results}
+Table TODO shows the best performing hyperparameter per model for all three problem types. Figure TODO shows the confusion matrix those model configurations. Tables TODO show all tested hyperparameter configurations per model and problem type.
+
+\subparagraph{Finding 1: poor SVM performance}
+SVM performed poorly. It seems it totaly failed to seperate the two classes and therefore has a low recall of TODO and precision of TODO. A reason for this is probably the class inbalance, since only 0.21\% of all samples are non-clean code with the RETURN\_NONE type. Although we tried to improve this balance with oversampling, undersampling and class weigthing inverse-proportional to the class frequency. Due to the long train time, we did not continue training the SVM for the other problem types. Although the classes are more balanced for CONDITION\_COMPARISON and CONDITION\_COMPARISON\_SIMPLE (4.86\% and 2.64\% respectively), we did not expect much improvement and therefore no valid reason to further invest in the SVM model.
+
