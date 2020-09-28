@@ -1,6 +1,6 @@
 This section is divided into the approach for the Clean Code Analysis Plattform and the Clean Code classification.
 
-\chapter{Clean Code Analysis Plattform}
+\section{Clean Code Analysis Plattform}
 The goal of the design and implementation of the Clean Code Analysis Plattform (CCAP) is a tool for software developers to improve the code quality of existing and new code. The tool accepts a directory containing source code files as input and analyses the input for snippets of improvable code quality. If the analysis classifies a code snippet as problematic, it should help the developer to improve the snippet by providing information about the problem. Ultimately, this should train the developer to spot problematic code by its own and to write clean code by default, so the number of alerts should decrease. At the same time, the overall software quality of a project increases immediately at rewriting a marked snippet and in the long term at training the developer to write code with higher quality.
 
 In order to use the tool effectively, the design and implementation should cover the following requirements:
@@ -11,7 +11,7 @@ In order to use the tool effectively, the design and implementation should cover
 \end{description}
 A more specific requirement is Python as an input language and the expansion language. After JavaScript, Python is the second most popular programming language 2019 according to the Github statistics (\url{https://octoverse.github.com/#top-languages}). Besides the general popularity, Python is heavily used in the scientific community for machine learning and universities for teaching programming. These groups are part of the potential target audience, and students in specific can benefit from automated reporting of low-quality source code.
 
-\section{Architecture}
+\subsection{Architecture}
 The CCAP architecture is divided into a static part and two extension possibilities: An extension with analysis plugins adds more rules that are validated by the system. Adding an output plugin allows specifying the output format to fit custom workflow needs.
 The static part consists of four components: A core component to act as an orchestration unit, a  component for handling the source code input and a component for handling the analysis plugins as well as output plugins. The design follows the requirements and goals for the platform. 
 (TODO: High-level architecture schematic diagram)
@@ -32,7 +32,7 @@ During the core execution phase, the core receives a list with the file name, fi
 
 The last component in the execution chain is the output plugin handler that will pass the \textit{FullReport} to the specified output plugin. It implements the same algorithm as the analysis plugin handler to find all plugins that inherit from \textit{AbstractOutputPlugin}. Instead of keeping track of all plugins, only the plugin that corresponds to the output format argument is instantiated. The output plugin has an entry point as defined in \textit{AbstractOutputPlugin}  that is called with all the collected results.
 
-\subsection{Analysis Plugins}\label{sec:analysis_plugins}
+\subsubsection{Analysis Plugins}\label{sec:analysis_plugins}
 Analysis plugins provide the easy extendability of the platform by developers. All users of the tool can expand the set of problems it can detect by implementing a plugin Python and placing it into the plugin directory of the tool. In order to be compatible with the core components, a plugin has to be a class that inherits from the \textit{AbstractAnalysisPlugin} class. Firstly, the abstract class introduces a class member variable \textit{metadata} of the class \textit{PluginMetaData}. A concrete plugin class sets this class member in the constructor to provide a plugin name, author and optional website. This metadata is used in the output to show more information about the plugin that reported a problem. Secondly, \textit{AbstractAnalysisPlugin} specifies a \textit{do\_analysis} method that serves as a entry point that the platform will call. It accepts a list of \textit{ParsedSourceFile} objects that contains the file path, the file content and the corresponding AST for all input files. With this information, the plugin can implement any logic to detect problems. 
 For example, the plugin can traverse the AST to look for specific node types, it can use a tokeniser on the content of the files and analyse the token stream or it can run sophisticated machine learning algorithms on the source code.
 The plugin can even import third-party libraries, although they have to be installed by the user on the system. After detecting all problems, the plugin returns an \textit{AnalysisReport}. The report contains the plugins metadata and a list of found problems. These problems are instances of a problem class inheriting from \textit{AbstractAnalysisProblem}. The abstract class expects a file path and line number as constructor arguments and requires the plugin developer to override the problem name and description (see listing \ref{lst:lst:return_none_problem_override} for an example). The problem name and description will be shown in the final output and should follow the following guidelines:
@@ -56,7 +56,7 @@ class ReturnNoneProblem(AbstractAnalysisProblem):
 \end{itemize}
 Although it is possible to use one plugin for multiple, different problem types, having one plugin for one problem type helps to reuse and share the plugin. Additionally, it can be disabled easily by removing the plugin from the plugin folder.
 
-\subsubsection{Steps to create an analysis plugin}
+\paragraph{Steps to create an analysis plugin}
 In order to expand the CCAP with an analysis plugin, the following steps are required for a developer:
 \begin{enumerate}
     \item Create a \textit{.py} file with a class inheriting from \textit{AbstractAnalysisPlugin}.
@@ -68,7 +68,7 @@ In order to expand the CCAP with an analysis plugin, the following steps are req
 Whereas these are the minimum required steps to implement the plugin, the developer is free to add additional methods, classes or import libraries as necessary.
 Furthermore, it is advisable to implement several tests to ensure the plugins correctness. CCAP uses pytest \footnote{\url{https://docs.pytest.org/en/stable/}} for testing, implementing a test is as easy as writing a function with a \enquote{test\_} prefix and running the \textit{pytest} command. The plugin can be tested by simulating a call from the CCAP core with a mocked \textit{ParsedSourceFile}. 
 
-\subsubsection{Return None Plugin}
+\paragraph{Return None Plugin}
 A rather simple analysis plugin demonstrates the capabilities of the CCAP: The Return None Plugin scans the source code for functions that return the None value. Returning None may result in runtime exceptions if the function caller does not expect and handle a potential None return. Although the None can be returned directly or as a value of the returning variable, this plugin only focus on the explicit \textit{return None} statement to showcase the options for the developer to analyse the source code.
 
 Detecting \textit{return None} is possible in multiple ways. The following shows the possibilities for developer to implement such a detector:
@@ -109,7 +109,7 @@ This implementation covers only the simple case, in which \textit{return None} i
 Since detection alone is not a great help for the user, a useful description of the problem is necessary. 
 As described in section \ref{sec:background:returning_none_and_error_handling}, there are some alternatives to returning none. If none happens due to an error, it is better to raise an exception and provoke an explicit error handling, which prevents runtime errors. If the standard return type is a collection, an empty list is more appropriate, since the function caller will most likely write the logic for an unknown amount of list items. However, if the standard return type is a single object, it is not apparent what to return. With PEP484 (TODO source), an optional type was introduced for type hints in Python 3. Using a static type checker for Python like mypy (TODO source) outputs a warning if a developer forgets to check an optional for not being none. 
 
-\subsubsection{Condition with Comparison}\label{sec:condition_comparison}
+\paragraph{Condition with Comparison}\label{sec:condition_comparison}
 The second plugin detects a direct comparison in a conditional statement. For better readability and understandability, it is suggested to use a function call with an appropriate name that evaluates to true or false. This function call allows a natural reading of the conditional statement without deciphering the meaning of the boolean logic.
 
 An if-statement consists of a condition and body part. If the condition evaluates to true, the body is executed. For the condition, any logical expression will be evaluated. A simple algorithm would take the AST, search for if nodes and check if the condition part is a compare node.
@@ -133,14 +133,14 @@ def _check_if_direct_comparison(self, node):
     return not isinstance(node, ast.Call)\end{lstlisting}
 \end{minipage}
 
-\subsection{Output Plugins}
+\subsubsection{Output Plugins}
 With output plugins, CCAP adds additional flexibility towards the output format. Depending on environmental requirements, the output can be adapted with custom logic by defining an output plugin. For instance, running the tool locally could write the results to the standard output in a human-readable way or create a formatted HTML file to be displayed in the browser. A machine-readable JSON output may be preferred when running inside an automated workflow.
 
 Output plugins follow similar concepts as analysis plugins. A plugin class inherits from \textit{AbstractOutputPlugin}. The abstract class introduces the metadata member of the \textit{PluginMetaData} class to encapsulate plugin name and author information. Additionally, a second member variable \textit{output\_format} has to be defined with a short abbreviation for the output format. This field is used by the output plugin handler to select the output plugin by the run arguments. Consequently, it should be unique; otherwise, the first found plugin with a matching \textit{output\_format} field is selected by the output plugin handler. Therefore, using a custom prefix string is recommended.
 
 As entry point method, the method \textit{handle\_report} has to be implemented. The method provides an instance of \textit{FullReport} as its argument. The  \textit{report} field holds a collection of  \textit{AnalysisReport} for every analysis plugin that has been executed. With metadata and problem information, the output plugin has access to all required information to produce the desired output.
 
-\subsubsection{Steps to create an output plugin}
+\paragraph{Steps to create an output plugin}
 To expand the output capabilities of the CCAP, the following steps are, similiar to analysis plugins, required:
 \begin{enumerate}
     \item Create a \textit{.py} file with a class inheriting from \textit{AbstractOutputPlugin}.
@@ -150,7 +150,7 @@ To expand the output capabilities of the CCAP, the following steps are, similiar
     \item Place the \textit{.py} file into the output plugin directory of the tool.
 \end{enumerate}
 
-\subsubsection{Standard Output Plugin}
+\paragraph{Standard Output Plugin}
 The Standard Output Plugin writes the formatted output to the stdout stream. It is enabled if no output plugin is explicitly specified. 
 
 The output is divided into a general part and the problem list. The former contains the input path, all executed plugins, a total runtime and a summary field with the numbers of problems in total. The latter displays the list with problems, grouped by analysis plugin.  
@@ -174,7 +174,7 @@ PLUGIN NAME: Return None (Null) Plugin by Enrico Kaack <e.kaack@live.de>
 \end{lstlisting} 
 \end{minipage}
 
-\subsubsection{HTML Output Plugin}
+\paragraph{HTML Output Plugin}
 For larger projects, the Standard Output Plugin may not be sufficient to get an overview of the project or to generate a report. Therefore, the HTML Output Plugin creates a \textit{report.html} file, that can be opened in every browser and provides a cleaner overview. It has similar general data at the top as the Standard Output Plugin, but it moves the problem description into a tooltip to offer a more compact overview. See figure \ref{fig:screen_html_output} for an example screenshot.
 
 \begin{figure}
@@ -183,7 +183,7 @@ For larger projects, the Standard Output Plugin may not be sufficient to get an 
     \caption{Output of the HTML Output Plugin, dispalyed in a browser.}
 \end{figure}
 
-\section{Extensions}
+\subsection{Extensions}
 While the core functionality exists, extensions for the CCAP would aim for improved useability for the user. One important improvement in useability would be an IDE integration for common IDEs like Visual Studio Code. A good starting point would be the Langauge Server Protocol\footnote{\url{https://microsoft.github.io/language-server-protocol/}}. This IDE integration requires a language client as a Visual Studio Code extension and a protocol-compliant language server. The latter would wrap the CCAP and modify it slightly to process a single, changed document and return the results. Since the CCAP architecture is modular, this is possible without larger modifications. 
 
 Another feature would be a configuration to disable specific analysis plugins, that one does not want to run on the project. With the current architecture, this would be possible by moving the analysis plugin file outside the plugin directory. A configuration with command-line parameters or with a per-project, hidden config file would have a better user experience. The latter could also be committed to the version control system, so every team member has the same configuration.
@@ -191,7 +191,7 @@ Continuing on configuration possibilities, having configuration possibilities fo
 
 Lastly, a feature to disable problem reporting for a specific code location could bring a boost in user acceptance. While some clean code rules are objective and can be measured precisely, some rules are more general recommendations that may not apply to every occurrence of this situation. For instance, the clean code guidelines generally suggest not to have more than three function arguments; it may be necessary or even inevitable to have four arguments. The CCAP should report this as a problem, but the user should be able to decide if it is acceptable. In this case, the problem type on this specific location should not be reported in the future. In the current version, the user has no way to ignore a specific problem. Consequently, over time the number of problems the user has to ignore will accumulate until the user abandons the tool since it does not provide an added value over the frustration of manually ignoring problems.
 
-\chapter{Clean Code Classification}\label{chap:clean_code_classification}
+\section{Clean Code Classification}\label{chap:clean_code_classification}
 In the previous chapter, we have presented a platform to check for clean code rules. This platform requires analysis plugins to detect certain problems. These handwritten rules work well on certain rules, but certain rules may require a complicated analysis of the AST, the data-flow or the inter-module dependencies. Some rules on the other hand are subjective and we do not see a way of detection those rule violations with an algorithm.
 Therefore, this chapter introduces an approach to evaluate different supervised machine learning models to classify code into clean code or problematic code. Furthermore, we describe how we modify the code to test the generalisation capabilities of the models. The mentioned machine learning models include random forest classifier, support-vector-Machines, gradient boosting classifier and a recurrent neural network based on Long short-term memory units. 
 
@@ -199,7 +199,7 @@ The objectives are to train, evaluate and compare Source Code Snippet Classifica
 
 In the following we describe the approach in detail. The strucutre follows a machine-learning typical pipeline of data collection, preprocessing, encoding, splitting and training. 
 
-\section{Challenges}
+\subsection{Challenges}
 \paragraph{Lack of datasets}
 The most crucial components of every machine learning experiment are labeled datasets. For clean code detection, our research has shown no datasets with labeled clean code violations that could be used.
 As a result, we evaluated differnent different appraoches:
@@ -279,7 +279,7 @@ source:
 Time Complexity Analysis of Support Vector Machines
 (SVM) in LibSVM
 
-\section{Dataset}\label{chap:clean_code_classification_dataset}
+\subsection{Dataset}\label{chap:clean_code_classification_dataset}
 The source of our dataset are open-source python projects on GitHub. We queried the top starred python repositories and handselected 18 repositories. Although most top stared repositories are data science frameworks, we additional choose projects from domains such as web server, automation and containerisation. See table TODO for a list of all 18 repositories
 A script downlaoded all projects in their main branch with the current head. See table TODO attachment for the corresponding git hashs. Afterwads, we removed all non-python files. 
 Next, we uniformly sampled 20\% of all files and seperated those into a holdout set for final testing. 
@@ -307,21 +307,21 @@ TODO per project analysis table in attachments.
     \label{tab:general_data_distribution}
 \end{table}
 
-\section{Processing}
+\subsection{Processing}
 For the processing steps, we create a pipeline with the d6tflow framework\footnote{\url{https://github.com/d6t/d6tflow}}. Each processing step is a task, that stores its results depending on the parameter configuration in a pickle file. This allows to define a pipeline once and run it with different parameter combinations. The scheduler automatically determines what tasks to run and what task outputs are already stored in pickle files. Consequently, running the pipeline is more efficient and repeatable.
 
 The processing pipeline consists of tasks to read the files into a datastructure, to processes source code and find the problems, to create a vocab dictionary, to convert the data into labeled samples and to split the data into a train, train test and test set. See overview TODO for a schematic representation of the pipeline.
 
-\subsection{Files into internal Data Structure}
+\subsubsection{Files into internal Data Structure}
 First, a scanner walks recursively in all subdirectories of the input folder to find all files. If the file has a \textit{.py} extension, its file path and the file content will be stored in a dictionary. The dictionaries for all file are collected into a list. 
 Reading all files into main memory increases the performance for downstream tasks, since main memory access is faster than disk access. Although the size of the systems main memory limits the dataset size, a file contains text and is therefore several kilobytes in size. The Train/Test dataset with 14,811 files is 94.98MB in accumulated file size.
 
-\subsection{Problem Detection}\label{sec:problem_detection}
+\subsubsection{Problem Detection}\label{sec:problem_detection}
 As a next step, the analysis plugins from the CCAP (see chapter \ref{sec:analysis_plugins}) process every file and store the line number along with the problem type. As a result, for every file list of problematic line numbers and the corresponding type is available for further processing. The CCAP only covers the two analysis plugins for the problem types CONDITION COMPARISON and RETURN NONE. For model training, we introduce the simple alogrithm to detect comparisons in conditions as problem type CONDITION COMPARISON SIMPLE (described in chapter \ref{sec:condition_comparison})
 
 
 
-\subsection{Data Encoding}\label{sec:data_encoding}
+\subsubsection{Data Encoding}\label{sec:data_encoding}
 The data encoding step transform the internal data representation into input vectors x and output vectors y. The transformation is descirbed in the following, multi-stage process.
 
 \paragraph{Fixed Length Sequence}
@@ -334,7 +334,7 @@ The textual token values are encoded with an Index-Based encoding. The most comm
 \paragraph{Label Extraction}
 With the internal representation, the ground truth is encoded as a line number. A transformation is necessary to label each sample corresponding to a given problem type. Label 1 is assigned, if the sample contains the given problem type. A sample contains a problem type, if it contains all tokens from the problematic line. If the sample is missing a token of the problematic line at the beginning or end, the label is 0 for non-problematic code. 
 
-\subsection{Train/Test Split}
+\subsubsection{Train/Test Split}
 The data split set is a two-stage process. 
 First, the data is split into a train and test set. As discussed in chapter \ref{sec:inbalanced_dataset}, we used over- and undersampling techniques to combat the inbalanced dataset. This is performed solely on the train data. The test data keeps the original distribution. Next, we split the resampled train data into a final train set and a train\_dev set. We use the latter to test the model performance on data with the same distribution as the trainingsdata to additionally evaluate the influence of the data distribution missmatch.
 
@@ -344,7 +344,7 @@ First, the data is split into a train and test set. As discussed in chapter \ref
     \caption{Split of the dataset. First, 20\% of all files are seperated into a holdout set for later testing. The remainding 80\% of the files are converted samples. The samples are then split again into 70\% training, 10\% train\_dev and 20\% test data. }
 \end{figure}
 
-\subsection{Models}
+\subsubsection{Models}
 Classifying code samples is a binary classification problem since we consider each problem type as a seperate classification task. We train and evaluate a random forest classifier, a support-vector machine based classifier, a gradient boosting classifier and a neural network with LSTM cells.
 
 \paragraph{Random Forest}
@@ -353,7 +353,7 @@ We use a random forest classifier with 100 decision trees to perform the binary 
 \paragraph{Gradient Boosting Classifier}
 \paragraph{Neural Networks with LSTM Cells}
 
-\subsection{Code Manipulation}
+\subsubsection{Code Manipulation}
 In research question TODO, we evaluate the models generalisation to detect similar pattern the model was not trained on. Therefore, we manipulate the code that it is still a rule violation, but the original analysis plugins would not spot them. 
 
 \paragraph{Return None}\label{par:manipulation_return_none}
