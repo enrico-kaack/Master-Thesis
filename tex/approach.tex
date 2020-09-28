@@ -310,7 +310,14 @@ TODO per project analysis table in attachments.
 \subsection{Processing}
 For the processing steps, we create a pipeline with the d6tflow framework\footnote{\url{https://github.com/d6t/d6tflow}}. Each processing step is a task, that stores its results depending on the parameter configuration in a pickle file. This allows to define a pipeline once and run it with different parameter combinations. The scheduler automatically determines what tasks to run and what task outputs are already stored in pickle files. Consequently, running the pipeline is more efficient and repeatable.
 
-The processing pipeline consists of tasks to read the files into a datastructure, to processes source code and find the problems, to create a vocab dictionary, to convert the data into labeled samples and to split the data into a train, train test and test set. See overview TODO for a schematic representation of the pipeline.
+The processing pipeline consists of tasks to read the files into a datastructure, to processes source code and find the problems, to create a vocab dictionary, to convert the data into labeled samples and to split the data into a train, traintest and test set. See overview TODO for a schematic representation of the pipeline.
+
+\begin{figure}
+    \includegraphics[width=1\textwidth]{img/ML/Pipeline_RQ2.pdf}
+    \label{fig:pipeline_rq2}
+    \caption{Schematic representation of the pipeline for RQ2 with configurable parameters. TODO describe}
+\end{figure}
+
 
 \subsubsection{Files into internal Data Structure}
 First, a scanner walks recursively in all subdirectories of the input folder to find all files. If the file has a \textit{.py} extension, its file path and the file content will be stored in a dictionary. The dictionaries for all file are collected into a list. 
@@ -345,7 +352,14 @@ First, the data is split into a train and test set. As discussed in chapter \ref
 \end{figure}
 
 \subsubsection{Code Manipulation}
-In research question TODO, we evaluate the models generalisation to detect similar pattern the model was not trained on. Therefore, we manipulate the code that it is still a rule violation, but the original analysis plugins would not spot them. 
+In research question TODO, we evaluate the models generalisation to detect similar pattern the model was not trained on. Therefore, we manipulate the code that it is still a rule violation, but the original analysis plugins would not spot them. The pipeline for code manipulation differ from the pipeline for RQ2 by an additional code manipulation task and a removal of the training step (see figure )
+
+\begin{figure}
+    \includegraphics[width=1\textwidth]{img/ML/Pipeline_RQ3.pdf}
+    \label{fig:pipeline_RQ3}
+    \caption{Pipeline for code manipulation and evaluation. TODO detailed description}
+\end{figure}
+
 
 \paragraph{Return None}\label{par:manipulation_return_none}
 For the problem type RETURN NONE, we manipulate the code to have an inline if statement that only returns None in one branch. Therefore, a function may still return None, but the analysis plugin would not detect this. Listing \ref{lst:return_none_modified} shows an example for this case. Although a modification of the analysis plugin could cover the variations as well, we want to see how well machine learning models could perform on this task.
