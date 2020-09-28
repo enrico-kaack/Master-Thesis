@@ -401,6 +401,8 @@ For gradient boosting classifier, we mainly vary the number of boosting steps an
 \paragraph{Neural Networks with LSTM Cells}
 Our neural network consists of five layer (see listing \ref{lst:lstm}). First, we use an embedding layer with an embedding size of 32. The input is the Index-Based encoded samples without type encoding. This layer is trained end-to-end with the complete network on the trainings-data. Furthermore, this layer covers most trainable parameters of the model. As a hidden layer, we use 10 LSTM cells with a prior and posterior dropout layer with a default 0.2 dropout. To perform binary classification, our model ends with a dense mapping onto a single neuron. The binary result is determined based on a 0.5 threshold for the output of the last neuron.
 
+We vary the hyperparameters for batch size, number of epochs, embedding size and number of LSTM cells.
+
 \begin{lstlisting}[label=lst:lstm, caption={Summary of our LSTM network. We use an embedding layer of size 32, 10 LSTM cells, a dropout layer before and after the LSTM layer with a defaut dropout ratio of 0.2 and a dense mapping to a single output neuron for binary classifcation with a threshold of 0.5.}]
 Layer (type)                 Output Shape              Param #
 ============================================
