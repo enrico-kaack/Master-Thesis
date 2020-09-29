@@ -37,7 +37,6 @@ Analysis plugins provide the easy extendability of the platform by developers. A
 For example, the plugin can traverse the AST to look for specific node types, it can use a tokeniser on the content of the files and analyse the token stream or it can run sophisticated machine learning algorithms on the source code.
 The plugin can even import third-party libraries, although they have to be installed by the user on the system. After detecting all problems, the plugin returns an \textit{AnalysisReport}. The report contains the plugins metadata and a list of found problems. These problems are instances of a problem class inheriting from \textit{AbstractAnalysisProblem}. The abstract class expects a file path and line number as constructor arguments and requires the plugin developer to override the problem name and description (see listing \ref{lst:lst:return_none_problem_override} for an example). The problem name and description will be shown in the final output and should follow the following guidelines:
 
-\begin{minipage}[c]{0.95\linewidth}
 
 \begin{lstlisting}[language=Python, label=lst:return_none_problem_override, caption={Example for overwriting the \textit{AbstractAnalysisProblem} with a concete implmentation. The problem name and description are overwritten.}]
 class ReturnNoneProblem(AbstractAnalysisProblem):
@@ -46,7 +45,6 @@ class ReturnNoneProblem(AbstractAnalysisProblem):
         self.description = "Returning None is dangerous since the caller has to check for None. Otherwise, a runtime exception may occur."
         super().__init__(file_path, line_number)
 \end{lstlisting}
-\end{minipage}
 
 \begin{itemize}
     \item Have a proper name that allows the experienced developer to recognise the problem quickly.
@@ -117,7 +115,6 @@ However, negation and logic AND/OR would not be detected by the simple approach.
 
 Following these considerations, an advanced algorithm would scan for if nodes in the AST. The conditional part as a boolean expression is evaluated in a recursive function that returns true if a direct comparison is made anywhere in a boolean expression.
 The conditional part can be a boolean operation (like AND/OR) or a unary operator (like NOT).  In these cases, the recursive function will be called again with the respective expressions. If the conditional part is neither a boolean operation nor a unary operator, a true is returned if the conditional part is not a method call. The last case would be the base case in the recursion. Listing \ref{lst:condition_coparison} shows the Python implementation of the recursion.
-\begin{minipage}[c]{\linewidth}
 \begin{lstlisting}[language=Python, label=lst:condition_coparison, caption={Recursive function to analyse an if statement for direct comparisons. Since a condition should contain a method call, the function returns False if this is not the case.}]
 def _check_if_direct_comparison(self, node):
     if isinstance(node, ast.BoolOp):
@@ -131,7 +128,6 @@ def _check_if_direct_comparison(self, node):
         return self._check_if_direct_comparison(node.operand)
 
     return not isinstance(node, ast.Call)\end{lstlisting}
-\end{minipage}
 
 \subsubsection{Output Plugins}
 With output plugins, CCAP adds additional flexibility towards the output format. Depending on environmental requirements, the output can be adapted with custom logic by defining an output plugin. For instance, running the tool locally could write the results to the standard output in a human-readable way or create a formatted HTML file to be displayed in the browser. A machine-readable JSON output may be preferred when running inside an automated workflow.
@@ -180,7 +176,7 @@ For larger projects, the Standard Output Plugin may not be sufficient to get an 
 \begin{figure}
     \includegraphics[width=1\textwidth]{img/CCAP/screenshot_html_output.png}
     \label{fig:screen_html_output}
-    \caption{Output of the HTML Output Plugin, dispalyed in a browser.}
+    \caption{Output of the HTML Output Plugin, displayed in a browser.}
 \end{figure}
 
 \subsection{Extensions}
