@@ -384,7 +384,6 @@ def f(a,b):
 The analysis for the CONDITION COMPARISON problem type is an advancement of the analysis of the CONDITION COMPARISON SIMPLE problem type.  See listing \ref{lst:conidtion_comparison_modified} for examples of the different analysis results.
 Since the results of CONDITION COMPARISON are the modification of the CONDITION COMPARISON SIMPLE, we use the first as ground truth for evaluating the generalisation. Since the CONDITION COMPARISON SIMPLE problems are a subset of the CONDITION COMPARISON problems, we use a similar approach as before (see \ref{par:manipulation_return_none}) to transform all problem occurances to be undectable by the CONDITION COMPARISON SIMPLE analysis plugin.
 
-\begin{minipage}[c]{0.95\linewidth}
 \begin{lstlisting}[language=Python, label=lst:conidtion_comparison_modified, caption={Sample statements for the differnce between the two analysis plugins CONDITION COMPARISON and CONDITION COMPARISON SIMPLE.  }]
     def f(a,b):
     #detected by CONDITION COMPARISON SIMPLE
@@ -401,7 +400,6 @@ Since the results of CONDITION COMPARISON are the modification of the CONDITION 
     #detected by CONDITION COMPARISON
     if isSmaller(a,b) or a < b:
         pass \end{lstlisting}
-\end{minipage}
 
 \subsection{Models}
 Classifying code samples is a binary classification problem since we consider each problem type as a seperate classification task. We train and evaluate a random forest classifier, a support-vector machine based classifier, a gradient boosting classifier and a neural network with LSTM cells.
