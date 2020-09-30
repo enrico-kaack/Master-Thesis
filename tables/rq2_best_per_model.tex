@@ -1,0 +1,26 @@
+% Please add the following required packages to your document preamble:
+% \usepackage{booktabs}
+\begin{table}[]
+    \begin{tabular}{@{}rlll@{}}
+    \toprule
+    \multicolumn{1}{l}{}                             & RETURN\_NONE         & COND\_COMP & COND\_SIMPLE \\ \midrule
+    \multicolumn{1}{l}{Random Forest}                & \multicolumn{1}{r}{} &            &              \\
+    F1                                               & 0.8328               & 0.9360     & 0.9375       \\
+    Recall                                           & 0.7179               & 0.9006     & 0.9004       \\
+    Precision                                        & 0.9913               & 0.9742     & 0.9779       \\ \midrule
+    \multicolumn{1}{l}{SVM}                          &                      &            &              \\
+    F1                                               &                      &            &              \\
+    Recall                                           &                      &            &              \\
+    Precision                                        &                      &            &              \\ \midrule
+    \multicolumn{1}{l}{Gradient Boosting Classifier} &                      &            &              \\
+    F1                                               & 0.4488               & 0.7958     & 0.7061       \\
+    Recall                                           & 0.9941               & 0.9727     & 0.9825       \\
+    Precision                                        & 0.2898               & 0.6734     & 0.5511       \\ \midrule
+    \multicolumn{1}{l}{LSTM}                         &                      &            &              \\
+    F1                                               & 0.9927               & 0.9812     & 0.9825       \\
+    Recall                                           & 0.9912               & 0.9832     & 0.9875       \\
+    Precision                                        & 0.9941               & 0.9791     & 0.9776       \\ \bottomrule
+    \end{tabular}
+    \caption{Best performing classifier for RQ2 (based on f1 score). }
+    \label{tab:rq2_best_classifier}
+    \end{table}
