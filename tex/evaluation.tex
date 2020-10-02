@@ -56,6 +56,9 @@ We evaluate all models for the three different problem types RETURN\_NONE, CONDI
 \paragraph{Results}
 Table TODO shows the best performing hyperparameter per model for all three problem types. Figure TODO shows the confusion matrix those model configurations. Tables TODO show all tested hyperparameter configurations per model and problem type.
 
+
+\input{tables/rq2_best_per_model.tex}
+
 \subparagraph{Finding 1: poor SVM performance}
 SVM performed poorly. It seems it totaly failed to seperate the two classes and therefore has a low recall of TODO and precision of TODO. A reason for this is probably the class inbalance, since only 0.21\% of all samples are non-clean code with the RETURN\_NONE type. Although we tried to improve this balance with oversampling, undersampling and class weigthing inverse-proportional to the class frequency. Due to the long train time, we did not continue training the SVM for the other problem types. Although the classes are more balanced for CONDITION\_COMPARISON and CONDITION\_COMPARISON\_SIMPLE (4.86\% and 2.64\% respectively), we did not expect much improvement and therefore no valid reason to further invest in the SVM model.
 
