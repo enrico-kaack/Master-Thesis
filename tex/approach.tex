@@ -278,30 +278,59 @@ Time Complexity Analysis of Support Vector Machines
 \subsection{Dataset}\label{chap:clean_code_classification_dataset}
 The source of our dataset are open-source python projects on GitHub. We queried the top starred python repositories and handselected 18 repositories. Although most top stared repositories are data science frameworks, we additional choose projects from domains such as web server, automation and containerisation. See table TODO for a list of all 18 repositories
 A script downlaoded all projects in their main branch with the current head. See table TODO attachment for the corresponding git hashs. Afterwads, we removed all non-python files. 
-Next, we uniformly sampled 20\% of all files and seperated those into a holdout set for final testing. 
-We ensured to not accidentially change the data distribution on the holdout set. Table \ref{tab:general_data_distribution}, shows general and problem specific metrics for the train/test set and the holdout set. The problem specific metrics are collected after processing the code repositories as described in TODO.
+Next, we uniformly sampled 20\% of all files and seperated those into a holdout set for final testing. Additionally, we perform our train/test split on the file level and not on the sample level. As described later in chapter \ref{sec:data_encoding}, we use a sliding window approach to convert source files with dynamic length into fixed length samples. Due to the sliding window approach, we may have one problematic code line in multple samples. If we would do a train/test split on sample level, we may indroduce samples covering one problematic line at different positions in both datasets (see figure TODO for visualisation). This would diminish the validity of metrics calculated from the test dataset. Table \ref{tab:lstm_wrong_train_test_split} shows an example for a train and test metrics of an neural network with LSTM cells. Without over- or undersampling, we achieve near perfect results for all problem types. If we apply undersampling to the train data, we basically remove some samples labeled as negative (in this case containing clean code). We observe a drop in precision but a near perfect recall.
+A decrease in precision and a constant recall means an increase in false positives. Since we removed some negative samples with undersampling, the overfitted model has not seen those samples that exist in the test set. 
+Consequently, we decided to perform a train/test split on file level as described earlier.
+\begin{table}[]
+    \tiny
+    \tabcolsep=0.11cm
+    \begin{tabularx}{\textwidth}{XXXXXXX|X|XXX|XXX|XXXX}
+    \toprule
+    \multicolumn{7}{c}{Parameter} & \multicolumn{3}{c}{RN} & \multicolumn{3}{c}{CCS} & \multicolumn{3}{c}{CC} \\ \midrule
+    over-\newline samp. & under-\newline samp. & emb-\newline size & epochs &batch-\newline size & \#lstm-\newline cells & dropout & & Train & Train/\newline Test & Test & Train & Train/\newline Test & Test & Train & Train/\newline Test & Test \\ \midrule
+    - & - & 32 & 3 & 256 &10.0 & 0.2|0.2 & & & & & & & & & \\
+    & & & & & & & \textit{F1} & 0.9937 & 0.9931 & 0.9927 & 0.9935 & 0.9817        & 0.9825        & 0.9916        & 0.9799        & 0.9812        \\
+    & & & & & & & \textit{Rec}l & 0.9906 & 0.9948 & 0.9912    & 0.9957 & 0.9864    & 0.9875    & 0.9925    & 0.9811    & 0.9832    \\
+    & & & & & & & \textit{Prec} & 0.9968 & 0.9913 & 0.9941 & 0.9912 & 0.9769 & 0.9776 & 0.9908 & 0.9787 & 0.9791 \\ \midrule
+    - & 0.5 & 32 & 3 & 64 &10.0 & 0.2|0.2 & & & & & & & & & \\
+    & & & & & & & \textit{F1} & 0.9995 & 0.8107 & 0.8072 & 0.9987 & 0.9699        & 0.9713        & 0.9978        & 0.9688        & 0.9699        \\
+    & & & & & & & \textit{Rec}l & 1.0 & 1.0 & 1.0    & 0.9985 & 0.9968    & 0.9971    & 0.9988    & 0.9968    & 0.9978    \\
+    & & & & & & & \textit{Prec} & 0.999 & 0.6817 & 0.6768 & 0.9989 & 0.9445 & 0.9469 & 0.9968 & 0.9424 & 0.9436 \\ \midrule
+\end{tabularx}
+\caption{TODO lstm}
+\label{tab:lstm_wrong_train_test_split}
+\end{table}
 
+We ensured to have a similiar data and label distribution on all data sets. Table \ref{tab:general_data_distribution} shows general and problem specific metrics for the train, test and holdout set. The problem specific metrics are collected after processing the code files as described in chapter \ref{sec:data_encoding}. The label distribution on all three datasets is noted in table TODO.
+
+TODO redo
 The average lines of code per file is similiar with a small difference of 3.26\%. For all problem types, the difference in lines of code containing the problem is smaller than 0.1 percentage point. This metric is important, since this results in compareable label distribution TODO.
 TODO per project analysis table in attachments.
 
 \begin{table}[]
-    \begin{tabular}{@{}llll@{}}
+    \begin{tabular}{@{}lllll@{}}
         \toprule
     %\cmidrule(l){2-4}
-    \multirow{4}{*}{}                            & Metric                  & Train/Test & Holdout \\ \cmidrule(l){2-4} 
-                                                 & Lines of Code           & 2,777,268  & 671,554 \\
-                                                 & Number of Files         & 14,811     & 3,702   \\
-                                                 & average LOC per File    & 187.51     & 181.40     \\ \midrule
-    \multirow{2}{*}{Return None}                 & LOCs containing problem & 0.08\%     & 0.08\%  \\
-                                                 & Problems per File       & 0.14       & 0.14    \\ \midrule
-    \multirow{2}{*}{Condition Comparison Simple} & LOCs containing problem & 1.28\%      & 1.32\%  \\
-                                                 & Problems per File       & 2.4       & 2.4    \\ \midrule
-    \multirow{2}{*}{Condition Comparison}        & LOCs containing problem & 2.34\%     & 2.44\%  \\
-                                                 & Problems per File       & 4.38       & 4.42    \\ \bottomrule
+    \multirow{4}{*}{}                            & Metric                  & Train & Test & Holdout \\ \cmidrule(l){2-5} 
+                                                 & Lines of Code           & 2,777,268 &  & 671,554 \\
+                                                 & Number of Files         & 14,811  &   & 3,702   \\
+                                                 & average LOC per File    & 187.51  &   & 181.40     \\ \midrule
+    \multirow{2}{*}{Return None}                 & LOCs containing problem & 0.08\%  &   & 0.08\%  \\
+                                                 & Problems per File       & 0.14    &   & 0.14    \\ \midrule
+    \multirow{2}{*}{Condition Comparison Simple} & LOCs containing problem & 1.28\%  &    & 1.32\%  \\
+                                                 & Problems per File       & 2.4     &  & 2.4    \\ \midrule
+    \multirow{2}{*}{Condition Comparison}        & LOCs containing problem & 2.34\%  &   & 2.44\%  \\
+                                                 & Problems per File       & 4.38    &   & 4.42    \\ \bottomrule
     \end{tabular}
     \caption{General and problem type specific metrics for the Train/Test (before train-test split) and Holdout set. The lines of code containing a problem and the problems per file are similiar.}
     \label{tab:general_data_distribution}
 \end{table}
+
+\begin{figure}
+    \includegraphics[width=1\textwidth]{img/ML/Data_split.pdf}
+    \label{fig:data_split}
+    \caption{Split of the dataset. First, 20\% of all files are seperated into a holdout set for later testing. The remainding 80\% of the files are split into 90\% training and 10\% test data. }
+\end{figure}
 
 \subsection{Processing}
 For the processing steps, we create a pipeline with the d6tflow framework\footnote{\url{https://github.com/d6t/d6tflow}}. Each processing step is a task, that stores its results depending on the parameter configuration in a pickle file. This allows to define a pipeline once and run it with different parameter combinations. The scheduler automatically determines what tasks to run and what task outputs are already stored in pickle files. Consequently, running the pipeline is more efficient and repeatable.
@@ -338,14 +367,8 @@ The textual token values are encoded with an Index-Based encoding. The most comm
 With the internal representation, the ground truth is encoded as a line number. A transformation is necessary to label each sample corresponding to a given problem type. Label 1 is assigned, if the sample contains the given problem type. A sample contains a problem type, if it contains all tokens from the problematic line. If the sample is missing a token of the problematic line at the beginning or end, the label is 0 for non-problematic code. 
 
 \subsubsection{Train/Test Split}
-The data split set is a two-stage process. 
-First, the data is split into a train and test set. As discussed in chapter \ref{sec:inbalanced_dataset}, we used over- and undersampling techniques to combat the inbalanced dataset. This is performed solely on the train data. The test data keeps the original distribution. Next, we split the resampled train data into a final train set and a train\_dev set. We use the latter to test the model performance on data with the same distribution as the trainingsdata to additionally evaluate the influence of the data distribution missmatch.
+TODO train test split before, or is it better here?
 
-\begin{figure}
-    \includegraphics[width=1\textwidth]{img/ML/Data_split.pdf}
-    \label{fig:data_split}
-    \caption{Split of the dataset. First, 20\% of all files are seperated into a holdout set for later testing. The remainding 80\% of the files are converted samples. The samples are then split again into 70\% training, 10\% train\_dev and 20\% test data. }
-\end{figure}
 
 \subsubsection{Code Manipulation}
 In research question TODO, we evaluate the models generalisation to detect similar pattern the model was not trained on. Therefore, we manipulate the code that it is still a rule violation, but the original analysis plugins would not spot them. The pipeline for code manipulation differ from the pipeline for RQ2 by an additional code manipulation task and a removal of the training step (see figure )
