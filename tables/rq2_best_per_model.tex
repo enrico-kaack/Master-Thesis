@@ -1,25 +1,26 @@
 % Please add the following required packages to your document preamble:
 % \usepackage{booktabs}
 \begin{table}[]
-    \begin{tabular}{@{}rlll@{}}
+    \tabcolsep=0.11cm
+    \begin{tabular}{@{}rccc@{}}
     \toprule
-    \multicolumn{1}{l}{}                             & RETURN\_NONE         & COND\_COMP & COND\_SIMPLE \\ \midrule
+    \multicolumn{1}{l}{}                             & RETURN\_NONE         & COND\_COMP\_SIMP & COND\_COMP \\ \midrule
     \multicolumn{1}{l}{Random Forest}                & \multicolumn{1}{r}{} &            &              \\
-    F1                                               & 0.8486               & 0.9351     & 0.9352       \\
-    Recall                                           & 0.7404               & 0.8976     & 0.8936       \\
-    Precision                                        & 0.9939               & 0.9759     & 0.9809       \\ \midrule
+    F1                                               & 0.8486               & 0.9352     & 0.9351       \\
+    Recall                                           & 0.7404               & 0.8936     & 0.8976       \\
+    Precision                                        & 0.9939               & 0.9809     & 0.9759       \\ \midrule
     \multicolumn{1}{l}{SVM}                          &                      &            &              \\
     F1                                               &                      &            &              \\
     Recall                                           &                      &            &              \\
     Precision                                        &                      &            &              \\ \midrule
     \multicolumn{1}{l}{Gradient Boosting Classifier} &                      &            &              \\
-    F1                                               & 0.9328               & 0.9088     & 0.8489       \\
-    Recall                                           & 0.9005               & 0.8766     & 0.7953       \\
-    Precision                                        & 0.9675               & 0.9434     & 0.9102       \\ \midrule
+    F1                                               & 0.9328               & 0.8489     & 0.9088       \\
+    Recall                                           & 0.9005               & 0.7953     & 0.8766       \\
+    Precision                                        & 0.9675               & 0.9102     & 0.9434       \\ \midrule
     \multicolumn{1}{l}{LSTM}                         &                      &            &              \\
-    F1                                               & 0.9933               & 0.9778     & 0.981       \\
-    Recall                                           & 0.9933               & 0.9852     & 0.9865       \\
-    Precision                                        & 0.9933               & 0.9706     & 0.9755        \\ \bottomrule
+    F1                                               & 0.9933               & 0.9805     & 0.9783       \\
+    Recall                                           & 0.9933               & 0.9779     & 0.9868       \\
+    Precision                                        & 0.9933               & 0.9831     & 0.97       \\ \bottomrule
     \end{tabular}
     \caption{Best performing classifier for RQ2 based on f1 score of the holdout set. }
     \label{tab:rq2_best_classifier}

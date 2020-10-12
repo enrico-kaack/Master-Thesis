@@ -54,10 +54,9 @@ Additionally, to compensate the cascading effect of a low precision due to the c
 We evaluate all models for the three different problem types RETURN\_NONE, CONDITION\_COMPARISON\_SIMPLE and CONDITION\_COMPARISON.
 
 \paragraph{Results}
-Table TODO shows the best performing hyperparameter per model for all three problem types. Figure TODO shows the confusion matrix those model configurations. We list all hyperparameter configurations and the corresponding traing, train/test and test pefromance for all problem types in the appendix (Table \ref{tab:all_results_random_forest}-\ref{tab:all_results_svm}).
+Table TODO shows the best performing hyperparameter per model for all three problem types. Figure TODO shows the confusion matrix those model configurations. We list all hyperparameter configurations and the corresponding traing, test and holdout peformance for all problem types in the appendix (Table \ref{tab:all_results_random_forest}-\ref{tab:all_results_svm}).
 
 
-\input{tables/rq2_best_per_model.tex}
 
 \subparagraph{Finding 1: poor SVM performance}
 SVM performed poorly. Based on the f1 score, the best configuration has a f1 of 0.0066, a recall of 0.0134 and a precision of 0.0044. In other words, only 1.34\% of positive samples are recognized as positive. The model seems to fail to seperate the two classes. A reason may be the class inbalance, since only 0.21\% of all samples of are non-clean code (positive) with the RETURN\_NONE type. In this configuration, we used undersampling with a ratio of 0.5, since oversampling was not feasable due to the increase in train time (see section \ref{sec:svm_quadratic_complexity}). After undersampling, 1/3 of all samples are therefore positive and 2/3 are negative. Since the time to train is still too long, we only took half of the undersampled dataset. 
@@ -118,3 +117,12 @@ Using oversampling with a ratio of 0.5, we see a perfect recall score of 1.0 (ro
 When we apply undersampling, we observe a drop in precision for all problem types, but a major drop in precision for the RN type (TODO numbers). This behaviour is compareable to the performance drop of the random forest classifier with undersampling. We conclude, similar to the random forest classifier, that the LSTM-based neural network react to less training data especially for the RN problem type. The train set for the latter is significantly smaller than for the over problem types, since its class frequency is only 0.21\% and therefore more samples from the majority class have to be deleted. In combination with too many trainable weights of our too powerful model, the model can not adjust its weights correctly. Since we reduce the variaty of negative samples, it becomes harder to spot these. Consequently, the false positive rate increases and therefore the precision decreases. The recall remains high, since the model has enough samples to corretly label positive samples and the false negatives do not increase.
 
 To sum up, we achieve near perfect performance with our neural network model. We achnowledge, that our model is too big with too many trainable parameter we do not need for the same performance as shown with the reduction of the embedding layer size. The model does not benefit from oversampling and undersampling impairs the training of the models weight since it reduces the overall number of samples.
+
+\subparagraph{Finding 5: Comparison}
+\input{tables/rq2_best_per_model.tex}
+ Table \ref{tab:rq2_best_classifier} shows the performance score of the best performing model of each classifier for all problem types.
+ The SVM performs poorly and does not meet our mandatory satisficing condition of a precision higher than 0.8. Therefore, we will not evaluate it further. On the other hand, the LSTM-based neural network model outperforms all other models and we expect it to perform well in the next research question recognizing modifications of the code.
+
+ Both random forest and gradient boosting classifier fullfill the satisficing condition for all problem types. Interestingly, they supplement each other: For the RN problem type, the gradient boosting classifier performs better with an f1 score of 0.9328, whereas the random forest classifier surpass the gradient boosting classifier for the CCS and CC problem type with 0.9352 and 0.9351 f1. As discussed, we explain the former result with the better insensitivity to class inbalance of the gradient boosting classifier, wheras the latter seems to be harder to learn for the gradient boosting classifier. Especially the seemingly difficulties for the CCS type are unexpected.
+ 
+ Note: in a real setup with handlabeled examples, we expect more variaty in the samples so the classifier may even perform better on the next research question 
