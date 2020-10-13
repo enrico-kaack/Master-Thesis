@@ -33,7 +33,6 @@ The Clean Code techniques focus mainly on maintainability by provididng intuitiv
 
 
 The following sections explain the clean code guidelines following the book by Robert C. Martin \cite{martin_clean_2009}.
-Since these rules are based on experience of the author, they are controversial. The critique will be explained in section TODO.
 
 \subsection{General Rules}
 Developers should follow the general rules consistently for developing new features or fixing bugs. They are the essential building blocks for the understandability and reliability of the code. 
@@ -132,7 +131,7 @@ This has multiple advantages:
 Metrics for code quality are a subset of more general software metrics. The following sections describe software metrics that express code quality.
 
 \subsection{Cyclomatic Complextiy}\label{sec:cyclomatic_complexity}
-Cyclomatic Complexity is a metric for the complexity of a section of code. It was introduced by Thomas McCabe, Sr.  Is is measured by counting the number of linearly independent execution paths. (TODO source)
+Cyclomatic Complexity is a metric for the complexity of a section of code. It was introduced by Thomas McCabe, Sr.  Is is measured by counting the number of linearly independent execution paths\cite{mccabe_complexity_1976}.
 
 To compute  the Cyclomatic Complexity, the control-flow graph is required. The control-flow graph represents possible execution paths. A node represents  a basic block, a code sequence without branching. A directed edge represent jumps in the control flow; e.g. an if-statement without an else-case has two edges. One edge to the basic block in the if-branch  and one edge to the basic block after the if-statement. Beside cyclomatic complexity, the control-flow graph is used for compiler optimisation techniques like dead code elimination and loop optimization (\url{https://ag-kastens.cs.uni-paderborn.de/lehre/material/compii/folien/c101-217a.pdf}).
 
@@ -146,10 +145,10 @@ Following this definition, the cyclomatic complexity can be calculated.. See fig
 
 MacCabe recommends to limit the cyclomatic complexity to 10. NIST confirms this recommendation in TODO. A lower cyclomatic complexity improves testability, since the complexity represents the number of execution paths that need to be tested. Therefore, $M$ is the upper bound for number of test cases for full branch coverage. 
 Furthermore, studies suggest a positive correlation between cyclomatic complexity and defects in functions. TODO source
-Safety standards like ISO 26262 (for electronics in automobiles) or IEC 62304 (for medical devices) mandates a low cyclomatic complexity TODO source.
+Safety standards like ISO 26262 (for electronics in automobiles) or IEC 62304 (for medical devices) mandates a low cyclomatic complexity \cite{isotc_22sc_32_iso_2018, isotisotc_210_iec_2006c_210}.
 
-\subsection{Halstead complexity measures}
-Maurice Halstead introduced the Halstead complexity measures in 1977. It is a collection of multiple countable measure and relations.
+\subsection{Halstead Complexity Measures}
+Maurice Halstead introduced the Halstead complexity measures in 1977\cite{halstead1977elements}. It is a collection of multiple countable measure and relations.
 
 The Halstead  metrics operates on a sequence of tokens that are classified to be an operator or an operand.
 
@@ -194,8 +193,8 @@ The number of  bugs correlates with the effor following
 (TODO general critique etc. on this metric since it seems to be arbitrary)
 
 \subsection{Software Maintainability Index}
-The software maintainability index was developed by Dan Coleman and Paul Oman in 1994. 16 HP engineers evaluated 16 software systems and scored it in a range from 0 to 100, with 100 representing best maintainability. 
-Following a regression analysis, they identified the following equation to match the maintainability of the evaluated systems (TODO source from Using metrics to evaluate software system maintainability):
+The software maintainability index was developed by Dan Coleman and Paul Oman in 1994. 16 HP engineers evaluated 16 software systems and scored it in a range from 0 to 100, with 100 representing best maintainability\cite{coleman_using_1994}. 
+Following a regression analysis, they identified the following equation to match the maintainability of the evaluated systems:
 \begin{displaymath}
 MI = 171 - 5.2 *\ln{\overline{V}} - 0.23 * \overline{M} - 16.2 * \ln{\overline{LOC}} + 50 * \sin{\sqrt{2.4 * C}}
 \end{displaymath}
@@ -215,7 +214,7 @@ It is good practice to use static code analysis tools to improve code quality. A
 Besides the use of static code analysis for compiler and optimisations, it is also helpful for analysing the code quality. Different categories of code quality related principles can be analysed:
 \begin{description}
     \item[Code Guidelines:] A static code analysis can ensure compliance to structural, naming and formatting code guidelines. 
-    \item[Standard Compliance:] A requiremnt for a software may be compliance to an industry standard like IEC 61508 or ISO 26262 (TODO source). Static code analysis can ensure or at least assist with the compliance.   
+    \item[Standard Compliance:] A requiremnt for a software may be compliance to an industry standard like IEC 61508 or ISO 26262 \cite{noauthor_iec_2010,isotc_22sc_32_iso_2018}. Static code analysis can ensure or at least assist with the compliance.  
     \item[Code Smells:] Some code smells follow a known pattern and a static code analysis can detect those smells. Since code smells can be an indication for chaotic code, it is best if these smells are detected and removed early on.
     \item[Bug Detection:] Although bug detection with static analysis can not detect all bugs, every detected bug before a software release is important. Examples for detected bugs are unhandled expressions or concurrency issues \cite{delaitre_evaluating_2015}.
     \item[Security Vulnerability Detection:] Static code analysis tools can detect some security vulnerabilities like SQL Injection Flaws, buffer overflows and missing input validation with high confidence. Since these are some common, easy to exploit vulnerabilites, a analysis for security vulnerabilities can increase the security of the overall software \cite{wichers_source_nodate}.  
@@ -266,7 +265,7 @@ For Python, Sonarqube offers more than 170 rules. These rules are in the followi
     \item[Security Vulnerabilities: ]  A security vulnerabilites analysis reveal code that is at risk of being exploited and has to be fixed immediately. Especially misconfiguration of cryptographic libraries can be revealed easily and future damage prevented.   
 \end{description}
 
-Additionally, Sonarqube offers several metrics like test coverage and an custom derivate of Cyclomatic Complexity named Cognitive Complexity. The authors sees several shortcommings in the original Cyclomatic Complexity model:
+Additionally, Sonarqube offers several metrics like test coverage and an custom derivate of Cyclomatic Complexity named Cognitive Complexity\cite{campbell2018cognitive}. The authors sees several shortcommings in the original Cyclomatic Complexity model:
 \begin{itemize}
     \item Parts of code with the same Cyclomatic Complexity do not neccessarily represent equal difficulty for maintenance.
     \item  Cyclomatic Complexity does not include modern language features like try/catch and lambdas. Therefore, the score can not be accurate.
@@ -274,14 +273,13 @@ Additionally, Sonarqube offers several metrics like test coverage and an custom 
 \end{itemize}
 Cognitive Complexity adresses these points, especially the incorporation of modern langauge features and meaningfullness on class and module level.
 
-The calculation is based on three rules:
+The calculation is based on three rules\cite{campbell2018cognitive}:
 \begin{description}
     \item[Ignore Shorthand Structures]: Method calls condense multiple statements into one easy to understand statement. Therefore, method calls as shorthand are ignored for the score. Similiarly, shorthand strcutures like the null-coalescing operator reduces the Cognitive Complexity compraed to an extensive null check and is therefore ignored for score calculation.
     \item[Break in the linear control flow]: A break in the expected linear control flow by loop structures and conditionals adds to Cognitive Complexity as to Cyclomatic Complexity. Additionally, Catches, Switches, sequences of logical operators, recursion and jumps also adds to Cognitive Complexity, since these strcutures break the linear control flow.
     \item[Nested flow-breaking strcutures]: Flow-breaking structures that are nested additionally increase the Cognitive Complexity, since it is harder to understand than non-nested structures.  
 \end{description}
-The method-level Cognitive Complexity score represents a relative complexity difference between methods that would have the same Cyclomatic Complexity. Furthermore, the aggregated Cognitive Complexity on a class or module level now differentiate between classes with many, simple methods and classes with a few, but complex methods. As a result, domain classes (containing mainly getters/setters) have a lower score compared to classes with complex code behaviour. (TODO source whitepaper multiple times)
-
+The method-level Cognitive Complexity score represents a relative complexity difference between methods that would have the same Cyclomatic Complexity. Furthermore, the aggregated Cognitive Complexity on a class or module level now differentiate between classes with many, simple methods and classes with a few, but complex methods. As a result, domain classes (containing mainly getters/setters) have a lower score compared to classes with complex code behaviour\cite{campbell2018cognitive}.
 
 Developers can extend Sonarqube similiarly to PMD. They can write a Java plugin that can acces the AST but also a semantic model of the code. Additional, extensions can be created that provide funcitonality to other extensions. The Java plugin is compiled into a .jar file and placed into the plugin dir of the Sonarqube installation. For simpler rules, XPath exressions are possible through the web interface and allow a quick extension. For instance, if developers observe bad code style during a pull request review, they can quickly write a rule to enforce this rule in all subsequent pull requests automatically.
 
