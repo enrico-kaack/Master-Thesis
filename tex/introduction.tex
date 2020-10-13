@@ -1,0 +1,16 @@
+\section{Motivation}
+- clean code violations can result in bad maintainable code
+- multiple tools exist, do not cover all clean code principles
+- tooling is important for productive use and for students learning clean code principles
+--> we therefore give an clean code overview, create a software platform to check for rules that can be expanded for teaching use and productive use and we try to use machine learning models to classify code as clean or unclean code so it may be possible for users to collect samples of unclean code and train the classifier without writing a complex rule or if a rule is not possible since the clean code rule is rather subjective
+
+\section{Goals}
+- overview of clean code principles
+- group CC principles into differrent abstraction levels concerning the methods used to check rule compliance (RegEx, AST-Based, Data-Flow, Dependency Graph, none (Machine learning))
+- develop a software plaform that can check for rule compliance, extendable by plugins
+- implement some plugins plugins into the platform 
+- analyse the use of machine learning models such as svm, gradient boosting classifier, random forest and a neural network on clean code violation detection
+- manipulate the code to simulate a 'noise' on the data to test if the models are able to detect the same problem in a different way, that they have not seen during training
+
+\section{Structure}
+Here you describe the structure of the thesis. For example:
