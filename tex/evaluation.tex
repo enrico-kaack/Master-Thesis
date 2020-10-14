@@ -131,3 +131,22 @@ To sum up, we achieve near-perfect performance with our neural network model. We
 
  \subsection{RQ3: Can the models detect modified non-clean code that can not be detected by the original rule checker? }
 See tables in attachment.
+
+CCS was a subsample of CC, --> check what CCS classifier were good in comparison to now good
+
+Random Forest: 
+- RN not possible
+- CC possible with 0.7158, interestingly with undersampling 
+without undersamling, precision increases but recall is 0
+
+Gradient Boosting Classifier:
+- RN: precision is bad with 0.24, recall of 0.76
+- CC: CCS had a lower performance in comparison to CC, maybe it tried to learn CC and was not able to just learn the subset --> maybe this is the reason fo r 0.83 f1. Resampling performs better than without resampling, opposite of single model training
+
+LSTM:
+- RN: work better with 0.38, still not good
+- CC: 0.65, worse than gbc and worse than random forest. although it performed increadibly well on the direct training
+
+Diskussion:
+why is RN so bad, why CC moderately possible?
+How could this be further improved? Maybe use finetuning training with just a few samples (like transfer learning assume the model has generalized basic structure and has to be finetuned for this types --> would be good since you only need to handsample a few samples to have a good working model for this types of problems) --> general mark importance of ML if there are no rules available therefore it is not posisble to generate a dataset like we did --> an approach with just a few samples would be great
