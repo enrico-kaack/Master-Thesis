@@ -133,13 +133,15 @@ To sum up, we achieve near-perfect performance with our neural network model. We
 See tables in attachment.
 
 \paragraph{Motivation}
-in previous approach, trained models on samples that were extracted from a github corpus and a algorithm to detect the non-clean code lines.
-implications:  we have an algorithmus to detect non-clean code samples. what if we can only write an algorithm that detects part of the problem or doesnt detect it when the code changes in its structure? --> Basically, we may not be able to cover all rules with traditional algorithms on AST, flow graph etc. --> we can only collect samples of some types of the problem but do not have all possible proble  variations in terms of code structureavailable.
-This is the motivation for this research question.
+For the previous research question, we trained models on a dataset. We created the dataset by downloading open-source repositories and applying our analysis plugins from \ref{sec:analysis_plugins} to label samples as clean or non-clean code. With this automatic approach, it is simle to generate a dataset und to scale the dataset to any size needed for training. These algorithm that detect non-clean code are the prerequesite for the dataset and a successfull training of machine learning models. This research question wants to put the machine learning approach into a szenario, in which the prerequesite is not met and there no dataset can be generated. This szenario applies to clean code guidelines that can not be checked by an algorithm that analyse the source code or any other representation in a deterministic way. Alternativeley, a deterministic algorithm may only detect a subset of clean-code vilations. Both szenarios boil down to not having samples for all or many structural variations of the rule violation. Therefore, we evaluate, how our previously trained models perform on slightly modified code that still violates the same clean code rule but could not be detected by the original analysis plugins.
+
 
 \paragraph{Approach}
-We simulate the fact we can not cover all structures of a problem with two variations: for rn, we put a noise on the data, we change the structure that it still return a none value but not directly. For CC, we use the model trained on the CCS type that only contains the subset with a direct comparison and evalaute it on data that contains the condition inside logical nesting that would not been flagged by CCS.
-Additionally, we have the evalaution of the model trained on the CC types as baseline for our performance evaluation. The baseline should handle the problem rather well compared to the evaluation in rq2. 
+To answer this research question, we use all models for all three problem types from the previous research question: For the RN problem type, we manipulate the holdout dataset as described \ref{sec:approach_code_manipulation}. The code still contain a logical \textit{return None}, although it is not explicitly written as two consecutive code tokens. This should explore, how well the different classifier extracted the structural information and can detect this noisy data. 
+
+With the CCS models, we simulate the scenario of having trained on a subset of all variations and testing on the full set of problem variations. We do so by manipulating all rules found by the algorithm for the CC problem type to only contain samples that are not part of the CCS subset. The CCS algorithm could therefore not detect a clean code violation.
+
+Last, we evaluate the models trained on the CC type with our manipulated code to provide a baseline for the CCS trained models. We expect the best performing CC model from the previous experiments should outperform all CCS models and should show similar performance like in the previous research question. We then investigate the the difference between the baseline and the model trained on CCS.
 
 \paragraph{Results}
 
@@ -161,3 +163,5 @@ LSTM:
 Diskussion:
 why is RN so bad, why CC moderately possible?
 How could this be further improved? Maybe use finetuning training with just a few samples (like transfer learning assume the model has generalized basic structure and has to be finetuned for this types --> would be good since you only need to handsample a few samples to have a good working model for this types of problems) --> general mark importance of ML if there are no rules available therefore it is not posisble to generate a dataset like we did --> an approach with just a few samples would be great
+
+simple encoding does not explore the code structure, another encoding necessary
