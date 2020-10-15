@@ -73,7 +73,6 @@ Generally, we observe a performance increase by applying oversampling, especiall
 Another common pattern is a worse performance on undersampled train sets. We observe a significant drop in performance for the RN problem type if we use a 0.5 undersampling ratio. Similarly, the performance for CCS and CC drops, although the decrease is smaller. Furthermore, we observe a moderate performance drop with 0.1 undersampling. From this pattern and the aforementioned observations for oversampling, we infer that a random forest classifier can profit from more data, even if they contain duplicated samples for the minority class due to oversampling. This can also explain the larger drop for undersampling for the RN problem type since the non-clean code class contains fewer samples for RN than for CCS and CC (2,078 for RN with 0.5 undersampling, 263,136 for CCS and 481,980 for CC). With fewer samples, the undersampling process reduces the overall amount of samples by deleting samples from the majority class. With an undersampling ratio of 0.1, fewer examples are deleted and the effect is less impactful but still observable. This effect is also visible in the smaller difference in performance between the CCs and CC problem type with undersampling. For CCS, the random forest classifier performs slightly worse than for CC, since only 131,568 samples have a CCS problem type whereas 240,990 samples contain the CC problem type.
 
 The impact of class weighting in comparison to equivalent configurations seems to be negligible. 
-mention numbers to prove the point
 To evaluate the impact of class weighting, we compare the variation in this parameter with otherwise identical configurations.
 For an oversampling ratio of 0.5 with type encoding, we see 0.8379, 0.9329 and 0.929 in test f1 performance without class weighting and 0.8352(-0.0027), 0.9287(-0.0042) and 0.9267(-0.0023) in test f1 score performance. The difference is not significant.
 For undersampling with a ratio of 0.5 and type encoding, the f1 score changes from 0.2583, 0.806 and 0.8632 test f1 score without class weighting to 0.2709(+0.0126), 0.8111(+0.0051) and 0.8671(+0.0039) test f1 score with class weighting. Again, the difference is not significant.
@@ -144,13 +143,20 @@ With the CCS models, we simulate the scenario of having trained on a subset of a
 Last, we evaluate the models trained on the CC type with our manipulated code to provide a baseline for the CCS trained models. We expect the best performing CC model from the previous experiments should outperform all CCS models and should show similar performance like in the previous research question. We then investigate the the difference between the baseline and the model trained on CCS.
 
 \paragraph{Results}
+For the results, we evaluate the results of the three models: Random Forest Classifier, Gradient Boosting Classifier and LSTM-based neural network. Per model, we analyse the performance for the RN manipulation, the CCS manipulation, teh comparison baseline and compare the results with the results from the previous research question.
 
-CCS was a subsample of CC, --> check what CCS classifier were good in comparison to now good
 
-Random Forest: 
-- RN not possible
-- CC possible with 0.7158, interestingly with undersampling 
-without undersamling, precision increases but recall is 0
+\subparagraph{Finding 1: Random Forest Classifier}
+The random forest classifier trained on the RN problem type achieves less than 0.06 f1 score. The classifier can not handle this kind of manipulation.
+
+The best CCS models achieves 0.7158 f1 with 0.758 recall and 0.678 precision. The basline model trained on the CC data reaches a 0.8186 f1 performance with a 0.9782 recall and 0.7038 precision. Compared to the baseline model, the CCS model has a 0.1 lower f1 score. The CCS model is trained with a 0.5 undersampling rate, 100 trees in the forest, class weighting and type encoding. The general better performance of models trained with undersampling is contradictory to the evaluation of the model in the previous experiment, in which oversampling performed better than undersampling. This reflects the baseline performance, for which the models with oversampled training and type encoding perform better than the undersampled counterparts. 
+
+The precision of models trained on undersampled datasets is lower than on the models trained on oversampled or not resampled training data. On the other hand, the recal drops to zero, which means the false negative rate increases. The model classifies most samples as negative and only a few as positive (TODO get numbers). With undersampled training, the model does not seem to be biased towards the negative classification as found with non-resampled or oversampled training data. Since the undersampling of the majority class (negative class, meaning clean code) reduces the number of unique negative samples in the training corpus, this decrease in bias seems reasonable. On the other hand, it is important to note that we test the model on the manipulated CC dataset that contains 5.1\% positive samples in comparison to the 2.51\% positive samples in the CCS train set without resampling. This may also influence the bias towards the negative samples.
+
+\subparagraph{Finding 2: Gradient Boosting Classifier}
+
+
+
 
 Gradient Boosting Classifier:
 - RN: precision is bad with 0.24, recall of 0.76
@@ -159,6 +165,8 @@ Gradient Boosting Classifier:
 LSTM:
 - RN: work better with 0.38, still not good
 - CC: 0.65, worse than gbc and worse than random forest. although it performed increadibly well on the direct training
+
+CCS was a subsample of CC, --> check what CCS classifier were good in comparison to now good
 
 Diskussion:
 why is RN so bad, why CC moderately possible?
