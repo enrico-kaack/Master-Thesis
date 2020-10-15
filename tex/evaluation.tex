@@ -132,6 +132,17 @@ To sum up, we achieve near-perfect performance with our neural network model. We
  \subsection{RQ3: Can the models detect modified non-clean code that can not be detected by the original rule checker? }
 See tables in attachment.
 
+\paragraph{Motivation}
+in previous approach, trained models on samples that were extracted from a github corpus and a algorithm to detect the non-clean code lines.
+implications:  we have an algorithmus to detect non-clean code samples. what if we can only write an algorithm that detects part of the problem or doesnt detect it when the code changes in its structure? --> Basically, we may not be able to cover all rules with traditional algorithms on AST, flow graph etc. --> we can only collect samples of some types of the problem but do not have all possible proble  variations in terms of code structureavailable.
+This is the motivation for this research question.
+
+\paragraph{Approach}
+We simulate the fact we can not cover all structures of a problem with two variations: for rn, we put a noise on the data, we change the structure that it still return a none value but not directly. For CC, we use the model trained on the CCS type that only contains the subset with a direct comparison and evalaute it on data that contains the condition inside logical nesting that would not been flagged by CCS.
+Additionally, we have the evalaution of the model trained on the CC types as baseline for our performance evaluation. The baseline should handle the problem rather well compared to the evaluation in rq2. 
+
+\paragraph{Results}
+
 CCS was a subsample of CC, --> check what CCS classifier were good in comparison to now good
 
 Random Forest: 
