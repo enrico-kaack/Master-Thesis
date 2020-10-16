@@ -1,12 +1,17 @@
 \section{Code Quality}
-Code Quality describes the quality of source code with regard to understandability and readability. Developers can understand well-written code easily. 
-High-quality code has an impact on onboarding new developers, writing new code and maintaining the existing code.
+The term code quality defines an evaluation of source code concerning the readability and understandability the source code. If source code is well-written and can be understand by developers easily, it is considered to be high quality.
 
-The onboarding of new developers is an investment of time and money in the developer. The faster a new developer can understand an existing code base, the faster the developer can start writing productive code and providing value.
-
-Maintaining existing code and adding features is part of most software today (TODO source). Agile development is a methodology used in software development that reflects this requirement. Source Code is improved and changed with runnable software versions at the end of each iteration.
-From a business standpoint, the always-changing code is modeled by subscription-based contracts that include new features and bugfixes. The easiness to change source code is business-critical, and a high-quality code can affect this requirement in the following kinds \cite{baggen_standardized_2012}:
-
+One of the main reasons why companies and developers aim for high code quality is the maintainability of source code. With a better understandability of the source code, changing it becomes more efficient and less error prone.
+Software maintanance consist mainly of those activities that involves chaning source code:
+\begin{enumerate}
+    \item Adding code for new feautres
+    \item Implementing changing requirements by modifying code
+    \item Fixing bugs to ensure correct functionality of the software.
+\end{enumerate}
+The importance of a good maintainability of source code is based on the assosiated cost.
+For project planning, different sources suggest to plan 50 to 80\% of the total software development costs for maintainance. A recent study from 2018 between Stripe and Harris Poll found that developers spent 42\% of their time maintaining code. Increasing the effectiveness of maintaining code is therefore cost-relevant (SOURCE: \url{https://stripe.com/de/reports/developer-coefficient-2018}TODO).
+The application of agile software development paradigms is another important contributor for code to be changeable. Agile development is a software development practice of building software in increments with a running software at the end of each increment.One of the advantages is the adaptability of this model to changing requirements, since with the end of each increment, a requirement change can be implemented. (TODO source Manifesto for agile software development).
+The easiness of code changeability due to code quality becomes a business-critical requirement and can positively impact the maintainability in the follwoing ways\cite{baggen_standardized_2012}:
 \begin{enumerate}
     \item Well-written code makes it easy to determine the location and the way source code has to be changed.
     \item A developer can implement changes more efficient in good code.
@@ -14,17 +19,18 @@ From a business standpoint, the always-changing code is modeled by subscription-
     \item Changes can be validated easier. 
 \end{enumerate}
 
-The International Organization for Standardization provides the standard ISO/IEC 25000:2014 for \enquote{Systems and software Quality Requirements and Evaluation (SQuaRE)}\cite{iso_central_secretary_systems_2014}.
+Besides the maintainability, a higher code quality makes it easier for new developers to understand the code base and be productive, since it is easier to read and understand the code.
 
-Code Quality is measured by the following code characteristics:
+The understandability and readability of high-quality source code has implications going further than maintainability. The International Organization for Standardization provides the standard ISO/IEC 25000:2014 for \enquote{Systems and software Quality Requirements and Evaluation (SQuaRE)}\cite{iso_central_secretary_systems_2014}, that measures code quality by the contribution of the following characteristic:
 \begin{enumerate}
     \item Reliability
     \item Performance efficiency
     \item Security
     \item Maintainability
 \end{enumerate}
+Reliability is the ability of a system to run without critical exception that would cause the system to crash, become unavailable or result in an inconsistent state. The most important factors for reliability are a correct multi-threading with access to shared ressources and correct memory allocation and deallocation. Performance efficiency describes a optimal use of the ressources like CPU-time, memory or network bandwith. The security aspect focus on code that does not open up as an attach vector. Especially common vulnerabilities like SQL injections shall be prevent.
 
-Besides the mentioned maintainability characteristics, Code Quality also depends on reliability (like multi-threading and resource allocation handling), performance efficiency for efficient code execution, and security (like vulnerabilities to frequent attacks like SQL-injection).
+Understandability and readability can improve the characteristics used by the standard to measure code quality. If code is harder to understand for developer, it is more likely that any code change will impact reliability, performance efficiency, security or maintainability, since the developer may not understand all implications of the change. 
 
 \section{Clean Code}\label{sec:clean_code}
 Clean Code is a concept for high-quality code, coined by the book Clean Code by Robert C. Martin \cite{martin_clean_2009}. The root cause for unclean code is chaotic code. Developers produce chaotic code in a conflict between deadline pressure based on the visible output (the functionality of the software) and extra effort to make code more intuitive. The latter is not directly visible as productive output, although an accumulation of chaotic code reduces the productivity over time \cite{martin_clean_2009}. A bigger legacy system with chaotic code will slow down later modifications or additions of code. By following the Clean Code guidelines and best-practices, this productivity loss can be minimized. 
