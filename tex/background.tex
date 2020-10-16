@@ -1,4 +1,4 @@
-\section{Code Quality}
+\section{Code Quality}\label{sec:code_quality}
 The term code quality defines an evaluation of source code concerning the readability and understandability the source code. If source code is well-written and can be understand by developers easily, it is considered to be high quality.
 
 One of the main reasons why companies and developers aim for high code quality is the maintainability of source code. With a better understandability of the source code, changing it becomes more efficient and less error prone.
@@ -33,12 +33,13 @@ Reliability is the ability of a system to run without critical exception that wo
 To sum up, code quality is a concept to describe source code from the view of a developer ability to understand and change code. This view influence characteristics like maintainability or reliability that can be used as metrics to measure code quality. 
 
 \section{Clean Code}\label{sec:clean_code}
-Clean Code is a concept for high-quality code, coined by the book Clean Code by Robert C. Martin \cite{martin_clean_2009}. The root cause for unclean code is chaotic code. Developers produce chaotic code in a conflict between deadline pressure based on the visible output (the functionality of the software) and extra effort to make code more intuitive. The latter is not directly visible as productive output, although an accumulation of chaotic code reduces the productivity over time \cite{martin_clean_2009}. A bigger legacy system with chaotic code will slow down later modifications or additions of code. By following the Clean Code guidelines and best-practices, this productivity loss can be minimized. 
+In chapter \ref{sec:code_quality}, we defined the terminology of code quality. Yet the question remains, how to achieve a high code quality. One approach is the clean code concept, coined by the Robert C. Martin in its book \enquote*{Clean Code: A Handbook of Agile Software Craftsmanship}\cite{martin_clean_2009}. Basically, source code can be seen as clean code or as non-clean chaotic code. The author describes clean code principles in the form of practical rules. Those practical rules shall result in intuitive code that is easy to understand and read, i.e. the code quality increases.
 
-The Clean Code techniques focus mainly on maintainability by provididng intuitive code. This has a positive effect on the security and reliability aspect as well, since developers can find edge cases in non-logical behaviour more easily in intuitive code. Some of the following Clean Code principles may decrease performance efficiency. Still, in many software projects, developer performance is a more valuable ressource than actual runtime performance (TODO source).
+Chaotic code on the other hand is harder to read and understand. The author argues, developers produce chaotic code in a conflict between deadline pressure and the necessary effort to make code more intuitive and follow clean code principles\cite{martin_clean_2009}. The former pressure is created by deadlines that focus on the visible output like the programs funcitonality whereas the latter is not directly visible in the final product. If the success criteria is solely based on the visible output, the code quality may suffer by fast-to-write chaotic code. This behaviour is shortsighten, since an accumulation of chaotic code reduces the productivity over time . A larger system with chaotic code will slow down later modifications or additions of code. With the costs assosiated with maintainability as described in chapter \ref{sec:code_quality}, reducing the maintainance effort is a logical step. With the clean code principles, developers can read and understand code in a more intuitive way and the described costs of chaotic code will decrease\cite{martin_clean_2009}.
 
 
-The following sections explain the clean code guidelines following the book by Robert C. Martin \cite{martin_clean_2009}.
+
+The following sections explain the clean code guidelines following the book by Robert C. Martin \cite{martin_clean_2009}.TODO give a more detailed overview of the next chapters
 
 \subsection{General Rules}
 Developers should follow the general rules consistently for developing new features or fixing bugs. They are the essential building blocks for the understandability and reliability of the code. 
