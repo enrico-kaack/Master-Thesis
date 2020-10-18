@@ -154,77 +154,112 @@ Additionally, the author describes the concept of code smells. In theory, follow
 This work will focus on the described rules and implement a detection for some rule violations.
 
 \section{Quantitative Metrics for Code Quality}
-Quantitative metrics  express code quality as a quantitative unit. 
-This has multiple advantages:
+To define the quality of a software product, it is necessary to have methods to express the code qualtity as quantitative units. This has multiple advantages:
 \begin{itemize}
     \item A metric sums up the quality of a project in a single unit.
     \item A quantitative approach tracks the changes in code quality over time. Therefore, it is obvious if code quality improves or not. In case the quality  undercuts a threshold, special measures like mandatory refactoring can be undertaken.
     \item A developers performance can be evaluated  based on the code quality. Since the maintainability and reliability of the software depends on the code quality, this is a good incentive to enforce high quality work.
-    \item A certain level of code quality can be required by a contract. As a result, a customer can expect less bugs and a smaller maintenance effort.
+    \item A certain level of code quality may be required by a contract. As a result, a customer may could less bugs and a smaller maintenance effort.
 \end{itemize}
-Metrics for code quality are a subset of more general software metrics. The following sections describe software metrics that express code quality.
+Metrics for code quality are a subset of general software metrics. The following sections describe common software metrics that express code quality.
 
 \subsection{Cyclomatic Complextiy}\label{sec:cyclomatic_complexity}
-Cyclomatic Complexity is a metric for the complexity of a section of code. It was introduced by Thomas McCabe, Sr.  Is is measured by counting the number of linearly independent execution paths\cite{mccabe_complexity_1976}.
+Cyclomatic Complexity is a metric for the complexity of a section of code. It was introduced by Thomas McCabe. It measures the complexity by counting the number of linearly independent execution paths\cite{mccabe_complexity_1976}. 
 
-To compute  the Cyclomatic Complexity, the control-flow graph is required. The control-flow graph represents possible execution paths. A node represents  a basic block, a code sequence without branching. A directed edge represent jumps in the control flow; e.g. an if-statement without an else-case has two edges. One edge to the basic block in the if-branch  and one edge to the basic block after the if-statement. Beside cyclomatic complexity, the control-flow graph is used for compiler optimisation techniques like dead code elimination and loop optimization (\url{https://ag-kastens.cs.uni-paderborn.de/lehre/material/compii/folien/c101-217a.pdf}).
+An execution path is the subsequent execution of instructions. With control flow structures such as if statements, two execution paths are possible, depending on the evaluation of the if condition. An execution path is linear independent, if it includes one subpath that is not part of the other paths. A better illustration is the control-flow graph. The control-flow graph represents possible execution paths. A node represents  a basic block, i.e a code sequence without branching. A directed edge represent jumps in the control flow; e.g. an if-statement would have two outgoing edges, one for a true condition and one for a condition evaluated as false. See figure TODO for a visualtion.
 
-The cyclomatic complexity on a control-flow graph is defined as:
-\begin{displaymath}
-    M = E - N + 2P
-\end{displaymath}
+\begin{figure}
+\begin{tabular}{p{0.45\textwidth}p{0.45\textwidth}}
+    \begin{minipage}{0.45\textwidth}
+        \centering
+    \includegraphics[height=1.5in]{img/Background/control-flow-graph.pdf}
+    \label{fig:background_control_flow_graph_image}
+    \end{minipage}
+&
+\begin{minipage}[c]{0.45\textwidth}
+\centering
+\begin{lstlisting}[language=Python, label=lst:background_control_flow_graph_listing]
+def function(a,b):
+    if a < b: # (1)
+        if b < 10: #(2)
+            a = a + b
+        else:
+            return b #(end)
+    a = a * 2 #(3)
+    return a #(end)
+\end{lstlisting}
+\end{minipage}
+\end{tabular}
+\caption[Control-flow graph visualisation for a code sample]{Control-flow graph visualisation for a code sample. The graph has 6 edges, 5 nodes and one connected component. The cyclomatic complexity is 3. }
+\label{fig:background_control_flow_graph}
+\end{figure}
 
-E is the number of edges, N the numder of nodes and P the number of connected components.  A connected graph is a subgraph, in which all nodes are connected to each other by a path. P represents the number of subprograms (like multiple functions or classes will).
-Following this definition, the cyclomatic complexity can be calculated.. See figure TODO for a visualisation.
+The cyclomatic complexity on a control-flow graph as the number of linearly independent execution paths is defined as:
+\begin{equation}\label{eq:cyclomatic_complexity}
+M = E - N + 2P
+\end{equation}
+
+$E$ is the number of edges, $N$ the number of nodes and $P$ the number of connected components.  A connected graph is a subgraph, in which all nodes are connected to each other by a path. Following this definition, the cyclomatic complexity can be calculated. Figure \ref{fig:background_control_flow_graph} shows a visualisation of a sample python function. The control-flow graph has 6 edges, 5 nodes and is one connected component. Using equation \ref{eq:cyclomatic_complexity}, the cyclomatix complexity is 3.
 
 MacCabe recommends to limit the cyclomatic complexity to 10. NIST confirms this recommendation in TODO. A lower cyclomatic complexity improves testability, since the complexity represents the number of execution paths that need to be tested. Therefore, $M$ is the upper bound for number of test cases for full branch coverage. 
 Furthermore, studies suggest a positive correlation between cyclomatic complexity and defects in functions. TODO source
-Safety standards like ISO 26262 (for electronics in automobiles) or IEC 62304 (for medical devices) mandates a low cyclomatic complexity \cite{isotc_22sc_32_iso_2018, isotisotc_210_iec_2006c_210}.
+Software that has to comply to safety standards like ISO 26262 (for electronics in automobiles) or IEC 62304 (for medical devices) are mandated to have a low cyclomatic complexity\cite{isotc_22sc_32_iso_2018, isotisotc_210_iec_2006c_210}.
+
+Although cyclomatic complexity is used thorughout the industry, several shortcomings are under critique. First, complexity from data flow is ignored. Working with a larger number of variables and operations, the code become more complex but the cyclomatic complexity does not take this into account. Second, nested code structure are not considered by the metric, although the it adds additional difficulty for understanding. TODO source as halstead critique.
 
 \subsection{Halstead Complexity Measures}
-Maurice Halstead introduced the Halstead complexity measures in 1977\cite{halstead1977elements}. It is a collection of multiple countable measure and relations.
+Maurice Halstead introduced the Halstead complexity measures (HCM) in 1977\cite{halstead1977elements}. Halstead approached the complexity measure with an empirical approach by defining observable and measureable properties and put them into relations.
 
-The Halstead  metrics operates on a sequence of tokens that are classified to be an operator or an operand.
+The measureable properties are operators and operands. Operators are symbols in expressions like an addition, subtraction or multiplication symbol. Operands are the values and variables that are manipulated by the operators. 
 
-The classification enables to count the following properties:
+The sum and number of distinc operators and operands are counted as:
 \begin{itemize}
     \item $\eta_1$ as the number of distinct operators 
     \item $\eta_2$ as the number of distinct operands
     \item $N_1$ is the sum of all operators
     \item $N_2$ is the sum of all operands  
 \end{itemize}
-The total program vocabulary can be computed as:
-\begin{displaymath}
-    \eta = \eta_1 + \eta_2
-\end{displaymath}
-The program length is not calculated by the lines of code, but as a sum of all operators and operands:
-\begin{displaymath}
-    N = N_1 + N_2
-\end{displaymath}
-The voume of a program in terms of program length and program vocabulary is defined as: 
-\begin{displaymath}
-    V = N * \log_2{\eta}
-\end{displaymath}
-An important metric is the difficulty of understanding a program, defined as:
+
+From these base properties, Halstead derrived additional properties:
+\begin{itemize}
+    \item Program vocabulary size:
+    \begin{displaymath}
+        \eta = \eta_1 + \eta_2
+    \end{displaymath}
+    \item Program length as the sum of all operators and operands:
+    \begin{displaymath}
+        N = N_1 + N_2
+    \end{displaymath}
+    \item The volume of a program in terms of program length and program vocabulary is defined as: 
+    \begin{displaymath}
+        V = N * \log_2{\eta}
+    \end{displaymath}
+\end{itemize}
+
+Based on those properties, code metrics can be calculated. 
+First, the difficulty of understanding a program is calculated as:
 \begin{displaymath}
     D = \frac{\eta_1}{2} * \frac{N_2}{\eta2}
 \end{displaymath}
-The major contribution to difficulty is the number of distinct operators $\eta_1$.
-The combination of difficulty and volumes is the effort for udnerstanding or changing code:
+The major contributors to difficulty are the number of distinct operators $\eta_1$ and the sum of all operands $N_2$.
+
+Second, the combination of difficulty and volume is the required effort for understanding or changing code follows:
 \begin{displaymath}
     E = D * V
 \end{displaymath}
-The effort translates into real coding time following the relation
+
+Third, the effort for changes translates into real time following the relation:
 \begin{displaymath}
     T = \frac{E}{18}s.
 \end{displaymath}
 
-The number of  bugs correlates with the effor following
+Last, the number of bugs correlates with the following relation TODO cite: A survey on metric of software complexity:
 \begin{displaymath}
-    B = \frac{E^{\frac{2}{3}}}{3000}
+    B = \frac{V}{3000}
 \end{displaymath}
 
-(TODO general critique etc. on this metric since it seems to be arbitrary)
+HCM focus on the complexity introduced by data manipulation, but ignores complexity from the control-flow. Since the cyclomatic copmplexity focus on the control-flow complexity but not on the data-flow complexity, it is practical to use both together to supplement each drawback (TODO source: A survey on metric of software complexity
+). Additionally, the correleation with the number of bugs is based on the programmers skill estimation with a fixed value of 3000. Since this varies between projects, such an experiental and fixed number is doubtable (TODO source as before).
 
 \subsection{Software Maintainability Index}
 The software maintainability index was developed by Dan Coleman and Paul Oman in 1994. 16 HP engineers evaluated 16 software systems and scored it in a range from 0 to 100, with 100 representing best maintainability\cite{coleman_using_1994}. 
@@ -232,15 +267,10 @@ Following a regression analysis, they identified the following equation to match
 \begin{displaymath}
 MI = 171 - 5.2 *\ln{\overline{V}} - 0.23 * \overline{M} - 16.2 * \ln{\overline{LOC}} + 50 * \sin{\sqrt{2.4 * C}}
 \end{displaymath}
-where $\overline{V}$ is the average Halstead Volume, $\overline{M}$ the average cyclic complexity, $LOC$ the lines of code and $C$ as fraction of comments.
+$\overline{V}$ is the average Halstead Volume, $\overline{M}$ the average cyclic complexity, $LOC$ the lines of code and $C$ as fraction of comments.
 
-The software maintainability index was defined many years ago with a limited sample size of developers and projects. Additionally, programming languages have changed significantly over time. A study by Sjøberg et. al suggest no correlation between the software maintainability index and actual maintainability effort in a controlled environment\cite{sjoberg_questioning_nodate}. Although the study only analysis four software projects and lacks generalisation, they find a strong anti-correlation with different maintainability metrics. Only the code size seems to correlate with the actual maintainability. The foormer seems to be consistent with a systematic review on software maintainability predictions and metrics by Riaz et. al\cite{riaz_systematic_2009}.
+The software maintainability index was defined many years ago with a limited sample size of developers and projects. Additionally, programming languages have changed significantly over time. A study by Sjøberg et. al suggest no correlation between the software maintainability index and actual maintanance effort in a controlled environment\cite{sjoberg_questioning_nodate}. Although the study only analysis four software projects and lacks generalisation, they find a strong anti-correlation with different maintainability metrics. Only the code size seems to correlate with the actual maintainability. The former seems to be consistent with a systematic review on software maintainability predictions and metrics by Riaz et. al\cite{riaz_systematic_2009}.
 
-
-
-Kritik an Clean Code
-
-??Teaching clean code, the paper from one german university
 
 \section{Tools for Code Quality Analysis}\label{sec:tool_comparison}
 It is good practice to use static code analysis tools to improve code quality. A static code analysis examines a program by analysing an abstract syntax tree, the control or data flow, a pointer analysis or an abstract (approximated) execution. In comparison to dynamic analysis, the code is not executed. The result of a static analysis can be based on approximations, so there might be false positive results. An expert has to examine the result and correct results if necessary\cite{prahofer_static_2017}.
@@ -254,7 +284,7 @@ Besides the use of static code analysis for compiler and optimisations, it is al
     \item[Security Vulnerability Detection:] Static code analysis tools can detect some security vulnerabilities like SQL Injection Flaws, buffer overflows and missing input validation with high confidence. Since these are some common, easy to exploit vulnerabilites, a analysis for security vulnerabilities can increase the security of the overall software \cite{wichers_source_nodate}.  
 \end{description}
 
-The following sections provide an overview of a few static code analysis tools with focus on code quality and maintainability. I selected them based on popularity and if the projects are still maintained.
+The following sections provide an overview of a few static code analysis tools with focus on code quality and maintainability. We selected them based on popularity and if the projects are still maintained.
 
 \subsection{PyLint}
 PyLint is a code analysis tool for the Python programming language. It is open-source and licensed under the GNU General Public License v2.0 and available for all common plattforms. PyLint can be executed as a standalone program or can be integrated into common IDEs like Eclipse. A continous integration pipeline may include PyLint as well to ensure an analysis on every build.
