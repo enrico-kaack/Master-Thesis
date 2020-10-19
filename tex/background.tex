@@ -107,8 +107,21 @@ In object-oriented programming, a method $m$ of an object $O$ may only call meth
     \item objects that are created within $m$'s scope
     \item instance variables of $O$
 \end{itemize}
-In other words, the object $O$ only calls methods on direct \enquote{neighboors}. The object does not call a method of its neighbour and subsequently calls a method on the returned object from the neighbour. By restricting the allowed method call to only direct \enquote{neighboors}, the dependencies between objects are reduced and the modularity increased. As a consequence, changing methods only affects the direct neighbours and not objects in potentially different parts of the software. Having objects like in the class diagram in figure TODO, the following implementation of the method \textit{test()} would violate the LoD:
-\begin{lstlisting}[language=Python, label=lst:LoD, caption={TODO caption}]
+In other words, the object $O$ only calls methods on direct \enquote{neighboors}. The object does not call a method of its neighbour and subsequently calls a method on the returned object from the neighbour. By restricting the allowed method call to only direct \enquote{neighbours}, the dependencies between objects are reduced and the modularity increased. As a consequence, changing methods only affects the direct neighbours and not objects in potentially different parts of the software. 
+Figure \ref{fig:LoD} shows an example for the LoD. In the method \textit{test}, a function call on \textit{B} returns a reference to \textit{C}. Since \textit{C} is not a direct neighboor of \textit{A}, the function call violates the LoD. The modularity of objects suffer, since a change of the method \textit{do\_something()} would require changes in in object \textit{A}. This close coupling of an \textit{A} and \textit{C} is circumvented with a method \textit{do\_something\_on\_C} that wraps the functionality of \textit{C}, so a change in \textit{C} would only require a change in B. With that common layer, \textit{A} and \textit{C} are decoupled. Object \textit{A} in this case does not know how the certain functionality is performed and it does not matter.  
+Bad code practice like the violation of the LoD in listing \ref{fig:LoD} is called a train wreck, since subsequent method calls look like multiple train carriages. Such train wrecks can be improved  by the described wrapping function.
+
+\begin{figure}
+\begin{tabular}{p{0.45\textwidth}p{0.45\textwidth}}
+    \begin{minipage}{0.45\textwidth}
+        \centering
+    \includegraphics[width=\linewidth]{img/Background/LawOfDemeterUML.pdf}
+    \label{fig:background_control_flow_graph_image}
+    \end{minipage}
+&
+\begin{minipage}[c]{0.45\textwidth}
+\centering
+\begin{lstlisting}[language=Python, label=lst:background_control_flow_graph_listing]
 def test():
     #violation of LoD
     self.B.get_C().do_something()
@@ -116,8 +129,13 @@ def test():
     #no violation of LoD
     self.B.do_something_on_C()
 \end{lstlisting}
-In the method test, a function call on \textit{B} returns a reference to \textit{C}. Since \textit{C} is not a direct neighboor of \textit{A}, the function call violates the LoD. The modularity of objects suffer, since a change of the method \textit{do\_something()} would require changes in in object \textit{A}. This close coupling of an \textit{A} and \textit{C} is circumvented with a method \textit{do\_something\_on\_C} that wraps the functionality of \textit{C}, so a change in \textit{C} would only require a change in B. With that common layer, \textit{A} and \textit{C} are decoupled. Object \textit{A} in this case does not know how the certain functionality is performed and it does not matter.  
-Bad code practice like the violation of the LoD in listing \ref{lst:LoD} is called a train wreck, since subsequent method calls look like multiple train carriages. Such train wrecks can be improved  by the described wrapping function.
+\end{minipage}
+\end{tabular}
+\caption[Illustration Law of Demeter]{A sample illustration of the Law of Demeter. The figure on the left shows a class diagram for the classes \textit{A}, \textit{B} and \textit{C}. The listing on the right shows the implmentation of the \textit{test} method of class \textit{A}.  }
+\label{fig:LoD}
+\end{figure}
+
+
 
 Data structures are often used as Data Transfer Objects (DTO) to communicate with other processes or services. These objects do not contain any functions; instead, they only have accessible member variables. A specialisation of DTOs are Active Records that contain additional methods for data storage. They are used to represent a data source like a database. For DTOs and Active Records, it is bad practice to insert business logic into this objects\cite{martin_clean_2009}. With business logic, the data structure becomes a hybrid between an object and a data structure. It becomes unclear, if the purpose of a hybrid is to store data or to expose methods to modify those data in a controlled way. Without the clear purpose of the object or data structure, it becomes harder to understand for developers.
 
