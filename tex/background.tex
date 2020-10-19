@@ -11,7 +11,7 @@ Software maintenance consists mainly of those activities that involve changing s
 The importance of good maintainability of source code is based on the associated cost.
 For project planning, different sources suggest planning 50 to 80\% of the total software development costs for maintenance. A recent study from 2018 between Stripe and Harris Poll found that developers spent 42\% of their time maintaining code. Increasing the effectiveness of maintaining code is consequently cost-relevant (SOURCE: \url{https://stripe.com/de/reports/developer-coefficient-2018}TODO).
 The application of agile software development paradigms is another important contributor for code to be changeable. Agile development is a software development practice of building software in increments with a running software at the end of each increment. One of the advantages is the adaptability of this model to changing requirements, since, with the end of each increment, a requirement change can be implemented. (TODO source Manifesto for agile software development).
-The easiness of code changeability due to code quality becomes a business-critical requirement and can positively impact the maintainability in the following ways\cite{baggen_standardized_2012}:
+The easiness of code changeability due to code quality becomes a business-critical requirement and can positively impact the maintainability in the following ways~\cite{baggen_standardized_2012}:
 \begin{enumerate}
     \item Well-written code makes it easy to determine the location and the way source code has to be changed.
     \item A developer can implement changes more efficient in good code.
@@ -21,7 +21,7 @@ The easiness of code changeability due to code quality becomes a business-critic
 
 Besides the maintainability, a higher code quality makes it easier for new developers to understand the code base and be productive since it is easier to read and understand the code.
 
-The understandability and readability of high-quality source code have implications going further than maintainability. The International Organization for Standardization provides the standard ISO/IEC 25000:2014 for \enquote{Systems and software Quality Requirements and Evaluation (SQuaRE)}\cite{iso_central_secretary_systems_2014}, that measures code quality by the contribution of the following characteristic:
+The understandability and readability of high-quality source code have implications going further than maintainability. The International Organization for Standardization provides the standard ISO/IEC 25000:2014 for \enquote{Systems and software Quality Requirements and Evaluation (SQuaRE)}~\cite{iso_central_secretary_systems_2014}, that measures code quality by the contribution of the following characteristic:
 \begin{enumerate}
     \item Reliability
     \item Performance efficiency
@@ -33,13 +33,13 @@ Reliability is the ability of a system to run without critical exception that wo
 To sum up, code quality is a concept to describe source code from the view of a developers ability to understand and change code. This view influence characteristics like maintainability or reliability that can be used as metrics to measure code quality. 
 
 \section{Clean Code}\label{sec:clean_code}
-In chapter \ref{sec:code_quality}, we defined the terminology of code quality. Yet the question remains, how to achieve a high code quality. One approach is the clean code concept, coined by the Robert C. Martin in its book \enquote{Clean Code: A Handbook of Agile Software Craftsmanship}\cite{martin_clean_2009}. Basically, source code can be seen as clean code or as non-clean chaotic code. The author describes clean code principles in the form of practical rules. Those practical rules shall result in intuitive code that is easy to understand and read, i.e. the code quality increases.
+In chapter \ref{sec:code_quality}, we defined the terminology of code quality. Yet the question remains, how to achieve a high code quality. One approach is the clean code concept, coined by the Robert C. Martin in its book \enquote{Clean Code: A Handbook of Agile Software Craftsmanship}~\cite{martin_clean_2009}. Basically, source code can be seen as clean code or as non-clean chaotic code. The author describes clean code principles in the form of practical rules. Those practical rules shall result in intuitive code that is easy to understand and read, i.e. the code quality increases.
 
-Chaotic code, on the other hand, is harder to read and understand. The author argues, developers produce chaotic code in a conflict between deadline pressure and the necessary effort to make code more intuitive and follow clean code principles\cite{martin_clean_2009}. The former pressure is created by deadlines that focus on the visible output like the functionality of the program, whereas the latter is not directly visible in the final product. If the success criteria are solely based on the visible output, the code quality may suffer by fast-to-write chaotic code. This behaviour is shortsighted since an accumulation of chaotic code reduces productivity over time. A larger system with chaotic code will slow down later modifications or additions of code. With the costs associated with maintainability as described in chapter \ref{sec:code_quality}, reducing the maintenance effort is a logical step. With the clean code principles, developers can read and understand code in a more intuitive way and the described costs of chaotic code will decrease\cite{martin_clean_2009}.
+Chaotic code, on the other hand, is harder to read and understand. The author argues, developers produce chaotic code in a conflict between deadline pressure and the necessary effort to make code more intuitive and follow clean code principles~\cite{martin_clean_2009}. The former pressure is created by deadlines that focus on the visible output like the functionality of the program, whereas the latter is not directly visible in the final product. If the success criteria are solely based on the visible output, the code quality may suffer by fast-to-write chaotic code. This behaviour is shortsighted since an accumulation of chaotic code reduces productivity over time. A larger system with chaotic code will slow down later modifications or additions of code. With the costs associated with maintainability as described in chapter \ref{sec:code_quality}, reducing the maintenance effort is a logical step. With the clean code principles, developers can read and understand code in a more intuitive way and the described costs of chaotic code will decrease~\cite{martin_clean_2009}.
 
 
 
-The following sections explain the clean code guidelines following the book by Robert C. Martin \cite{martin_clean_2009}.TODO give a more detailed overview of the next chapters
+The following sections explain the clean code guidelines following the book by Robert C. Martin~\cite{martin_clean_2009}.TODO give a more detailed overview of the next chapters
 
 \subsection{General Rules}
 The following general rules are basic rules that act as a foundation for more specific rules.
@@ -54,7 +54,7 @@ The third general rule states that every time a developer touches the code, he s
 
 \subsection{Naming}\label{sec:naming}
 The naming section covers several rules for naming variables, functions, types and classes.
-Good naming can make it easier to read and understand code. \enquote{Good} naming is an opinionated topic; For Robert C. Martin, the key factor of good naming is the descriptiveness of names\cite{martin_clean_2009}. Descriptive names provide the reader with enough information to understand what a variable stores or what a function computes. Abbreviations or symbolic names like \textit{a1, a2} are not descriptive and do not provide information about the meaning. Using symbolic names for mathematical expressions could be an exception to the rule if the naming mirrors the expression.
+Good naming can make it easier to read and understand code. \enquote{Good} naming is an opinionated topic; For Robert C. Martin, the key factor of good naming is the descriptiveness of names~\cite{martin_clean_2009}. Descriptive names provide the reader with enough information to understand what a variable stores or what a function computes. Abbreviations or symbolic names like \textit{a1, a2} are not descriptive and do not provide information about the meaning. Using symbolic names for mathematical expressions could be an exception to the rule if the naming mirrors the expression.
 
 To come up with a descriptive name, it is helpful to include a verb or verb expression for function names, because functions express an action. For class names, a noun emphasises the object character of the class.
 
@@ -63,13 +63,13 @@ Another helpful property of a name is an easy pronunciation since it is easier t
 An old naming convention is the Hungarian naming convention. In Hungarian naming, the type is encoded as a prefix of a variable name. TODO sample and source. Nowadays, the type encoding is redundant to the automatic type inference of IDEs. The automatic type inference also prevents confusion for the reader if the type in the notation and the actual type are inconsistent. The same logic applies to a prefix for member variables and methods, since an IDE can automatically highlight those different tokens.
 
 \subsection{Functions}\label{sec:functions}
-This chapter describes several rules regarding functions, that Robert C. Martin charactericze\cite{martin_clean_2009}. 
+This chapter describes several rules regarding functions, that Robert C. Martin charactericze~\cite{martin_clean_2009}. 
 
 First, functions should be small in length. Exceeding 20 lines should not be necessary in most cases. If a function is small, it can be read more easily and without scrolling. 
 
 Second, inside a function, if-, else- and while-statements should contain a function call for the condition and one function call for the body. With a descriptive naming (see \ref{sec:naming}), a function call document the condition and body in a concise and readable way. In sample TODO, reading a condition with function calls does not require the reader to decrypt the logical expression. This can also save additional comments that explain the meaning of the condition. Furthermore, if the body also contains a function call, it is fast to understand the cause-effect relation of the if expression. 
 
-Third, functions should fulfil one purpose. Since functions may have to call several functions subsequently to perform the required computation, Robert C. Martin expands the rule that functions should only operate on one abstraction level\cite{martin_clean_2009}. This would result in the following structure:
+Third, functions should fulfil one purpose. Since functions may have to call several functions subsequently to perform the required computation, Robert C. Martin expands the rule that functions should only operate on one abstraction level~\cite{martin_clean_2009}. This would result in the following structure:
 Functions with a low abstraction level handle data access and manipulation, e.g. string manipulation. Functions on a middle abstraction layer orchestrate the low-level operations. On the next higher level, the mid-level functions are orchestrated etc. Following this structure, a function has one purpose on the low level and one orchestration function on a higher abstraction layer. 
 
 Fourth, the number of function arguments should be three or lower. With many function arguments, it becomes harder to call a function. Simultaneously, testing becomes harder, especially if all argument combinations should be tested. Functions with none or one argument simplify testing a lot. Since testing can reveal bugs, testable code is crucial for reducing the number of bugs.
@@ -82,11 +82,11 @@ The next rule forbids the returning of error codes and suggests raising an excep
 Last, the important principle for software engineering applies directly to functions: Don't repeat yourself TODO source. Repeated code is dangerous and chaotic since it requires changes in multiple locations if it has to be modified. This makes duplicated code very prone to copy and paste errors and small mistakes that may not be obvious during development but will lead to a fatal crash at runtime. Many patterns and tools have been developed to mitigate duplicated code (TODO: some references to duplicated code detection, etc.).
 
 \subsection{Comments}
-Comments are part of every programming language and can play an important role in code quality. Subjectively good comments clarify the meaning of the code and help to understand the code. However, comments can become outdated and wrong or provide useless information\cite{martin_clean_2009}. In a perfect world, the programming language and the programmer would be expressive enough that commenting is not required for clarity. Following the clean code guidelines for naming and functions makes many descriptive comments obsolete, since the function description is encoded in the function name.
+Comments are part of every programming language and can play an important role in code quality. Subjectively good comments clarify the meaning of the code and help to understand the code. However, comments can become outdated and wrong or provide useless information~\cite{martin_clean_2009}. In a perfect world, the programming language and the programmer would be expressive enough that commenting is not required for clarity. Following the clean code guidelines for naming and functions makes many descriptive comments obsolete, since the function description is encoded in the function name.
 
 Comments will not help to turn chaotic code into clean code. If a developer explains a line of code by a comment, it is often more helpful to call a function with a descriptive name to replace the comment. Since comments are not part of the program logic, if the explaining comment is not updated with the code, the comment gives misinformation to the reader like described before.
 
-In brief, before writing a comment, the developer should think about expressing the same in code. Robert C. Martin gives some exceptions for situations, where comments can be helpful or necessary\cite{martin_clean_2009}:
+In brief, before writing a comment, the developer should think about expressing the same in code. Robert C. Martin gives some exceptions for situations, where comments can be helpful or necessary~\cite{martin_clean_2009}:
 
 \begin{description}
     \item[Legal notes:] Legal notes like copyright or license information and author mentions may be necessary. Although they should be short and link to an external licensing document in full extent.
@@ -137,7 +137,7 @@ def test():
 
 
 
-Data structures are often used as Data Transfer Objects (DTO) to communicate with other processes or services. These objects do not contain any functions; instead, they only have accessible member variables. A specialisation of DTOs are Active Records that contain additional methods for data storage. They are used to represent a data source like a database. For DTOs and Active Records, it is bad practice to insert business logic into this objects\cite{martin_clean_2009}. With business logic, the data structure becomes a hybrid between an object and a data structure. It becomes unclear, if the purpose of a hybrid is to store data or to expose methods to modify those data in a controlled way. Without the clear purpose of the object or data structure, it becomes harder to understand for developers.
+Data structures are often used as Data Transfer Objects (DTO) to communicate with other processes or services. These objects do not contain any functions; instead, they only have accessible member variables. A specialisation of DTOs are Active Records that contain additional methods for data storage. They are used to represent a data source like a database. For DTOs and Active Records, it is bad practice to insert business logic into this objects~\cite{martin_clean_2009}. With business logic, the data structure becomes a hybrid between an object and a data structure. It becomes unclear, if the purpose of a hybrid is to store data or to expose methods to modify those data in a controlled way. Without the clear purpose of the object or data structure, it becomes harder to understand for developers.
 
 
 \subsection{Classes}\label{sec:classes}
@@ -155,18 +155,18 @@ The last rule provides a guideline on how to handle class dependencies. If a dep
 This chapter covers clean code rules for error handling. Basically, the following ways are methods for handling errors:
 First, a function can return an error code if some exception occurred. The function caller has to check for the error code and act accordingly. Second, some programming languages support the concept of throwing and catching an exception. And last, a function can return a null value to indicate the execution failure. 
 
-In section \ref{sec:functions}, we described the clean code rule that prefers throwing an exception over returning an error code. The supporting argument of Robert C. Martin is the better separation between application logic and error handling\cite{martin_clean_2009}. Error codes have to be checked immediately, so the error checking interrupts the code for the application logic. By throwing and catching errors, the error handling can be completely extracted into a sperate function and can be removed from the main application logic. Furthermore, the try-catch block enforces transactional behaviour. At the end of either the try or the catch block, the application should be in a consistent state. Error codes hide this explicit transactional behaviour. 
+In section \ref{sec:functions}, we described the clean code rule that prefers throwing an exception over returning an error code. The supporting argument of Robert C. Martin is the better separation between application logic and error handling~\cite{martin_clean_2009}. Error codes have to be checked immediately, so the error checking interrupts the code for the application logic. By throwing and catching errors, the error handling can be completely extracted into a sperate function and can be removed from the main application logic. Furthermore, the try-catch block enforces transactional behaviour. At the end of either the try or the catch block, the application should be in a consistent state. Error codes hide this explicit transactional behaviour. 
 
-Notwithstanding the clean code rules, Go as more recent programming language\footnote{designed in 2007 as a response to problems with C++, Java and Python\cite{noauthor_go_nodate}} returns explicit error types instead of throwing an exception. This was designed to \enquote{encourage you to explicitly check for errors where thy occur}, instead of \enquote{throwing exceptions and sometimes catching them}\cite{gerrand_error_2011}.   
+Notwithstanding the clean code rules, Go as more recent programming language\footnote{designed in 2007 as a response to problems with C++, Java and Python~\cite{noauthor_go_nodate}} returns explicit error types instead of throwing an exception. This was designed to \enquote{encourage you to explicitly check for errors where thy occur}, instead of \enquote{throwing exceptions and sometimes catching them}~\cite{gerrand_error_2011}.   
 So the practical application of the clean code rule for throwing exception depends on the design of the programming language.
 
-The third method of error handling is returning a null value. Instead of checking for a specific error code, the caller would check for a null return value. If a developer misses the check, the program will terminate with an unhandled NullPointerException at runtime. Tony Hoare introduced the null reference in 1965 and later called it his \enquote{billion-dollar mistake}\cite{hoare_null_2009}, since it leads to many bugs and security vulnerabilities throughout the decades. Languages like Kotlin are designed with null safety enforced. Kotlin distinguishes between nullable and non-nullable references, with a compiler enforcing null checking\cite{noauthor_null_nodate}. If a language does not enforce null safety with a compiler, a special case like an empty collection or an optional type can be returned. 
-Returning null introduce the same problems like error code handling such as mixing application and error handling logic and is additionally not explicitly marked as an error code. From a function signature, it may not be obvious that the return value may be null if the language does not support compile-time checking or optional types. Robert C. Martin describes returning null as a violation of the clean code rules\cite{martin_clean_2009}. 
+The third method of error handling is returning a null value. Instead of checking for a specific error code, the caller would check for a null return value. If a developer misses the check, the program will terminate with an unhandled NullPointerException at runtime. Tony Hoare introduced the null reference in 1965 and later called it his \enquote{billion-dollar mistake}~\cite{hoare_null_2009}, since it leads to many bugs and security vulnerabilities throughout the decades. Languages like Kotlin are designed with null safety enforced. Kotlin distinguishes between nullable and non-nullable references, with a compiler enforcing null checking~\cite{noauthor_null_nodate}. If a language does not enforce null safety with a compiler, a special case like an empty collection or an optional type can be returned. 
+Returning null introduce the same problems like error code handling such as mixing application and error handling logic and is additionally not explicitly marked as an error code. From a function signature, it may not be obvious that the return value may be null if the language does not support compile-time checking or optional types. Robert C. Martin describes returning null as a violation of the clean code rules~\cite{martin_clean_2009}. 
 
 Independent of the error handling method is the next rule for error handling with a third-party library. In section \ref{sec:classes}, we described wrapping dependencies like third-party libraries to decrease the coupling to the dependency. The wrapping concept also applies to error handling, since the wrapper can unify the exceptions, so the application does not check for dependency-specific error types. Changing the dependency requires only a change in the wrapper implementation but not everywhere this wrapper is used. 
 
 \subsection{Additional Rules}
-Robert C. Martin describes more rules for system design, multi-threading, testing and third-party code\cite{martin_clean_2009}. 
+Robert C. Martin describes more rules for system design, multi-threading, testing and third-party code~\cite{martin_clean_2009}. 
 Additionally, the author describes the concept of code smells. In theory, following these rules seems to lead to clean code. In practice, however, developers tend to violate rules in some situations. A code smell is a code characteristic that could indicate such a violation.
 
 This work will focus on the described rules and implement a detection for some rule violations.
@@ -190,7 +190,7 @@ Another method is the control flow analysis. For the control flow analysis, the 
 
 Besides the control flow, it is possible to analyse the data flow in a data flow graph. With the data-flow analysis it is possible to collect information about the read and write operations to variables. In combination with the control flow graph, the data flow for different control flow can be calculated.
 
-Last, a call graph can be computed. A call graph maps all method or function calls starting from the main method. It allows to spot dependencies between modules\cite{prahofer_static_2017}.
+Last, a call graph can be computed. A call graph maps all method or function calls starting from the main method. It allows to spot dependencies between modules~\cite{prahofer_static_2017}.
 
 
 \section{Quantitative Metrics for Code Quality}
@@ -204,7 +204,7 @@ To define the quality of a software product, it is necessary to have methods to 
 Metrics for code quality are a subset of general software metrics. The following sections describe common software metrics that express code quality.
 
 \subsection{Cyclomatic Complextiy}\label{sec:cyclomatic_complexity}
-Cyclomatic Complexity is a metric for the complexity of a section of code. It was introduced by Thomas McCabe. It measures the complexity by counting the number of linearly independent execution paths\cite{mccabe_complexity_1976}. 
+Cyclomatic Complexity is a metric for the complexity of a section of code. It was introduced by Thomas McCabe. It measures the complexity by counting the number of linearly independent execution paths~\cite{mccabe_complexity_1976}. 
 
 An execution path is the subsequent execution of instructions. With control flow structures such as if statements, two execution paths are possible, depending on the evaluation of the if condition. An execution path is linearly independent if it includes one subpath that is not part of any other path. A control flow graph represents all possible control flows as described in \ref{sec:code_analysis}. Figure \ref{fig:background_control_flow_graph} shows a control flow graph for a sample function.
 
@@ -243,12 +243,12 @@ $E$ is the number of edges, $N$ the number of nodes and $P$ the number of connec
 
 MacCabe recommends limiting the cyclomatic complexity to 10. NIST confirms this recommendation in TODO. A lower cyclomatic complexity improves testability since the complexity represents the number of execution paths that need to be tested. Therefore, $M$ is the upper bound for the number of test cases for full branch coverage. 
 Furthermore, studies suggest a positive correlation between cyclomatic complexity and defects in functions. TODO source
-Software that has to comply to safety standards like ISO 26262 (for electronics in automobiles) or IEC 62304 (for medical devices) are mandated to have a low cyclomatic complexity\cite{isotc_22sc_32_iso_2018, isotisotc_210_iec_2006c_210}.
+Software that has to comply to safety standards like ISO 26262 (for electronics in automobiles) or IEC 62304 (for medical devices) are mandated to have a low cyclomatic complexity~\cite{isotc_22sc_32_iso_2018, isotisotc_210_iec_2006c_210}.
 
 Although cyclomatic complexity is used throughout the industry, several shortcomings are under critique. First, complexity from data flow is ignored. Working with a larger number of variables and operations, the code becomes more complex, but the cyclomatic complexity does not take this into account. Second, nested code structures are not considered by the metric, although it adds additional difficulty for understanding. TODO source as Halstead critique.
 
 \subsection{Halstead Complexity Measures}
-Maurice Halstead introduced the Halstead complexity measures (HCM) in 1977\cite{halstead1977elements}. Halstead approached the complexity measure with an empirical approach by defining observable and measurable properties and put them into relations.
+Maurice Halstead introduced the Halstead complexity measures (HCM) in 1977~\cite{halstead1977elements}. Halstead approached the complexity measure with an empirical approach by defining observable and measurable properties and put them into relations.
 
 The measurable properties are operators and operands. Operators are symbols in expressions like an addition, subtraction or multiplication symbol. Operands are the values and variables that are manipulated by the operators. 
 
@@ -302,26 +302,26 @@ HCM focus on the complexity introduced by data manipulation but ignores complexi
 ). Additionally, the correlation with the number of bugs is based on the programmer's skill estimation with a fixed value of 3000. Since this varies between projects, such an experiential and fixed number is doubtable (TODO source as before).
 
 \subsection{Software Maintainability Index}
-The software maintainability index was developed by Dan Coleman and Paul Oman in 1994. 16 HP engineers evaluated 16 software systems and scored it in a range from 0 to 100, with 100 representing best maintainability\cite{coleman_using_1994}. 
+The software maintainability index was developed by Dan Coleman and Paul Oman in 1994. 16 HP engineers evaluated 16 software systems and scored it in a range from 0 to 100, with 100 representing best maintainability~\cite{coleman_using_1994}. 
 Following a regression analysis, they identified the following equation to match the maintainability of the evaluated systems:
 \begin{displaymath}
 MI = 171 - 5.2 *\ln{\overline{V}} - 0.23 * \overline{M} - 16.2 * \ln{\overline{LOC}} + 50 * \sin{\sqrt{2.4 * C}}
 \end{displaymath}
 $\overline{V}$ is the average Halstead Volume, $\overline{M}$ the average cyclic complexity, $LOC$ the lines of code and $C$ as fraction of comments.
 
-The software maintainability index was defined many years ago with a limited sample size of developers and projects. Additionally, programming languages have changed significantly over time. A study by Sjøberg et al. suggest no correlation between the software maintainability index and actual maintenance effort in a controlled environment\cite{sjoberg_questioning_nodate}. Although the study only analysis four software projects and lacks generalisation, they find a strong anti-correlation with different maintainability metrics. Only the code size seems to correlate with the actual maintainability. The former seems to be consistent with a systematic review on software maintainability predictions and metrics by Riaz et. al\cite{riaz_systematic_2009}.
+The software maintainability index was defined many years ago with a limited sample size of developers and projects. Additionally, programming languages have changed significantly over time. A study by Sjøberg et al. suggest no correlation between the software maintainability index and actual maintenance effort in a controlled environment~\cite{sjoberg_questioning_nodate}. Although the study only analysis four software projects and lacks generalisation, they find a strong anti-correlation with different maintainability metrics. Only the code size seems to correlate with the actual maintainability. The former seems to be consistent with a systematic review on software maintainability predictions and metrics by Riaz et. al~\cite{riaz_systematic_2009}.
 
 
 \section{Tools for Code Quality Analysis}\label{sec:tool_comparison}
-It is good practice to use static code analysis tools to improve code quality. A static code analysis examines a program by analysing an abstract syntax tree, the control or data flow, a pointer analysis or an abstract (approximated) execution. In comparison to dynamic analysis, the code is not executed. The result of static analysis can be based on approximations, so there might be false-positive results. An expert has to examine the result and correct results if necessary\cite{prahofer_static_2017}.
+It is good practice to use static code analysis tools to improve code quality. A static code analysis examines a program by analysing an abstract syntax tree, the control or data flow, a pointer analysis or an abstract (approximated) execution. In comparison to dynamic analysis, the code is not executed. The result of static analysis can be based on approximations, so there might be false-positive results. An expert has to examine the result and correct results if necessary~\cite{prahofer_static_2017}.
 
 Besides the use of static code analysis for compiler and optimisations, it is also helpful for analysing the code quality. Different categories of code quality-related principles can be analysed:
 \begin{description}
     \item[Code Guidelines:] A static code analysis can ensure compliance to structural, naming and formatting code guidelines. 
-    \item[Standard Compliance:] A requirement for a software may be compliance to an industry-standard like IEC 61508 or ISO 26262 \cite{noauthor_iec_2010,isotc_22sc_32_iso_2018}. Static code analysis can ensure or at least assist with the compliance.  
+    \item[Standard Compliance:] A requirement for a software may be compliance to an industry-standard like IEC 61508 or ISO 26262~\cite{noauthor_iec_2010,isotc_22sc_32_iso_2018}. Static code analysis can ensure or at least assist with the compliance.  
     \item[Code Smells:] Some code smells follow a known pattern and a static code analysis can detect those smells. Since code smells can be an indication for chaotic code, it is best if these smells are detected and removed early on.
-    \item[Bug Detection:] Although bug detection with static analysis can not detect all bugs, every detected bug before a software release is important. Examples for detected bugs are unhandled expressions or concurrency issues \cite{delaitre_evaluating_2015}.
-    \item[Security Vulnerability Detection:] Static code analysis tools can detect some security vulnerabilities like SQL Injection Flaws, buffer overflows and missing input validation with high confidence. Since these are some common, easy to exploit vulnerabilities, an analysis for security vulnerabilities can increase the security of the overall software \cite{wichers_source_nodate}.  
+    \item[Bug Detection:] Although bug detection with static analysis can not detect all bugs, every detected bug before a software release is important. Examples for detected bugs are unhandled expressions or concurrency issues~\cite{delaitre_evaluating_2015}.
+    \item[Security Vulnerability Detection:] Static code analysis tools can detect some security vulnerabilities like SQL Injection Flaws, buffer overflows and missing input validation with high confidence. Since these are some common, easy to exploit vulnerabilities, an analysis for security vulnerabilities can increase the security of the overall software~\cite{wichers_source_nodate}.  
 \end{description}
 
 The following sections provide an overview of a few static code analysis tools with a focus on code quality and maintainability. We selected them based on popularity and if the projects are still maintained.
@@ -369,7 +369,7 @@ For Python, Sonarqube offers more than 170 rules. These rules are in the followi
     \item[Security Vulnerabilities: ]  A security vulnerabilities analysis reveal code that is at risk of being exploited and has to be fixed immediately. Especially misconfiguration of cryptographic libraries can be revealed easily and future damage prevented.   
 \end{description}
 
-Additionally, Sonarqube offers several metrics like test coverage and a custom derivate of Cyclomatic Complexity named Cognitive Complexity\cite{campbell2018cognitive}. The authors see several shortcomings in the original Cyclomatic Complexity model:
+Additionally, Sonarqube offers several metrics like test coverage and a custom derivate of Cyclomatic Complexity named Cognitive Complexity~\cite{campbell2018cognitive}. The authors see several shortcomings in the original Cyclomatic Complexity model:
 \begin{itemize}
     \item Parts of code with the same Cyclomatic Complexity do not necessarily represent an equal difficulty for maintenance.
     \item  Cyclomatic Complexity does not include modern language features like try/catch and lambdas. Therefore, the score can not be accurate.
@@ -377,13 +377,13 @@ Additionally, Sonarqube offers several metrics like test coverage and a custom d
 \end{itemize}
 Cognitive Complexity addresses these points, especially the incorporation of modern language features and meaningfulness on class and module level.
 
-The calculation is based on three rules\cite{campbell2018cognitive}:
+The calculation is based on three rules~\cite{campbell2018cognitive}:
 \begin{description}
     \item[Ignore Shorthand Structures]: Method calls condense multiple statements into one easy to understand the statement. Therefore, method calls as shorthand are ignored for the score. Similarly, shorthand structures like the null-coalescing operator reduce the Cognitive Complexity compared to an extensive null check and are therefore ignored for score calculation.
     \item[Break in the linear control flow]: A break in the expected linear control flow by loop structures and conditionals adds to Cognitive Complexity as to Cyclomatic Complexity. Additionally, Catches, Switches, sequences of logical operators, recursion and jumps also adds to Cognitive Complexity, since these structures break the linear control flow.
     \item[Nested flow-breaking strcutures]: Flow-breaking structures that are nested additionally increase the Cognitive Complexity, since it is harder to understand than non-nested structures.  
 \end{description}
-The method-level Cognitive Complexity score represents a relative complexity difference between methods that would have the same Cyclomatic Complexity. Furthermore, the aggregated Cognitive Complexity on a class or module level now differentiate between classes with many, simple methods and classes with a few, but complex methods. As a result, domain classes (containing mainly getters/setters) have a lower score compared to classes with complex code behaviour\cite{campbell2018cognitive}.
+The method-level Cognitive Complexity score represents a relative complexity difference between methods that would have the same Cyclomatic Complexity. Furthermore, the aggregated Cognitive Complexity on a class or module level now differentiate between classes with many, simple methods and classes with a few, but complex methods. As a result, domain classes (containing mainly getters/setters) have a lower score compared to classes with complex code behaviour~\cite{campbell2018cognitive}.
 
 Developers can extend Sonarqube similarly to PMD. They can write a Java plugin that can access the AST but also a semantic model of the code. Additional, extensions can be created that provide the functionality to other extensions. The Java plugin is compiled into a .jar file and placed into the plugin dir of the Sonarqube installation. For simpler rules, XPath expressions are possible through the web interface and allow a quick extension. For instance, if developers observe bad code style during a pull request review, they can quickly write a rule to enforce this rule in all subsequent pull requests automatically.
 
