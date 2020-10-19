@@ -192,6 +192,16 @@ Besides the control flow, it is possible to analyse the data flow in a data flow
 
 Last, a call graph can be computed. A call graph maps all method or function calls starting from the main method. It allows to spot dependencies between modules~\cite{prahofer_static_2017}.
 
+\section{Clean Code Complexity Levels}
+We described the clean code rules in \Cref{sec:clean_code}. This work focus on the automated checking of clean code rules. Some rules can be checked straighforward with an algorithm wheras others may be too abstract to be checked in an automated way. In this Section, we want to categorise the clean code rules into different complexity levels. The complexity levels are based on the complexity of implementing an automated rule checker. 
+
+We define three levels of complexity, based on the different source code analysis techniques and effort necessary:
+\begin{description}
+    \item[Basic Complexity] The level of basic complexity covers all rules that can be checked by analysing the text, token stream or AST of the program.
+    \item[Advanced Complexity] Rules with medium complexity require a control flow, data flow, call graph analysis or more advanced, deterministic analysis techniques. Furthermore, a combination of different analysis methods from the basic complexity level will be categorized as medium complexity. 
+    \item[High Complexity] The level of high complexity covers the clean code rules we think can not be checked with traditional, deterministic analysis techniques such as those described in \Cref{sec:code_analysis}. For this level, it may be indispensible to use statistical methods like machine learning approaches to create an automated checker. If we do not think of an algorithm that could detect a non-clean code pattern, a machine learning algorithm may be trained to imitate a human decider. It is important to note that we do not proove that no such algorithm exists. Instead, we base our categorisation on the absent of results researching this problem. 
+\end{description}
+ 
 
 \section{Quantitative Metrics for Code Quality}
 To define the quality of a software product, it is necessary to have methods to express the code quality as quantitative units. This has multiple advantages:
@@ -310,6 +320,7 @@ MI = 171 - 5.2 *\ln{\overline{V}} - 0.23 * \overline{M} - 16.2 * \ln{\overline{L
 $\overline{V}$ is the average Halstead Volume, $\overline{M}$ the average cyclic complexity, $LOC$ the lines of code and $C$ as fraction of comments.
 
 The software maintainability index was defined many years ago with a limited sample size of developers and projects. Additionally, programming languages have changed significantly over time. A study by Sjøberg et al. suggest no correlation between the software maintainability index and actual maintenance effort in a controlled environment~\cite{sjoberg_questioning_nodate}. Although the study only analysis four software projects and lacks generalisation, they find a strong anti-correlation with different maintainability metrics. Only the code size seems to correlate with the actual maintainability. The former seems to be consistent with a systematic review on software maintainability predictions and metrics by Riaz et. al~\cite{riaz_systematic_2009}.
+
 
 
 \section{Tools for Code Quality Analysis}\label{sec:tool_comparison}
