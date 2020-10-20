@@ -2,49 +2,62 @@
 @article{abdiansah_time_2015,
   title = {Time {{Complexity Analysis}} of {{Support Vector Machines}} ({{SVM}}) in {{LibSVM}}},
   author = {Abdiansah, Abdiansah and Wardoyo, Retantyo},
-  date = {2015-10-15},
-  journaltitle = {International Journal of Computer Applications},
-  shortjournal = {IJCA},
+  year = {2015},
+  month = oct,
   volume = {128},
   pages = {28--34},
   issn = {09758887},
   doi = {10.5120/ijca2015906480},
-  url = {http://www.ijcaonline.org/research/volume128/number3/abdiansah-2015-ijca-906480.pdf},
-  urldate = {2020-10-13},
   file = {/home/enrico/Zotero/storage/32RY4YSW/Abdiansah und Wardoyo - 2015 - Time Complexity Analysis of Support Vector Machine.pdf},
+  journal = {International Journal of Computer Applications},
   number = {3}
 }
 
 @article{allamanis_learning_2018,
   title = {Learning to {{Represent Programs}} with {{Graphs}}},
   author = {Allamanis, Miltiadis and Brockschmidt, Marc and Khademi, Mahmoud},
-  date = {2018-05-04},
-  url = {http://arxiv.org/abs/1711.00740},
-  urldate = {2020-08-02},
-  abstract = {Learning tasks on source code (i.e., formal languages) have been considered recently, but most work has tried to transfer natural language methods and does not capitalize on the unique opportunities offered by code’s known syntax. For example, long-range dependencies induced by using the same variable or function in distant locations are often not considered. We propose to use graphs to represent both the syntactic and semantic structure of code and use graph-based deep learning methods to learn to reason over program structures. In this work, we present how to construct graphs from source code and how to scale Gated Graph Neural Networks training to such large graphs. We evaluate our method on two tasks: VARNAMING, in which a network attempts to predict the name of a variable given its usage, and VARMISUSE, in which the network learns to reason about selecting the correct variable that should be used at a given program location. Our comparison to methods that use less structured program representations shows the advantages of modeling known structure, and suggests that our models learn to infer meaningful names and to solve the VARMISUSE task in many cases. Additionally, our testing showed that VARMISUSE identifies a number of bugs in mature open-source projects.},
+  year = {2018},
+  month = may,
+  abstract = {Learning tasks on source code (i.e., formal languages) have been considered recently, but most work has tried to transfer natural language methods and does not capitalize on the unique opportunities offered by code's known syntax. For example, long-range dependencies induced by using the same variable or function in distant locations are often not considered. We propose to use graphs to represent both the syntactic and semantic structure of code and use graph-based deep learning methods to learn to reason over program structures. In this work, we present how to construct graphs from source code and how to scale Gated Graph Neural Networks training to such large graphs. We evaluate our method on two tasks: VARNAMING, in which a network attempts to predict the name of a variable given its usage, and VARMISUSE, in which the network learns to reason about selecting the correct variable that should be used at a given program location. Our comparison to methods that use less structured program representations shows the advantages of modeling known structure, and suggests that our models learn to infer meaningful names and to solve the VARMISUSE task in many cases. Additionally, our testing showed that VARMISUSE identifies a number of bugs in mature open-source projects.},
   archivePrefix = {arXiv},
   eprint = {1711.00740},
   eprinttype = {arxiv},
   file = {/home/enrico/Zotero/storage/6WWJP2AN/Allamanis et al. - 2018 - Learning to Represent Programs with Graphs.pdf},
+  journal = {arXiv:1711.00740 [cs]},
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Machine Learning,Computer Science - Programming Languages,Computer Science - Software Engineering},
-  langid = {english},
+  language = {en},
   primaryClass = {cs}
+}
+
+@article{allen_control_1970,
+  title = {Control Flow Analysis},
+  author = {Allen, Frances E.},
+  year = {1970},
+  month = jul,
+  volume = {5},
+  pages = {1--19},
+  issn = {0362-1340, 1558-1160},
+  doi = {10.1145/390013.808479},
+  file = {/home/enrico/Zotero/storage/DIN9YUNV/Allen - 1970 - Control flow analysis.pdf},
+  journal = {ACM SIGPLAN Notices},
+  language = {en},
+  number = {7}
 }
 
 @article{alon_code2seq_2019,
   title = {Code2seq: {{Generating Sequences}} from {{Structured Representations}} of {{Code}}},
   shorttitle = {Code2seq},
   author = {Alon, Uri and Brody, Shaked and Levy, Omer and Yahav, Eran},
-  date = {2019-02-21},
-  url = {http://arxiv.org/abs/1808.01400},
-  urldate = {2020-08-02},
+  year = {2019},
+  month = feb,
   abstract = {The ability to generate natural language sequences from source code snippets has a variety of applications such as code summarization, documentation, and retrieval. Sequence-to-sequence (seq2seq) models, adopted from neural machine translation (NMT), have achieved state-of-the-art performance on these tasks by treating source code as a sequence of tokens. We present CODE2SEQ: an alternative approach that leverages the syntactic structure of programming languages to better encode source code. Our model represents a code snippet as the set of compositional paths in its abstract syntax tree (AST) and uses attention to select the relevant paths while decoding. We demonstrate the effectiveness of our approach for two tasks, two programming languages, and four datasets of up to 16M examples. Our model significantly outperforms previous models that were specifically designed for programming languages, as well as state-of-the-art NMT models. An online demo of our model is available at http://code2seq.org. Our code, data and trained models are available at http://github.com/tech-srl/code2seq.},
   archivePrefix = {arXiv},
   eprint = {1808.01400},
   eprinttype = {arxiv},
   file = {/home/enrico/Zotero/storage/JGI2N2UI/Alon et al. - 2019 - code2seq Generating Sequences from Structured Rep.pdf},
+  journal = {arXiv:1808.01400 [cs, stat]},
   keywords = {Computer Science - Machine Learning,Computer Science - Programming Languages,Statistics - Machine Learning},
-  langid = {english},
+  language = {en},
   primaryClass = {cs, stat}
 }
 
@@ -52,60 +65,60 @@
   title = {Code2vec: {{Learning Distributed Representations}} of {{Code}}},
   shorttitle = {Code2vec},
   author = {Alon, Uri and Zilberstein, Meital and Levy, Omer and Yahav, Eran},
-  date = {2018-10-30},
-  url = {http://arxiv.org/abs/1803.09473},
-  urldate = {2020-08-02},
-  abstract = {We present a neural model for representing snippets of code as continuous distributed vectors (“code embeddings”). The main idea is to represent a code snippet as a single fixed-length code vector, which can be used to predict semantic properties of the snippet. This is performed by decomposing code to a collection of paths in its abstract syntax tree, and learning the atomic representation of each path simultaneously with learning how to aggregate a set of them. We demonstrate the effectiveness of our approach by using it to predict a method’s name from the vector representation of its body. We evaluate our approach by training a model on a dataset of 14M methods. We show that code vectors trained on this dataset can predict method names from files that were completely unobserved during training. Furthermore, we show that our model learns useful method name vectors that capture semantic similarities, combinations, and analogies. Comparing previous techniques over the same data set, our approach obtains a relative improvement of over 75\%, being the first to successfully predict method names based on a large, cross-project, corpus. Our trained model, visualizations and vector similarities are available as an interactive online demo at http://code2vec.org. The code, data and trained models are available at https://github.com/tech-srl/code2vec.},
+  year = {2018},
+  month = oct,
+  abstract = {We present a neural model for representing snippets of code as continuous distributed vectors (``code embeddings''). The main idea is to represent a code snippet as a single fixed-length code vector, which can be used to predict semantic properties of the snippet. This is performed by decomposing code to a collection of paths in its abstract syntax tree, and learning the atomic representation of each path simultaneously with learning how to aggregate a set of them. We demonstrate the effectiveness of our approach by using it to predict a method's name from the vector representation of its body. We evaluate our approach by training a model on a dataset of 14M methods. We show that code vectors trained on this dataset can predict method names from files that were completely unobserved during training. Furthermore, we show that our model learns useful method name vectors that capture semantic similarities, combinations, and analogies. Comparing previous techniques over the same data set, our approach obtains a relative improvement of over 75\%, being the first to successfully predict method names based on a large, cross-project, corpus. Our trained model, visualizations and vector similarities are available as an interactive online demo at http://code2vec.org. The code, data and trained models are available at https://github.com/tech-srl/code2vec.},
   archivePrefix = {arXiv},
   eprint = {1803.09473},
   eprinttype = {arxiv},
   file = {/home/enrico/Zotero/storage/YRQYVA3F/Alon et al. - 2018 - code2vec Learning Distributed Representations of .pdf},
+  journal = {arXiv:1803.09473 [cs, stat]},
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Machine Learning,Computer Science - Programming Languages,Statistics - Machine Learning},
-  langid = {english},
+  language = {en},
   primaryClass = {cs, stat}
 }
 
 @article{alon_general_2018,
   title = {A {{General Path}}-{{Based Representation}} for {{Predicting Program Properties}}},
   author = {Alon, Uri and Zilberstein, Meital and Levy, Omer and Yahav, Eran},
-  date = {2018-04-22},
-  url = {http://arxiv.org/abs/1803.09544},
-  urldate = {2020-08-02},
+  year = {2018},
+  month = apr,
   abstract = {Predicting program properties such as names or expression types has a wide range of applications. It can ease the task of programming, and increase programmer productivity. A major challenge when learning from programs is how to represent programs in a way that facilitates effective learning. We present a general path-based representation for learning from programs. Our representation is purely syntactic and extracted automatically. The main idea is to represent a program using paths in its abstract syntax tree (AST). This allows a learning model to leverage the structured nature of code rather than treating it as a flat sequence of tokens.},
   archivePrefix = {arXiv},
   eprint = {1803.09544},
   eprinttype = {arxiv},
   file = {/home/enrico/Zotero/storage/9AURHKYP/Alon et al. - 2018 - A General Path-Based Representation for Predicting.pdf},
+  journal = {arXiv:1803.09544 [cs]},
   keywords = {Computer Science - Machine Learning,Computer Science - Programming Languages},
-  langid = {english},
+  language = {en},
   primaryClass = {cs}
 }
 
 @article{babii_modeling_2019,
   title = {Modeling {{Vocabulary}} for {{Big Code Machine Learning}}},
   author = {Babii, Hlib and Janes, Andrea and Robbes, Romain},
-  date = {2019-04-03},
-  url = {http://arxiv.org/abs/1904.01873},
-  urldate = {2020-08-02},
+  year = {2019},
+  month = apr,
   abstract = {When building machine learning models that operate on source code, several decisions have to be made to model source-code vocabulary. These decisions can have a large impact: some can lead to not being able to train models at all, others significantly affect performance, particularly for Neural Language Models. Yet, these decisions are not often fully described. This paper lists important modeling choices for source code vocabulary, and explores their impact on the resulting vocabulary on a large-scale corpus of 14,436 projects. We show that a subset of decisions have decisive characteristics, allowing to train accurate Neural Language Models quickly on a large corpus of 10,106 projects.},
   archivePrefix = {arXiv},
   eprint = {1904.01873},
   eprinttype = {arxiv},
   file = {/home/enrico/Zotero/storage/GMNMUM5Q/Babii et al. - 2019 - Modeling Vocabulary for Big Code Machine Learning.pdf},
+  journal = {arXiv:1904.01873 [cs]},
   keywords = {Computer Science - Computation and Language,Computer Science - Software Engineering},
-  langid = {english},
+  language = {en},
   primaryClass = {cs}
 }
 
 @article{baggen_standardized_2012,
   title = {Standardized Code Quality Benchmarking for Improving Software Maintainability},
-  author = {Baggen, Robert and Correia, José Pedro and Schill, Katrin and Visser, Joost},
-  date = {2012},
-  journaltitle = {Software Quality Journal},
+  author = {Baggen, Robert and Correia, Jos{\'e} Pedro and Schill, Katrin and Visser, Joost},
+  year = {2012},
   volume = {20},
   pages = {287--307},
   publisher = {{Springer}},
   file = {/home/enrico/Zotero/storage/LH4HVAVP/Baggen et al. - 2012 - Standardized code quality benchmarking for improvi.pdf},
+  journal = {Software Quality Journal},
   number = {2}
 }
 
@@ -113,61 +126,57 @@
   title = {Cry Wolf: The Psychology of False Alarms},
   shorttitle = {Cry Wolf},
   author = {Breznitz, Shlomo},
-  date = {1984},
+  year = {1984},
   publisher = {{Lawrence Erlbaum Associates}},
-  location = {{Hillsdale, N.J}},
+  address = {{Hillsdale, N.J}},
   isbn = {978-0-89859-296-2},
   keywords = {False alarms,Fear,Psychological aspects,Threat (Psychology),Warnings},
-  pagetotal = {265}
+  lccn = {BF789.F29 B73 1984}
 }
 
 @article{brockschmidt_generative_2019,
   title = {{{GENERATIVE CODE MODELING WITH GRAPHS}}},
   author = {Brockschmidt, Marc and Allamanis, Miltiadis and Gaunt, Alexander and Polozov, Oleksandr},
-  date = {2019},
+  year = {2019},
   pages = {24},
   abstract = {Generative models for source code are an interesting structured prediction problem, requiring to reason about both hard syntactic and semantic constraints as well as about natural, likely programs. We present a novel model for this problem that uses a graph to represent the intermediate state of the generated output. Our model generates code by interleaving grammar-driven expansion steps with graph augmentation and neural message passing steps. An experimental evaluation shows that our new model can generate semantically meaningful expressions, outperforming a range of strong baselines.},
   file = {/home/enrico/Zotero/storage/AKKUQ459/Brockschmidt et al. - 2019 - GENERATIVE CODE MODELING WITH GRAPHS.pdf},
-  langid = {english}
+  language = {en}
 }
 
 @inproceedings{buch_learning-based_2019,
   title = {Learning-{{Based Recursive Aggregation}} of {{Abstract Syntax Trees}} for {{Code Clone Detection}}},
   booktitle = {2019 {{IEEE}} 26th {{International Conference}} on {{Software Analysis}}, {{Evolution}} and {{Reengineering}} ({{SANER}})},
   author = {Buch, Lutz and Andrzejak, Artur},
-  date = {2019-02},
+  year = {2019},
+  month = feb,
   pages = {95--104},
   publisher = {{IEEE}},
-  location = {{Hangzhou, China}},
+  address = {{Hangzhou, China}},
   doi = {10.1109/SANER.2019.8668039},
-  url = {https://ieeexplore.ieee.org/document/8668039/},
-  urldate = {2020-08-02},
   abstract = {Code clone detection remains a crucial challenge in maintaining software projects. Many classic approaches rely on handcrafted aggregation schemes, while recent work uses supervised or unsupervised learning. In this work, we study several aspects of aggregation schemes for code clone detection based on supervised learning. To this aim, we implement an AST-based Recursive Neural Network. Firstly, our ablation study shows the influence of model choices and hyperparameters. We introduce error scaling as a way to effectively and efficiently address the class imbalance problem arising in code clone detection. Secondly, we study the influence of pretrained embeddings representing nodes in ASTs. We show that simply averaging all node vectors of a given AST yields strong baseline aggregation scheme. Further, learned AST aggregation schemes greatly benefit from pretrained node embeddings. Finally, we show the importance of carefully separating training and test data by clone clusters, to reliably measure generalization of models learned with supervision.},
-  eventtitle = {2019 {{IEEE}} 26th {{International Conference}} on {{Software Analysis}}, {{Evolution}} and {{Reengineering}} ({{SANER}})},
   file = {/home/enrico/Zotero/storage/MQQNFFDW/Buch und Andrzejak - 2019 - Learning-Based Recursive Aggregation of Abstract S.pdf},
   isbn = {978-1-72810-591-8},
-  langid = {english}
+  language = {en}
 }
 
 @article{campbell2018cognitive,
   title = {Cognitive {{Complexity}}-{{A}} New Way of Measuring Understandability},
   author = {Campbell, G Ann},
-  date = {2018},
-  journaltitle = {SonarSource SA}
+  year = {2018},
+  journal = {SonarSource SA}
 }
 
 @article{coleman_using_1994,
   title = {Using Metrics to Evaluate Software System Maintainability},
   author = {Coleman, D. and Ash, D. and Lowther, B. and Oman, P.},
-  date = {1994-08},
-  journaltitle = {Computer},
-  shortjournal = {Computer},
+  year = {1994},
+  month = aug,
   volume = {27},
   pages = {44--49},
   issn = {0018-9162},
   doi = {10.1109/2.303623},
-  url = {http://ieeexplore.ieee.org/document/303623/},
-  urldate = {2020-10-13},
+  journal = {Computer},
   number = {8}
 }
 
@@ -175,32 +184,32 @@
   title = {Transformer-{{XL}}: {{Attentive Language Models Beyond}} a {{Fixed}}-{{Length Context}}},
   shorttitle = {Transformer-{{XL}}},
   author = {Dai, Zihang and Yang, Zhilin and Yang, Yiming and Carbonell, Jaime and Le, Quoc V. and Salakhutdinov, Ruslan},
-  date = {2019-06-02},
-  url = {http://arxiv.org/abs/1901.02860},
-  urldate = {2020-08-02},
+  year = {2019},
+  month = jun,
   abstract = {Transformers have a potential of learning longer-term dependency, but are limited by a fixed-length context in the setting of language modeling. We propose a novel neural architecture Transformer-XL that enables learning dependency beyond a fixed length without disrupting temporal coherence. It consists of a segment-level recurrence mechanism and a novel positional encoding scheme. Our method not only enables capturing longer-term dependency, but also resolves the context fragmentation problem. As a result, TransformerXL learns dependency that is 80\% longer than RNNs and 450\% longer than vanilla Transformers, achieves better performance on both short and long sequences, and is up to 1,800+ times faster than vanilla Transformers during evaluation. Notably, we improve the state-ofthe-art results of bpc/perplexity to 0.99 on enwiki8, 1.08 on text8, 18.3 on WikiText-103, 21.8 on One Billion Word, and 54.5 on Penn Treebank (without finetuning). When trained only on WikiText-103, Transformer-XL manages to generate reasonably coherent, novel text articles with thousands of tokens. Our code, pretrained models, and hyperparameters are available in both Tensorflow and PyTorch1.},
   archivePrefix = {arXiv},
   eprint = {1901.02860},
   eprinttype = {arxiv},
   file = {/home/enrico/Zotero/storage/SJYYNQ6I/Dai et al. - 2019 - Transformer-XL Attentive Language Models Beyond a.pdf},
+  journal = {arXiv:1901.02860 [cs, stat]},
   keywords = {Computer Science - Computation and Language,Computer Science - Machine Learning,Statistics - Machine Learning},
-  langid = {english},
+  language = {en},
   primaryClass = {cs, stat}
 }
 
 @article{dam_deep_2016,
   title = {A Deep Language Model for Software Code},
   author = {Dam, Hoa Khanh and Tran, Truyen and Pham, Trang},
-  date = {2016-08-09},
-  url = {http://arxiv.org/abs/1608.02715},
-  urldate = {2020-08-02},
+  year = {2016},
+  month = aug,
   abstract = {Existing language models such as n-grams for software code often fail to capture a long context where dependent code elements scatter far apart. In this paper, we propose a novel approach to build a language model for software code to address this particular issue. Our language model, partly inspired by human memory, is built upon the powerful deep learning-based Long Short Term Memory architecture that is capable of learning long-term dependencies which occur frequently in software code. Results from our intrinsic evaluation on a corpus of Java projects have demonstrated the effectiveness of our language model. This work contributes to realizing our vision for DeepSoft, an end-to-end, generic deep learning-based framework for modeling software and its development process.},
   archivePrefix = {arXiv},
   eprint = {1608.02715},
   eprinttype = {arxiv},
   file = {/home/enrico/Zotero/storage/BC8FUFQM/Dam et al. - 2016 - A deep language model for software code.pdf},
+  journal = {arXiv:1608.02715 [cs, stat]},
   keywords = {Computer Science - Software Engineering,Statistics - Machine Learning},
-  langid = {english},
+  language = {en},
   primaryClass = {cs, stat}
 }
 
@@ -208,210 +217,241 @@
   title = {Evaluating {{Bug Finders}} -- {{Test}} and {{Measurement}} of {{Static Code Analyzers}}},
   booktitle = {2015 {{IEEE}}/{{ACM}} 1st {{International Workshop}} on {{Complex Faults}} and {{Failures}} in {{Large Software Systems}} ({{COUFLESS}})},
   author = {Delaitre, Aurelien and Stivalet, Bertrand and Fong, Elizabeth and Okun, Vadim},
-  date = {2015-05},
+  year = {2015},
+  month = may,
   pages = {14--20},
   publisher = {{IEEE}},
-  location = {{Florence, Italy}},
+  address = {{Florence, Italy}},
   doi = {10.1109/COUFLESS.2015.10},
-  url = {http://ieeexplore.ieee.org/document/7181477/},
-  urldate = {2020-08-11},
   abstract = {Software static analysis is one of many options for finding bugs in software. Like compilers, static analyzers take a program as input. This paper covers tools that examine source codewithout executing itand output bug reports. Static analysis is a complex and generally undecidable problem. Most tools resort to approximation to overcome these obstacles and it sometimes leads to incorrect results. Therefore, tool effectiveness needs to be evaluated. Several characteristics of the tools should be examined. First, what types of bugs can they find? Second, what proportion of bugs do they report? Third, what percentage of findings is correct? These questions can be answered by one or more metrics. But to calculate these, we need test cases having certain characteristics: statistical significance, ground truth, and relevance. Test cases with all three attributes are out of reach, but we can use combinations of only two to calculate the metrics.},
-  eventtitle = {2015 {{IEEE}}/{{ACM}} 1st {{International Workshop}} on {{Complex Faults}} and {{Failures}} in {{Large Software Systems}} ({{COUFLESS}})},
   file = {/home/enrico/Zotero/storage/UVV954XA/Delaitre et al. - 2015 - Evaluating Bug Finders -- Test and Measurement of .pdf},
   isbn = {978-1-4673-7034-9},
-  langid = {english}
+  language = {en}
 }
 
 @article{feng_codebert_2020,
   title = {{{CodeBERT}}: {{A Pre}}-{{Trained Model}} for {{Programming}} and {{Natural Languages}}},
   shorttitle = {{{CodeBERT}}},
   author = {Feng, Zhangyin and Guo, Daya and Tang, Duyu and Duan, Nan and Feng, Xiaocheng and Gong, Ming and Shou, Linjun and Qin, Bing and Liu, Ting and Jiang, Daxin and Zhou, Ming},
-  date = {2020-04-27},
-  url = {http://arxiv.org/abs/2002.08155},
-  urldate = {2020-08-02},
-  abstract = {We present CodeBERT, a bimodal pre-trained model for programming language (PL) and natural language (NL). CodeBERT learns generalpurpose representations that support downstream NL-PL applications such as natural language code search, code documentation generation, etc. We develop CodeBERT with Transformer-based neural architecture, and train it with a hybrid objective function that incorporates the pre-training task of replaced token detection, which is to detect plausible alternatives sampled from generators. This enables us to utilize both “bimodal” data of NLPL pairs and “unimodal” data, where the former provides input tokens for model training while the latter helps to learn better generators. We evaluate CodeBERT on two NL-PL applications by fine-tuning model parameters. Results show that CodeBERT achieves state-of-the-art performance on both natural language code search and code documentation generation. Furthermore, to investigate what type of knowledge is learned in CodeBERT, we construct a dataset for NL-PL probing, and evaluate in a zero-shot setting where parameters of pre-trained models are fixed. Results show that CodeBERT performs better than previous pre-trained models on NL-PL probing.},
+  year = {2020},
+  month = apr,
+  abstract = {We present CodeBERT, a bimodal pre-trained model for programming language (PL) and natural language (NL). CodeBERT learns generalpurpose representations that support downstream NL-PL applications such as natural language code search, code documentation generation, etc. We develop CodeBERT with Transformer-based neural architecture, and train it with a hybrid objective function that incorporates the pre-training task of replaced token detection, which is to detect plausible alternatives sampled from generators. This enables us to utilize both ``bimodal'' data of NLPL pairs and ``unimodal'' data, where the former provides input tokens for model training while the latter helps to learn better generators. We evaluate CodeBERT on two NL-PL applications by fine-tuning model parameters. Results show that CodeBERT achieves state-of-the-art performance on both natural language code search and code documentation generation. Furthermore, to investigate what type of knowledge is learned in CodeBERT, we construct a dataset for NL-PL probing, and evaluate in a zero-shot setting where parameters of pre-trained models are fixed. Results show that CodeBERT performs better than previous pre-trained models on NL-PL probing.},
   archivePrefix = {arXiv},
   eprint = {2002.08155},
   eprinttype = {arxiv},
   file = {/home/enrico/Zotero/storage/DWHALAFF/Feng et al. - 2020 - CodeBERT A Pre-Trained Model for Programming and .pdf},
+  journal = {arXiv:2002.08155 [cs]},
   keywords = {Computer Science - Computation and Language,Computer Science - Programming Languages},
-  langid = {english},
+  language = {en},
   primaryClass = {cs}
 }
 
-@online{gerrand_error_2011,
+@misc{galorath_accurately_2019,
+  title = {Accurately {{Estimate Your Software Maintenance Costs}}},
+  author = {{Galorath}},
+  year = {2019},
+  month = jan,
+  abstract = {Accurately estimating software maintenance costs is critical to proper project management, as software maintenance makes up roughly 75\% of the TCO.},
+  chapter = {Resources},
+  file = {/home/enrico/Zotero/storage/8NNQNRDJ/software-maintenance-costs.html},
+  journal = {Galorath},
+  language = {en-US}
+}
+
+@misc{gerrand_error_2011,
   title = {Error Handling and {{Go}}},
   author = {Gerrand, Andrew},
-  date = {2011-07-12},
-  url = {https://blog.golang.org/error-handling-and-go},
-  type = {The Go Blog}
+  year = {2011},
+  month = dec,
+  howpublished = {https://blog.golang.org/error-handling-and-go},
+  journal = {Error handling and Go},
+  type = {The {{Go Blog}}}
 }
 
 @book{halstead1977elements,
   title = {Elements of Software Science},
   author = {Halstead, Maurice Howard and others},
-  date = {1977},
+  year = {1977},
   volume = {7},
   publisher = {{Elsevier New York}}
 }
 
+@inproceedings{haoyu_basic_2012,
+  title = {Basic {{Design Principles}} in {{Software Engineering}}},
+  booktitle = {2012 {{Fourth International Conference}} on {{Computational}} and {{Information Sciences}}},
+  author = {Haoyu, Wang and Haili, Zhou},
+  year = {2012},
+  month = aug,
+  pages = {1251--1254},
+  publisher = {{IEEE}},
+  address = {{Chongqing, China}},
+  doi = {10.1109/ICCIS.2012.91},
+  isbn = {978-1-4673-2406-9 978-0-7695-4789-3}
+}
+
 @article{hegedus_empirical_2018-1,
   title = {Empirical Evaluation of Software Maintainability Based on a Manually Validated Refactoring Dataset},
-  author = {Hegedűs, Péter and Kádár, István and Ferenc, Rudolf and Gyimóthy, Tibor},
-  date = {2018-03},
-  journaltitle = {Information and Software Technology},
-  shortjournal = {Information and Software Technology},
+  author = {Heged{\H u}s, P{\'e}ter and K{\'a}d{\'a}r, Istv{\'a}n and Ferenc, Rudolf and Gyim{\'o}thy, Tibor},
+  year = {2018},
+  month = mar,
   volume = {95},
   pages = {313--327},
   issn = {09505849},
   doi = {10.1016/j.infsof.2017.11.012},
-  url = {https://linkinghub.elsevier.com/retrieve/pii/S0950584916303561},
-  urldate = {2020-08-11},
-  abstract = {Objective: This paper presents a manually validated subset of a previously published dataset containing the refactorings extracted by the RefFinder tool, code metrics, and maintainability of 7 open-source systems. We found that RefFinder had around 27\% overall average precision on the subject systems, thus our manually validated subset has substantial added value. Using the dataset, we studied several aspects of the refactored and non-refactored source code elements (classes and methods), like the differences in their maintainability and source code metrics.
-Method: We divided the source code elements into a group containing the refactored elements and a group with non-refactored elements. We analyzed the elements’ characteristics in these groups using correlation analysis, Mann–Whitney U test and effect size measures.
-Results: Source code elements subjected to refactorings had significantly lower maintainability than elements not affected by refactorings. Moreover, refactored elements had significantly higher size related metrics, complexity, and coupling. Also these metrics changed more significantly in the refactored elements. The results are mostly in line with our previous findings on the not validated dataset, with the difference that clone metrics had no strong connection with refactoring.
-Conclusions: Compared to the preliminary analysis using a not validated dataset, the manually validated dataset led to more significant results, which suggests that developers find targets for refactorings based on some internal quality properties of the source code, like their size, complexity or coupling, but not clone related metrics as reported in our previous studies. They do not just use these properties for identifying targets, but also control them with refactorings.},
+  abstract = {Objective: This paper presents a manually validated subset of a previously published dataset containing the refactorings extracted by the RefFinder tool, code metrics, and maintainability of 7 open-source systems. We found that RefFinder had around 27\% overall average precision on the subject systems, thus our manually validated subset has substantial added value. Using the dataset, we studied several aspects of the refactored and non-refactored source code elements (classes and methods), like the differences in their maintainability and source code metrics. Method: We divided the source code elements into a group containing the refactored elements and a group with non-refactored elements. We analyzed the elements' characteristics in these groups using correlation analysis, Mann\textendash Whitney U test and effect size measures. Results: Source code elements subjected to refactorings had significantly lower maintainability than elements not affected by refactorings. Moreover, refactored elements had significantly higher size related metrics, complexity, and coupling. Also these metrics changed more significantly in the refactored elements. The results are mostly in line with our previous findings on the not validated dataset, with the difference that clone metrics had no strong connection with refactoring. Conclusions: Compared to the preliminary analysis using a not validated dataset, the manually validated dataset led to more significant results, which suggests that developers find targets for refactorings based on some internal quality properties of the source code, like their size, complexity or coupling, but not clone related metrics as reported in our previous studies. They do not just use these properties for identifying targets, but also control them with refactorings.},
   file = {/home/enrico/Zotero/storage/TWWNHWD3/Hegedűs et al. - 2018 - Empirical evaluation of software maintainability b.pdf},
-  langid = {english}
+  journal = {Information and Software Technology},
+  language = {en}
 }
 
 @inproceedings{hellendoorn_are_2017,
   title = {Are Deep Neural Networks the Best Choice for Modeling Source Code?},
   booktitle = {Proceedings of the 2017 11th {{Joint Meeting}} on {{Foundations}} of {{Software Engineering}}  - {{ESEC}}/{{FSE}} 2017},
   author = {Hellendoorn, Vincent J. and Devanbu, Premkumar},
-  date = {2017},
+  year = {2017},
   pages = {763--773},
   publisher = {{ACM Press}},
-  location = {{Paderborn, Germany}},
+  address = {{Paderborn, Germany}},
   doi = {10.1145/3106237.3106290},
-  url = {http://dl.acm.org/citation.cfm?doid=3106237.3106290},
-  urldate = {2020-08-02},
   abstract = {Current statistical language modeling techniques, including deeplearning based models, have proven to be quite effective for source code. We argue here that the special properties of source code can be exploited for further improvements. In this work, we enhance established language modeling approaches to handle the special challenges of modeling source code, such as: frequent changes, larger, changing vocabularies, deeply nested scopes, etc. We present a fast, nested language modeling toolkit specifically designed for software, with the ability to add \& remove text, and mix \& swap out many models. Specifically, we improve upon prior cache-modeling work and present a model with a much more expansive, multi-level notion of locality that we show to be well-suited for modeling software. We present results on varying corpora in comparison with traditional N -gram, as well as RNN, and LSTM deep-learning language models, and release all our source code for public use. Our evaluations suggest that carefully adapting N -gram models for source code can yield performance that surpasses even RNN and LSTM based deep-learning models.},
-  eventtitle = {The 2017 11th {{Joint Meeting}}},
   file = {/home/enrico/Zotero/storage/LY75RLM3/Hellendoorn und Devanbu - 2017 - Are deep neural networks the best choice for model.pdf},
   isbn = {978-1-4503-5105-8},
-  langid = {english}
+  language = {en}
 }
 
-@online{hoare_null_2009,
+@inproceedings{Hitz95measuringcoupling,
+  title = {Measuring Coupling and Cohesion in Object-Oriented Systems},
+  booktitle = {Proceedings of International Symposium on Applied Corporate Computing},
+  author = {Hitz, Martin and Montazeri, Behzad},
+  year = {1995},
+  pages = {25--27}
+}
+
+@misc{hoare_null_2009,
   title = {Null {{References}}: {{The Billion Dollar Mistake}}},
   author = {Hoare, Tony},
-  date = {2009-03-13},
-  url = {https://qconlondon.com/london-2009/qconlondon.com/london-2009/speaker/Tony+Hoare.html},
-  eventtitle = {{{QCon}}},
-  type = {Presentation},
-  venue = {{London, UK}}
+  year = {2009},
+  month = mar,
+  address = {{London, UK}},
+  type = {Presentation}
 }
 
-@report{iso_central_secretary_isoiec_2014,
-  title = {{{ISO}}/{{IEC}} 25000:2014: {{Systems}} and Software Engineering — {{Systems}} and Software {{Quality Requirements}} and {{Evaluation}} ({{SQuaRE}}) — {{Guide}} to {{SQuaRE}}},
-  shorttitle = {{{ISO}}/{{IEC}} 25000:2014},
+@techreport{iso_central_secretary_isoiec_2011,
+  title = {{{ISO}}/{{IEC}} 25010:2011: {{Systems}} and Software Engineering \textemdash{} {{Systems}} and Software {{Quality Requirements}} and {{Evaluation}} ({{SQuaRE}}) \textemdash{} {{System}} and Software Quality Models},
+  shorttitle = {{{ISO}}/{{IEC}} 25010:2011},
   author = {ISO Central Secretary},
-  date = {2014},
+  year = {2011},
+  address = {{Geneva, CH}},
   institution = {{International Organization for Standardization}},
-  location = {{Geneva, CH}},
-  url = {https://www.iso.org/standard/64764.html},
-  langid = {english},
+  language = {en},
   number = {ISO/IEC 25000:2014},
   type = {Standard}
 }
 
-@report{isotc_210_iec_2006,
-  title = {{{IEC}} 62304:2006 {{Medical}} Device Software — {{Software}} Life Cycle Processes},
+@techreport{isotc_210_iec_2006,
+  title = {{{IEC}} 62304:2006 {{Medical}} Device Software \textemdash{} {{Software}} Life Cycle Processes},
   shorttitle = {{{IEC}} 62304:2006},
   author = {{ISO/TC 210}},
-  date = {2006-05},
+  year = {2006},
+  month = may,
+  address = {{Geneva, CH}},
   institution = {{International Organization for Standardization}},
-  location = {{Geneva, CH}},
-  url = {https://www.iso.org/standard/38421.html},
   type = {Standard}
 }
 
-@report{isotc_22sc_32_iso_2018,
-  title = {{{ISO}} 26262:2018 {{Road}} Vehicles — {{Functional}} Safety},
+@techreport{isotc_22sc_32_iso_2018,
+  title = {{{ISO}} 26262:2018 {{Road}} Vehicles \textemdash{} {{Functional}} Safety},
   author = {{ISO/TC 22/SC 32}},
-  date = {2018-12},
+  year = {2018},
+  month = dec,
   institution = {{International Organization for Standardization}}
 }
 
 @article{kim_code_2020-2,
   title = {Code {{Prediction}} by {{Feeding Trees}} to {{Transformers}}},
   author = {Kim, Seohyun and Zhao, Jinman and Tian, Yuchi and Chandra, Satish},
-  date = {2020-07-02},
-  url = {http://arxiv.org/abs/2003.13848},
-  urldate = {2020-08-02},
+  year = {2020},
+  month = jul,
   abstract = {We advance the state-of-the-art in the accuracy of code prediction (next token prediction) used in autocomplete systems. First, we report that using the recently proposed Transformer architecture even out-of-the-box outperforms previous neural and non-neural systems for code prediction. We then show that by making the Transformer architecture aware of the syntactic structure of code, we further increase the margin by which a Transformer-based system outperforms previous systems. With this, it outperforms the accuracy of an RNN-based system (similar to Hellendoorn et al. 2018) by 18.3\textbackslash\%, the Deep3 system (Raychev et al 2016) by 14.1\textbackslash\%, and an adaptation of Code2Seq (Alon et al., 2018) for code prediction by 14.4\textbackslash\%. We present in the paper several ways of communicating the code structure to the Transformer, which is fundamentally built for processing sequence data. We provide a comprehensive experimental evaluation of our proposal, along with alternative design choices, on a standard Python dataset, as well as on a Facebook internal Python corpus. Our code and data preparation pipeline will be available in open source.},
   archivePrefix = {arXiv},
   eprint = {2003.13848},
   eprinttype = {arxiv},
   file = {/home/enrico/Zotero/storage/Y8P66MJV/Kim et al. - 2020 - Code Prediction by Feeding Trees to Transformers.pdf},
+  journal = {arXiv:2003.13848 [cs]},
   keywords = {Computer Science - Software Engineering,Encoding,gpt-2},
-  langid = {english},
+  language = {en},
   primaryClass = {cs}
 }
 
 @article{laradji_software_2015,
   title = {Software Defect Prediction Using Ensemble Learning on Selected Features},
   author = {Laradji, Issam H. and Alshayeb, Mohammad and Ghouti, Lahouari},
-  date = {2015-02},
-  journaltitle = {Information and Software Technology},
-  shortjournal = {Information and Software Technology},
+  year = {2015},
+  month = feb,
   volume = {58},
   pages = {388--402},
   issn = {09505849},
   doi = {10.1016/j.infsof.2014.07.005},
-  url = {https://linkinghub.elsevier.com/retrieve/pii/S0950584914001591},
-  urldate = {2020-08-11},
-  abstract = {Objective: The objectives of this paper are to demonstrate the positive effects of combining feature selection and ensemble learning on the performance of defect classification. Along with efficient feature selection, a new two-variant (with and without feature selection) ensemble learning algorithm is proposed to provide robustness to both data imbalance and feature redundancy.
-Method: We carefully combine selected ensemble learning models with efficient feature selection to address these issues and mitigate their effects on the defect classification performance.
-Results: Forward selection showed that only few features contribute to high area under the receiver-operating curve (AUC). On the tested datasets, greedy forward selection (GFS) method outperformed other feature selection techniques such as Pearson’s correlation. This suggests that features are highly unstable. However, ensemble learners like random forests and the proposed algorithm, average probability ensemble (APE), are not as affected by poor features as in the case of weighted support vector machines (W-SVMs). Moreover, the APE model combined with greedy forward selection (enhanced APE) achieved AUC values of approximately 1.0 for the NASA datasets: PC2, PC4, and MC1.
-Conclusion: This paper shows that features of a software dataset must be carefully selected for accurate classification of defective components. Furthermore, tackling the software data issues, mentioned above, with the proposed combined learning model resulted in remarkable classification performance paving the way for successful quality control.},
+  abstract = {Objective: The objectives of this paper are to demonstrate the positive effects of combining feature selection and ensemble learning on the performance of defect classification. Along with efficient feature selection, a new two-variant (with and without feature selection) ensemble learning algorithm is proposed to provide robustness to both data imbalance and feature redundancy. Method: We carefully combine selected ensemble learning models with efficient feature selection to address these issues and mitigate their effects on the defect classification performance. Results: Forward selection showed that only few features contribute to high area under the receiver-operating curve (AUC). On the tested datasets, greedy forward selection (GFS) method outperformed other feature selection techniques such as Pearson's correlation. This suggests that features are highly unstable. However, ensemble learners like random forests and the proposed algorithm, average probability ensemble (APE), are not as affected by poor features as in the case of weighted support vector machines (W-SVMs). Moreover, the APE model combined with greedy forward selection (enhanced APE) achieved AUC values of approximately 1.0 for the NASA datasets: PC2, PC4, and MC1. Conclusion: This paper shows that features of a software dataset must be carefully selected for accurate classification of defective components. Furthermore, tackling the software data issues, mentioned above, with the proposed combined learning model resulted in remarkable classification performance paving the way for successful quality control.},
   file = {/home/enrico/Zotero/storage/YIRMHG5X/Laradji et al. - 2015 - Software defect prediction using ensemble learning.pdf},
-  langid = {english}
+  journal = {Information and Software Technology},
+  language = {en}
 }
 
 @article{latte_clean_2019,
   title = {Clean {{Code}}: {{On}} the {{Use}} of {{Practices}} and {{Tools}} to {{Produce Maintainable Code}} for {{Long}}-{{Living Software}}},
   author = {Latte, Bjorn and Henning, Soren and Wojcieszak, Maik},
-  date = {2019},
-  journaltitle = {Living Systems},
+  year = {2019},
   pages = {4},
-  abstract = {Maintaining a long-living software system is substantially related to the quality of the code the system is built from. In this experience report we describe how a set of practices and tools has been established and used on the early stages of a project. The approach is based on Clean Code and the use of well known static code analysis tools. The tools and practices have been used with an immediate effect of having cleaner code that is easier to understand in the long term. Additional attention is given to the cultural aspect that is involved in reaching a mindset that will allow to set and uphold code quality standards. Reaching a common understanding is a team effort that requires ”leaving one’s comfort zone“. Finding common ground can significantly decide about failure or success in creating maintainable code.},
+  abstract = {Maintaining a long-living software system is substantially related to the quality of the code the system is built from. In this experience report we describe how a set of practices and tools has been established and used on the early stages of a project. The approach is based on Clean Code and the use of well known static code analysis tools. The tools and practices have been used with an immediate effect of having cleaner code that is easier to understand in the long term. Additional attention is given to the cultural aspect that is involved in reaching a mindset that will allow to set and uphold code quality standards. Reaching a common understanding is a team effort that requires ''leaving one's comfort zone``. Finding common ground can significantly decide about failure or success in creating maintainable code.},
   file = {/home/enrico/Zotero/storage/IFT6DKFE/Latte et al. - Clean Code On the Use of Practices and Tools to P.pdf},
-  langid = {english}
+  journal = {Living Systems},
+  language = {en}
 }
 
 @article{li_code_2018-1,
   title = {Code {{Completion}} with {{Neural Attention}} and {{Pointer Networks}}},
   author = {Li, Jian and Wang, Yue and Lyu, Michael R. and King, Irwin},
-  date = {2018-07},
-  journaltitle = {Proceedings of the Twenty-Seventh International Joint Conference on Artificial Intelligence},
+  year = {2018},
+  month = jul,
   pages = {4159--4165},
   doi = {10.24963/ijcai.2018/578},
-  url = {http://arxiv.org/abs/1711.09573},
-  urldate = {2020-08-02},
   abstract = {Intelligent code completion has become an essential research task to accelerate modern software development. To facilitate effective code completion for dynamically-typed programming languages, we apply neural language models by learning from large codebases, and develop a tailored attention mechanism for code completion. However, standard neural language models even with attention mechanism cannot correctly predict the outof-vocabulary (OoV) words that restrict the code completion performance. In this paper, inspired by the prevalence of locally repeated terms in program source code, and the recently proposed pointer copy mechanism, we propose a pointer mixture network for better predicting OoV words in code completion. Based on the context, the pointer mixture network learns to either generate a withinvocabulary word through an RNN component, or regenerate an OoV word from local context through a pointer component. Experiments on two benchmarked datasets demonstrate the effectiveness of our attention mechanism and pointer mixture network on the code completion task.},
   archivePrefix = {arXiv},
   eprint = {1711.09573},
   eprinttype = {arxiv},
   file = {/home/enrico/Zotero/storage/WLLNLQEF/Li et al. - 2018 - Code Completion with Neural Attention and Pointer .pdf},
+  journal = {Proceedings of the Twenty-Seventh International Joint Conference on Artificial Intelligence},
   keywords = {Computer Science - Computation and Language,Computer Science - Software Engineering},
-  langid = {english}
+  language = {en}
+}
+
+@article{lieberherr_assuring_1989,
+  title = {Assuring Good Style for Object-Oriented Programs},
+  author = {Lieberherr, K.J. and Holland, I.M.},
+  year = {1989},
+  month = sep,
+  volume = {6},
+  pages = {38--48},
+  issn = {0740-7459},
+  doi = {10.1109/52.35588},
+  journal = {IEEE Software},
+  number = {5}
 }
 
 @article{liu_self-attentional_2020-1,
   title = {A {{Self}}-{{Attentional Neural Architecture}} for {{Code Completion}} with {{Multi}}-{{Task Learning}}},
   author = {Liu, Fang and Li, Ge and Wei, Bolin and Xia, Xin and Fu, Zhiyi and Jin, Zhi},
-  date = {2020-06-26},
-  url = {http://arxiv.org/abs/1909.06983},
-  urldate = {2020-08-02},
-  abstract = {Code completion, one of the most useful features in the Integrated Development Environments (IDEs), can accelerate software development by suggesting the libraries, APIs, and method names in real-time. Recent studies have shown that statistical language models can improve the performance of code completion tools through learning from large-scale software repositories. However, these models suffer from three major drawbacks: a) The hierarchical structural information of the programs is not fully utilized in the program’s representation; b) In programs, the semantic relationships can be very long. Existing recurrent neural networks based language models are not sufficient to model the long-term dependency. c) Existing approaches perform a specific task in one model, which leads to the underuse of the information from related tasks. To address these challenges, in this paper, we propose a selfattentional neural architecture for code completion with multi-task learning. To utilize the hierarchical structural information of the programs, we present a novel method that considers the path from the predicting node to the root node. To capture the long-term dependency in the input programs, we adopt a self-attentional architecture based network as the base language model. To enable the knowledge sharing between related tasks, we creatively propose a Multi-Task Learning (MTL) framework to learn two related tasks in code completion jointly. Experiments on three real-world datasets demonstrate the effectiveness of our model when compared with state-of-the-art methods.},
+  year = {2020},
+  month = jun,
+  abstract = {Code completion, one of the most useful features in the Integrated Development Environments (IDEs), can accelerate software development by suggesting the libraries, APIs, and method names in real-time. Recent studies have shown that statistical language models can improve the performance of code completion tools through learning from large-scale software repositories. However, these models suffer from three major drawbacks: a) The hierarchical structural information of the programs is not fully utilized in the program's representation; b) In programs, the semantic relationships can be very long. Existing recurrent neural networks based language models are not sufficient to model the long-term dependency. c) Existing approaches perform a specific task in one model, which leads to the underuse of the information from related tasks. To address these challenges, in this paper, we propose a selfattentional neural architecture for code completion with multi-task learning. To utilize the hierarchical structural information of the programs, we present a novel method that considers the path from the predicting node to the root node. To capture the long-term dependency in the input programs, we adopt a self-attentional architecture based network as the base language model. To enable the knowledge sharing between related tasks, we creatively propose a Multi-Task Learning (MTL) framework to learn two related tasks in code completion jointly. Experiments on three real-world datasets demonstrate the effectiveness of our model when compared with state-of-the-art methods.},
   archivePrefix = {arXiv},
   eprint = {1909.06983},
   eprinttype = {arxiv},
   file = {/home/enrico/Zotero/storage/5RXXFIKM/Liu et al. - 2020 - A Self-Attentional Neural Architecture for Code Co.pdf},
+  journal = {arXiv:1909.06983 [cs]},
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Software Engineering},
-  langid = {english},
+  language = {en},
   primaryClass = {cs}
 }
 
@@ -419,114 +459,138 @@ Conclusion: This paper shows that features of a software dataset must be careful
   title = {Aroma: {{Code Recommendation}} via {{Structural Code Search}}},
   shorttitle = {Aroma},
   author = {Luan, Sifei and Yang, Di and Barnaby, Celeste and Sen, Koushik and Chandra, Satish},
-  date = {2019-10-10},
-  journaltitle = {Proceedings of the ACM on Programming Languages},
-  shortjournal = {Proc. ACM Program. Lang.},
+  year = {2019},
+  month = oct,
   volume = {3},
   pages = {1--28},
   issn = {2475-1421, 2475-1421},
   doi = {10.1145/3360578},
-  url = {http://arxiv.org/abs/1812.01158},
-  urldate = {2020-08-02},
-  abstract = {Programmers often write code that has similarity to existing code written somewhere. A tool that could help programmers to search such similar code would be immensely useful. Such a tool could help programmers to extend partially written code snippets to completely implement necessary functionality, help to discover extensions to the partial code which are commonly included by other programmers, help to cross-check against similar code written by other programmers, or help to add extra code which would fix common mistakes and errors. We propose Aroma, a tool and technique for code recommendation via structural code search. Aroma indexes a huge code corpus including thousands of open-source projects, takes a partial code snippet as input, searches the corpus for method bodies containing the partial code snippet, and clusters and intersects the results of the search to recommend a small set of succinct code snippets which both contain the query snippet and appear as part of several methods in the corpus. We evaluated Aroma on 2000 randomly selected queries created from the corpus, as well as 64 queries derived from code snippets obtained from Stack Overflow, a popular website for discussing code. We implemented Aroma for 4 different languages, and developed an IDE plugin for Aroma. Furthermore, we conducted a study where we asked 12 programmers to complete programming tasks using Aroma, and collected their feedback. Our results indicate that Aroma is capable of retrieving and recommending relevant code snippets efficiently. CCS Concepts: • Information systems → Near-duplicate and plagiarism detection; • Software and its engineering → Development frameworks and environments; Software post-development issues.},
+  abstract = {Programmers often write code that has similarity to existing code written somewhere. A tool that could help programmers to search such similar code would be immensely useful. Such a tool could help programmers to extend partially written code snippets to completely implement necessary functionality, help to discover extensions to the partial code which are commonly included by other programmers, help to cross-check against similar code written by other programmers, or help to add extra code which would fix common mistakes and errors. We propose Aroma, a tool and technique for code recommendation via structural code search. Aroma indexes a huge code corpus including thousands of open-source projects, takes a partial code snippet as input, searches the corpus for method bodies containing the partial code snippet, and clusters and intersects the results of the search to recommend a small set of succinct code snippets which both contain the query snippet and appear as part of several methods in the corpus. We evaluated Aroma on 2000 randomly selected queries created from the corpus, as well as 64 queries derived from code snippets obtained from Stack Overflow, a popular website for discussing code. We implemented Aroma for 4 different languages, and developed an IDE plugin for Aroma. Furthermore, we conducted a study where we asked 12 programmers to complete programming tasks using Aroma, and collected their feedback. Our results indicate that Aroma is capable of retrieving and recommending relevant code snippets efficiently. CCS Concepts: \textbullet{} Information systems \textrightarrow{} Near-duplicate and plagiarism detection; \textbullet{} Software and its engineering \textrightarrow{} Development frameworks and environments; Software post-development issues.},
   archivePrefix = {arXiv},
   eprint = {1812.01158},
   eprinttype = {arxiv},
   file = {/home/enrico/Zotero/storage/LYSLGYDG/Luan et al. - 2019 - Aroma Code Recommendation via Structural Code Sea.pdf},
-  issue = {OOPSLA},
+  journal = {Proceedings of the ACM on Programming Languages},
   keywords = {Computer Science - Software Engineering},
-  langid = {english}
+  language = {en},
+  number = {OOPSLA}
 }
 
 @article{malhotra_software_2016,
   title = {Software {{Maintainability}}: {{Systematic Literature Review}} and {{Current Trends}}},
   shorttitle = {Software {{Maintainability}}},
   author = {Malhotra, Ruchika and Chug, Anuradha},
-  date = {2016-10},
-  journaltitle = {International Journal of Software Engineering and Knowledge Engineering},
-  shortjournal = {Int. J. Soft. Eng. Knowl. Eng.},
+  year = {2016},
+  month = oct,
   volume = {26},
   pages = {1221--1253},
   issn = {0218-1940, 1793-6403},
   doi = {10.1142/S0218194016500431},
-  url = {https://www.worldscientific.com/doi/abs/10.1142/S0218194016500431},
-  urldate = {2020-08-11},
   abstract = {Software maintenance is an expensive activity that consumes a major portion of the cost of the total project. Various activities carried out during maintenance include the addition of new features, deletion of obsolete code, correction of errors, etc. Software maintainability means the ease with which these operations can be carried out. If the maintainability can be measured in early phases of the software development, it helps in better planning and optimum resource utilization. Measurement of design properties such as coupling, cohesion, etc. in early phases of development often leads us to derive the corresponding maintainability with the help of prediction models. In this paper, we performed a systematic review of the existing studies related to software maintainability from January 1991 to October 2015. In total, 96 primary studies were identified out of which 47 studies were from journals, 36 from conference proceedings and 13 from others. All studies were compiled in structured form and analyzed through numerous perspectives such as the use of design metrics, prediction model, tools, data sources, prediction accuracy, etc. According to the review results, we found that the use of machine learning algorithms in predicting maintainability has increased since 2005. The use of evolutionary algorithms has also begun in related sub-fields since 2010. We have observed that design metrics is still the most favored option to capture the characteristics of any given software before deploying it further in prediction model for determining the corresponding software maintainability. A significant increase in the use of public dataset for making the prediction models has also been observed and in this regard two public datasets User Interface Management System (UIMS) and Quality Evaluation System (QUES) proposed by Li and Henry is quite popular among researchers. Although machine learning algorithms are still the most popular methods, however, we suggest that researchers working on software maintainability area should experiment on the use of open source datasets with hybrid algorithms. In this regard, more empirical studies are also required to be conducted on a large number of datasets so that a generalized theory could be made. The current paper will be beneficial for practitioners, researchers and developers as they can use these models and metrics for creating benchmark and standards. Findings of this extensive review would also be useful for novices in the field of software maintainability as it not only provides explicit definitions, but also lays a foundation for further research by providing a quick link to all important studies in the said field. Finally, this study also compiles current trends, emerging sub-fields and identifies various opportunities of future research in the field of software maintainability.},
   file = {/home/enrico/Zotero/storage/FDYH3FY9/Malhotra und Chug - 2016 - Software Maintainability Systematic Literature Re.pdf},
-  langid = {english},
+  journal = {International Journal of Software Engineering and Knowledge Engineering},
+  language = {en},
   number = {08}
 }
 
 @book{martin_clean_2009,
   title = {Clean Code: A Handbook of Agile Software Craftsmanship},
   author = {Martin, Robert C},
-  date = {2009},
+  year = {2009},
   publisher = {{Pearson Education}}
 }
 
 @article{mccabe_complexity_1976,
   title = {A {{Complexity Measure}}},
   author = {McCabe, T.J.},
-  date = {1976-12},
-  journaltitle = {IEEE Transactions on Software Engineering},
-  shortjournal = {IIEEE Trans. Software Eng.},
+  year = {1976},
+  month = dec,
   volume = {SE-2},
   pages = {308--320},
   issn = {0098-5589},
   doi = {10.1109/TSE.1976.233837},
-  url = {http://ieeexplore.ieee.org/document/1702388/},
-  urldate = {2020-10-13},
+  file = {/home/enrico/Zotero/storage/LJC8JAH9/McCabe - 1976 - A Complexity Measure.pdf},
+  journal = {IEEE Transactions on Software Engineering},
   number = {4}
 }
 
+@book{mogensen_introduction_2017,
+  title = {Introduction to {{Compiler Design}}},
+  author = {Mogensen, Torben {\AE}gidius},
+  year = {2017},
+  edition = {2nd ed. 2017},
+  publisher = {{Springer International Publishing : Imprint: Springer}},
+  address = {{Cham}},
+  doi = {10.1007/978-3-319-66966-3},
+  abstract = {The second edition of this textbook has been fully revised and adds material about loop optimisation, function call optimisation and dataflow analysis. It presents techniques for making realistic compilers for simple programming languages, using techniques that are close to those used in "real" compilers, albeit in places slightly simplified for presentation purposes. All phases required for translating a high-level language to symbolic machine language are covered, including lexing, parsing, type checking, intermediate-code generation, machine-code generation, register allocation and optimisation, interpretation is covered briefly. Aiming to be neutral with respect to implementation languages, algorithms are presented in pseudo-code rather than in any specific programming language, but suggestions are in many cases given for how these can be realised in different language flavours. Introduction to Compiler Design is intended for an introductory course in compiler design, suitable for both undergraduate and graduate courses depending on which chapters are used},
+  isbn = {978-3-319-66966-3},
+  keywords = {Programming languages (Electronic computers),Programming Languages; Compilers; Interpreters},
+  lccn = {005.13},
+  series = {Undergraduate {{Topics}} in {{Computer Science}}}
+}
+
 @article{naujoks_cooperative_2016,
-  title = {Cooperative Warning Systems: {{The}} Impact of False and Unnecessary Alarms on Drivers’ Compliance},
+  title = {Cooperative Warning Systems: {{The}} Impact of False and Unnecessary Alarms on Drivers' Compliance},
   shorttitle = {Cooperative Warning Systems},
   author = {Naujoks, Frederik and Kiesel, Andrea and Neukum, Alexandra},
-  date = {2016-12},
-  journaltitle = {Accident Analysis \& Prevention},
-  shortjournal = {Accident Analysis \& Prevention},
+  year = {2016},
+  month = dec,
   volume = {97},
   pages = {162--175},
   issn = {00014575},
   doi = {10.1016/j.aap.2016.09.009},
-  url = {https://linkinghub.elsevier.com/retrieve/pii/S0001457516303396},
-  urldate = {2020-10-13},
-  langid = {english}
+  journal = {Accident Analysis \& Prevention},
+  language = {en}
 }
 
-@online{noauthor_go_nodate,
+@misc{noauthor_go_nodate,
   title = {Go at {{Google}}: {{Language Design}} in the {{Service}} of {{Software Engineering}}},
-  url = {https://talks.golang.org/2012/splash.article},
-  urldate = {2020-08-08},
-  file = {/home/enrico/Zotero/storage/JCV5KWP7/splash.html}
+  file = {/home/enrico/Zotero/storage/JCV5KWP7/splash.html},
+  howpublished = {https://talks.golang.org/2012/splash.article}
 }
 
-@online{noauthor_null_nodate,
+@misc{noauthor_null_nodate,
   title = {Null {{Safety}} - {{Kotlin Programming Language}}},
-  journaltitle = {Kotlin},
-  url = {https://kotlinlang.org/docs/reference/null-safety.html},
-  urldate = {2020-08-08},
   file = {/home/enrico/Zotero/storage/TJCBEQAP/null-safety.html},
-  langid = {english}
+  howpublished = {https://kotlinlang.org/docs/reference/null-safety.html},
+  journal = {Kotlin},
+  language = {en}
+}
+
+@misc{pep8,
+  title = {{{PEP}} 8: Style Guide for {{Python}} Code},
+  author = {Van Rossum, Guido and Warsaw, Barry and Coghlan, Nick},
+  year = {2013}
 }
 
 @article{prahofer_static_2017,
   title = {Static {{Code Analysis}} of {{IEC}} 61131-3 {{Programs}}: {{Comprehensive Tool Support}} and {{Experiences}} from {{Large}}-{{Scale Industrial Application}}},
   shorttitle = {Static {{Code Analysis}} of {{IEC}} 61131-3 {{Programs}}},
   author = {Prahofer, Herbert and Angerer, Florian and Ramler, Rudolf and Grillenberger, Friedrich},
-  date = {2017-02},
-  journaltitle = {IEEE Transactions on Industrial Informatics},
-  shortjournal = {IEEE Trans. Ind. Inf.},
+  year = {2017},
+  month = feb,
   volume = {13},
   pages = {37--47},
   issn = {1551-3203, 1941-0050},
   doi = {10.1109/TII.2016.2604760},
-  url = {http://ieeexplore.ieee.org/document/7557072/},
-  urldate = {2020-08-11},
   abstract = {Static code analysis techniques examine programs without actually executing them. The main benefits lie in improving software quality by detecting problematic code constructs and potential defects in early development stages. Today, static code analysis is a widely used quality assurance technique and numerous tools are available for established programming languages like C/C++, Java, or C\#. However, in the domain of PLC programming, static code analysis tools are still rare, although many properties of PLC programming languages are beneficial for static analysis techniques. Therefore, an approach and tool for static code analysis of IEC 61131-3 programs has been developed which is capable of detecting a range of issues commonly occurring in PLC programming. The approach employs different analysis methods, like pattern-matching on program structures, control flow and data flow analysis, and, especially, call graph and pointer analysis techniques. Based on results from an initial analysis project, where common issues for static analysis of PLC programs have been investigated, this paper illustrates adoption and extensions of analysis techniques for PLC programs and presents results from large-scale industrial application.},
   file = {/home/enrico/Zotero/storage/RPIIJ4DZ/Prahofer et al. - 2017 - Static Code Analysis of IEC 61131-3 Programs Comp.pdf},
-  langid = {english},
+  journal = {IEEE Transactions on Industrial Informatics},
+  language = {en},
+  number = {1}
+}
+
+@article{prahofer_static_2017-2,
+  title = {Static {{Code Analysis}} of {{IEC}} 61131-3 {{Programs}}: {{Comprehensive Tool Support}} and {{Experiences}} from {{Large}}-{{Scale Industrial Application}}},
+  shorttitle = {Static {{Code Analysis}} of {{IEC}} 61131-3 {{Programs}}},
+  author = {Prahofer, Herbert and Angerer, Florian and Ramler, Rudolf and Grillenberger, Friedrich},
+  year = {2017},
+  month = feb,
+  volume = {13},
+  pages = {37--47},
+  issn = {1551-3203, 1941-0050},
+  doi = {10.1109/TII.2016.2604760},
+  journal = {IEEE Transactions on Industrial Informatics},
   number = {1}
 }
 
@@ -536,17 +600,17 @@ Conclusion: This paper shows that features of a software dataset must be careful
   pages = {24},
   abstract = {Natural language processing tasks, such as question answering, machine translation, reading comprehension, and summarization, are typically approached with supervised learning on taskspecific datasets. We demonstrate that language models begin to learn these tasks without any explicit supervision when trained on a new dataset of millions of webpages called WebText. When conditioned on a document plus questions, the answers generated by the language model reach 55 F1 on the CoQA dataset - matching or exceeding the performance of 3 out of 4 baseline systems without using the 127,000+ training examples. The capacity of the language model is essential to the success of zero-shot task transfer and increasing it improves performance in a log-linear fashion across tasks. Our largest model, GPT-2, is a 1.5B parameter Transformer that achieves state of the art results on 7 out of 8 tested language modeling datasets in a zero-shot setting but still underfits WebText. Samples from the model reflect these improvements and contain coherent paragraphs of text. These findings suggest a promising path towards building language processing systems which learn to perform tasks from their naturally occurring demonstrations.},
   file = {/home/enrico/Zotero/storage/TD9UPAG8/Radford et al. - Language Models are Unsupervised Multitask Learner.pdf},
-  langid = {english}
+  language = {en}
 }
 
 @article{raychev2016probabilistic,
   title = {Probabilistic Model for Code with Decision Trees},
   author = {Raychev, Veselin and Bielik, Pavol and Vechev, Martin},
-  date = {2016},
-  journaltitle = {ACM SIGPLAN Notices},
+  year = {2016},
   volume = {51},
   pages = {731--747},
   publisher = {{ACM New York, NY, USA}},
+  journal = {ACM SIGPLAN Notices},
   number = {10}
 }
 
@@ -554,54 +618,70 @@ Conclusion: This paper shows that features of a software dataset must be careful
   title = {A Systematic Review of Software Maintainability Prediction and Metrics},
   booktitle = {2009 3rd {{International Symposium}} on {{Empirical Software Engineering}} and {{Measurement}}},
   author = {Riaz, Mehwish and Mendes, Emilia and Tempero, Ewan},
-  date = {2009-10},
+  year = {2009},
+  month = oct,
   pages = {367--377},
   publisher = {{IEEE}},
-  location = {{Lake Buena Vista, FL, USA}},
+  address = {{Lake Buena Vista, FL, USA}},
   doi = {10.1109/ESEM.2009.5314233},
-  url = {http://ieeexplore.ieee.org/document/5314233/},
-  urldate = {2020-08-11},
   abstract = {This paper presents the results of a systematic review conducted to collect evidence on software maintainability prediction and metrics. The study was targeted at the software quality attribute of maintainability as opposed to the process of software maintenance. The evidence was gathered from the selected studies against a set of meaningful and focused questions. 710 studies were initially retrieved; however of these only 15 studies were selected; their quality was assessed; data extraction was performed; and data was synthesized against the research questions. Our results suggest that there is little evidence on the effectiveness of software maintainability prediction techniques and models.},
-  eventtitle = {2009 3rd {{International Symposium}} on {{Empirical Software Engineering}} and {{Measurement}} ({{ESEM}})},
   file = {/home/enrico/Zotero/storage/XH3Z2HEQ/Riaz et al. - 2009 - A systematic review of software maintainability pr.pdf},
   isbn = {978-1-4244-4842-5},
-  langid = {english}
+  language = {en}
 }
 
 @inproceedings{schmedding_clean_2015,
   title = {Clean {{Code}}-Ein Neues {{Ziel}} Im {{Software}}-{{Praktikum}}.},
   booktitle = {{{SEUH}}},
   author = {Schmedding, Doris and Vasileva, Anna and Remmers, Julian},
-  date = {2015},
+  year = {2015},
   pages = {81--91},
   file = {/home/enrico/Zotero/storage/8IEJRBXF/Schmedding et al. - 2015 - Clean Code-ein neues Ziel im Software-Praktikum..pdf}
 }
 
 @article{schmedding_clean_2015-1,
-  title = {Clean Code – ein neues Ziel im Software-Praktikum},
+  title = {{Clean Code \textendash{} ein neues Ziel im Software-Praktikum}},
   author = {Schmedding, Doris and Vasileva, Anna and Remmers, Julian},
-  date = {2015},
+  year = {2015},
   pages = {11},
   file = {/home/enrico/Zotero/storage/T82UG2SM/Schmedding et al. - 2015 - Clean Code – ein neues Ziel im Software-Praktikum.pdf},
-  langid = {german}
+  language = {de}
+}
+
+@book{schwaber_agile_2002,
+  title = {Agile Software Development with {{Scrum}}},
+  author = {Schwaber, Ken and Beedle, Mike},
+  year = {2002},
+  publisher = {{Prentice Hall}},
+  address = {{Upper Saddle River, NJ}},
+  isbn = {978-0-13-067634-4},
+  keywords = {Agile software development,Scrum (Computer software development)},
+  lccn = {QA76.76.D47 S32 2002},
+  series = {Series in Agile Software Development}
 }
 
 @article{sjoberg_questioning_nodate,
   title = {Questioning {{Software Maintenance Metrics}}: {{A Comparative Case Study}}},
-  author = {Sjøberg, Dag I K and Sjoberg, Dag and Anda, Bente and Mockus, Audris},
+  author = {Sj{\o}berg, Dag I K and Sjoberg, Dag and Anda, Bente and Mockus, Audris},
   pages = {4},
   abstract = {Context: Many metrics are used in software engineering research as surrogates for maintainability of software systems. Aim: Our aim was to investigate whether such metrics are consistent among themselves and the extent to which they predict maintenance effort at the entire system level. Method: The Maintainability Index, a set of structural measures, two code smells (Feature Envy and God Class) and size were applied to a set of four functionally equivalent systems. The metrics were compared with each other and with the outcome of a study in which six developers were hired to perform three maintenance tasks on the same systems. Results: The metrics were not mutually consistent. Only system size and low cohesion were strongly associated with increased maintenance effort. Conclusion: Apart from size, surrogate maintainability measures may not reflect future maintenance effort. Surrogates need to be evaluated in the contexts for which they will be used. While traditional metrics are used to identify problematic areas in the code, the improvements of the worst areas may, inadvertently, lead to more problems for the entire system. Our results suggest that local improvements should be accompanied by an evaluation at the system level.},
   file = {/home/enrico/Zotero/storage/4RJYJD7C/Sjøberg et al. - Questioning Software Maintenance Metrics A Compar.pdf},
-  langid = {english}
+  language = {en}
+}
+
+@techreport{stripe_developer_2018,
+  title = {The {{Developer Coefficient}} - {{Software}} Engineering Efficiency and Its \$3 Trillion Impact on Global {{GDP}}},
+  author = {{Stripe} and {Harris Poll}},
+  year = {2018},
+  month = sep
 }
 
 @article{svyatkovskiy_intellicode_2020,
   title = {{{IntelliCode Compose}}: {{Code Generation Using Transformer}}},
   shorttitle = {{{IntelliCode Compose}}},
   author = {Svyatkovskiy, Alexey and Deng, Shao Kun and Fu, Shengyu and Sundaresan, Neel},
-  date = {2020-05-16},
-  url = {http://arxiv.org/abs/2005.08025},
-  urldate = {2020-06-11},
+  year = {2020},
+  month = may,
   abstract = {In software development through integrated development environments (IDEs), code completion is one of the most widely used features. Nevertheless, majority of integrated development environments only support completion of methods and APIs, or arguments. In this paper, we introduce IntelliCode Compose \$-\$ a general-purpose multilingual code completion tool which is capable of predicting sequences of code tokens of arbitrary types, generating up to entire lines of syntactically correct code. It leverages state-of-the-art generative transformer model trained on 1.2 billion lines of source code in Python, \$C\textbackslash textbackslash\#\$, JavaScript and TypeScript programming languages. IntelliCode Compose is deployed as a cloud-based web service. It makes use of client-side tree-based caching, efficient parallel implementation of the beam search decoder, and compute graph optimizations to meet edit-time completion suggestion requirements in the Visual Studio Code IDE and Azure Notebook. Our best model yields an average edit similarity of \$86.7\textbackslash textbackslash\%\$ and a perplexity of 1.82 for Python programming language.},
   archivePrefix = {arXiv},
   eprint = {2005.08025},
@@ -610,23 +690,22 @@ Conclusion: This paper shows that features of a software dataset must be careful
   keywords = {Computer Science - Computation and Language,Computer Science - Software Engineering,Encoding,gpt-2}
 }
 
-@report{tc_65sc_65a_iec_2010,
+@techreport{tc_65sc_65a_iec_2010,
   title = {{{IEC}} 61508:2010 {{Parts}} 1-7},
   author = {{TC 65/SC 65A}},
-  date = {2010-04},
+  year = {2010},
+  month = apr,
   institution = {{International Electrotechnical Commission}},
-  url = {https://webstore.iec.ch/publication/5515},
   type = {Standard}
 }
 
-@online{wichers_source_nodate,
+@misc{wichers_source_nodate,
   title = {Source {{Code Analysis Tools}} | {{OWASP}}},
   author = {Wichers, Dave and Worcel, Eitan},
-  url = {https://owasp.org/www-community/Source_Code_Analysis_Tools},
-  urldate = {2020-08-11},
   abstract = {Source Code Analysis Tools on the main website for The OWASP Foundation. OWASP is a nonprofit foundation that works to improve the security of software.},
   file = {/home/enrico/Zotero/storage/IZI5VABD/Source_Code_Analysis_Tools.html},
-  langid = {english}
+  howpublished = {https://owasp.org/www-community/Source\_Code\_Analysis\_Tools},
+  language = {en}
 }
 
 @inproceedings{yamashita_thresholds_2016,
@@ -634,36 +713,57 @@ Conclusion: This paper shows that features of a software dataset must be careful
   shorttitle = {Thresholds for {{Size}} and {{Complexity Metrics}}},
   booktitle = {2016 {{IEEE International Conference}} on {{Software Quality}}, {{Reliability}} and {{Security}} ({{QRS}})},
   author = {Yamashita, Kazuhiro and Huang, Changyun and Nagappan, Meiyappan and Kamei, Yasutaka and Mockus, Audris and Hassan, Ahmed E. and Ubayashi, Naoyasu},
-  date = {2016-08},
+  year = {2016},
+  month = aug,
   pages = {191--201},
   publisher = {{IEEE}},
-  location = {{Vienna, Austria}},
+  address = {{Vienna, Austria}},
   doi = {10.1109/QRS.2016.31},
-  url = {http://ieeexplore.ieee.org/document/7589799/},
-  urldate = {2020-08-11},
   abstract = {Practical guidelines on what code has better quality are in great demand. For example, it is reasonable to expect the most complex code to be buggy. Structuring code into reasonably sized files and classes also appears to be prudent. Many attempts to determine (or declare) risk thresholds for various code metrics have been made. In this paper we want to examine the applicability of such thresholds. Hence, we replicate a recently published technique for calculating metric thresholds to determine high-risk files based on code size (LOC and number of methods), and complexity (cyclomatic complexity and module interface coupling) using a very large set of open and closed source projects written primarily in Java. We relate the threshold-derived risk to (a) the probability that a file would have a defect, and (b) the defect density of the files in the highrisk group. We find that the probability of a file having a defect is higher in the very high-risk group with a few exceptions. This is particularly pronounced when using size thresholds. Surprisingly, the defect density was uniformly lower in the very high-risk group of files. Our results suggest that, as expected, less code is associated with fewer defects. However, the same amount of code in large and complex files was associated with fewer defects than when located in smaller and less complex files. Hence we conclude that risk thresholds for size and complexity metrics have to be used with caution if at all. Our findings have immediate practical implications: the redistribution of Java code into smaller and less complex files may be counterproductive.},
-  eventtitle = {2016 {{IEEE International Conference}} on {{Software Quality}}, {{Reliability}} and {{Security}} ({{QRS}})},
   file = {/home/enrico/Zotero/storage/VIIZEFUH/Yamashita et al. - 2016 - Thresholds for Size and Complexity Metrics A Case.pdf},
   isbn = {978-1-5090-4127-5},
-  langid = {english}
+  language = {en}
+}
+
+@inproceedings{yip_software_1994,
+  title = {A Software Maintenance Survey},
+  booktitle = {Proceedings of 1st {{Asia}}-{{Pacific Software Engineering Conference}}},
+  author = {Yip, S.W.L. and Lam, T.},
+  year = {1994},
+  pages = {70--79},
+  publisher = {{IEEE Comput. Soc. Press}},
+  address = {{Tokyo, Japan}},
+  doi = {10.1109/APSEC.1994.465272},
+  isbn = {978-0-8186-6960-6}
+}
+
+@inproceedings{yu_survey_2010,
+  title = {A Survey on Metric of Software Complexity},
+  booktitle = {2010 2nd {{IEEE International Conference}} on {{Information Management}} and {{Engineering}}},
+  author = {Yu, Sheng and Zhou, Shijie},
+  year = {2010},
+  pages = {352--356},
+  publisher = {{IEEE}},
+  address = {{Chengdu, China}},
+  doi = {10.1109/ICIME.2010.5477581},
+  file = {/home/enrico/Zotero/storage/IUMP6F7X/Yu und Zhou - 2010 - A survey on metric of software complexity.pdf},
+  isbn = {978-1-4244-5263-7}
 }
 
 @inproceedings{zhang_novel_2019,
   title = {A {{Novel Neural Source Code Representation Based}} on {{Abstract Syntax Tree}}},
   booktitle = {2019 {{IEEE}}/{{ACM}} 41st {{International Conference}} on {{Software Engineering}} ({{ICSE}})},
   author = {Zhang, Jian and Wang, Xu and Zhang, Hongyu and Sun, Hailong and Wang, Kaixuan and Liu, Xudong},
-  date = {2019-05},
+  year = {2019},
+  month = may,
   pages = {783--794},
   publisher = {{IEEE}},
-  location = {{Montreal, QC, Canada}},
+  address = {{Montreal, QC, Canada}},
   doi = {10.1109/ICSE.2019.00086},
-  url = {https://ieeexplore.ieee.org/document/8812062/},
-  urldate = {2020-08-02},
   abstract = {Exploiting machine learning techniques for analyzing programs has attracted much attention. One key problem is how to represent code fragments well for follow-up analysis. Traditional information retrieval based methods often treat programs as natural language texts, which could miss important semantic information of source code. Recently, state-of-the-art studies demonstrate that abstract syntax tree (AST) based neural models can better represent source code. However, the sizes of ASTs are usually large and the existing models are prone to the long-term dependency problem. In this paper, we propose a novel AST-based Neural Network (ASTNN) for source code representation. Unlike existing models that work on entire ASTs, ASTNN splits each large AST into a sequence of small statement trees, and encodes the statement trees to vectors by capturing the lexical and syntactical knowledge of statements. Based on the sequence of statement vectors, a bidirectional RNN model is used to leverage the naturalness of statements and finally produce the vector representation of a code fragment. We have applied our neural network based source code representation method to two common program comprehension tasks: source code classification and code clone detection. Experimental results on the two tasks indicate that our model is superior to state-of-the-art approaches.},
-  eventtitle = {2019 {{IEEE}}/{{ACM}} 41st {{International Conference}} on {{Software Engineering}} ({{ICSE}})},
   file = {/home/enrico/Zotero/storage/NQM9D52E/Zhang et al. - 2019 - A Novel Neural Source Code Representation Based on.pdf},
   isbn = {978-1-72810-869-8},
-  langid = {english}
+  language = {en}
 }
 
 

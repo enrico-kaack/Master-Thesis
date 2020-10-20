@@ -9,8 +9,8 @@ Software maintenance consists mainly of those activities that involve changing s
     \item Fixing bugs to ensure correct functionality of the software.
 \end{enumerate}
 The importance of good maintainability of source code is based on the associated cost.
-For project planning, different sources suggest planning 50 to 80\% of the total software development costs for maintenance. A recent study from 2018 between Stripe and Harris Poll found that developers spent 42\% of their time maintaining code. Increasing the effectiveness of maintaining code is consequently cost-relevant (SOURCE: \url{https://stripe.com/de/reports/developer-coefficient-2018}TODO).
-The application of agile software development paradigms is another important contributor for code to be changeable. Agile development is a software development practice of building software in increments with a running software at the end of each increment. One of the advantages is the adaptability of this model to changing requirements, since, with the end of each increment, a requirement change can be implemented. (TODO source Manifesto for agile software development).
+For project planning, different sources suggest planning 66 to 75\% of the total software costs for maintenance~\cite{yip_software_1994, galorath_accurately_2019}. A recent study from 2018 between Stripe and Harris Poll found that developers spent 42\% of their time maintaining code~\cite{stripe_developer_2018}. Increasing the effectiveness of maintaining code is consequently cost-relevant.
+The application of agile software development methodologies like Scrum is another important contributor for code to be changeable. Scrum is a agile software development practice of building software in increments with a running software at the end of each increment. One of the advantages is the adaptability of this model to changing requirements, since, with the end of each increment, a requirement change can be implemented~\cite{schwaber_agile_2002}.
 The easiness of code changeability due to code quality becomes a business-critical requirement and can positively impact the maintainability in the following ways~\cite{baggen_standardized_2012}:
 \begin{enumerate}
     \item Well-written code makes it easy to determine the location and the way source code has to be changed.
@@ -21,13 +21,14 @@ The easiness of code changeability due to code quality becomes a business-critic
 
 Besides the maintainability, a higher code quality makes it easier for new developers to understand the code base and be productive since it is easier to read and understand the code.
 
-The understandability and readability of high-quality source code have implications going further than maintainability. The International Organization for Standardization provides the standard ISO/IEC 25000:2014 for \enquote{Systems and software Quality Requirements and Evaluation (SQuaRE)}~\cite{iso_central_secretary_systems_2014}, that measures code quality by the contribution of the following characteristic:
+The understandability and readability of high-quality source code have implications going further than maintainability. The International Organization for Standardization provides the standard ISO/IEC 25010:2011 that measures code quality by the contribution of the following characteristic~\cite{iso_central_secretary_isoiec_2011}:
 \begin{enumerate}
     \item Reliability
     \item Performance efficiency
     \item Security
     \item Maintainability
 \end{enumerate}
+TODO: additionally, the standard mentions functional suitability, compatibility, useability and portability
 Reliability is the ability of a system to run without critical exception that would cause the system to crash, become unavailable or result in an inconsistent state. The most important factors for reliability are correct multi-threading with access to shared resources and correct memory allocation and deallocation. Performance efficiency describes an optimal use of the resources like CPU-time, memory or network bandwidth. The security aspect focus on code that does not open up as an attack vector. Especially common vulnerabilities like SQL injections shall be prevented.
 
 To sum up, code quality is a concept to describe source code from the view of a developers ability to understand and change code. This view influence characteristics like maintainability or reliability that can be used as metrics to measure code quality. 
@@ -68,7 +69,7 @@ Fifth, side-effects in a function body should be avoided. Side-effects happen if
 
 The next rule forbids the returning of error codes and suggests raising an exception if the programming language supports it. Raising an exception allows better separation between application logic and error handling code since the error code checking interrupts the reading flow of code. On the other hand, catching a raised exception is separated from the logic for a non-error execution and can be separated into an additional function for an even cleaner structure. TODO: see example In this case, error handling counts as the one purpose of this function.
 
-Last, the important principle for software engineering applies directly to functions: Don't repeat yourself TODO source. Repeated code is dangerous and chaotic since it requires changes in multiple locations if it has to be modified. This makes duplicated code very prone to copy and paste errors and small mistakes that may not be obvious during development but will lead to a fatal crash at runtime. Many patterns and tools have been developed to mitigate duplicated code (TODO: some references to duplicated code detection, etc.).
+Last, the important principle for software engineering applies directly to functions: Don't repeat yourself~\cite{haoyu_basic_2012}. Repeated code is dangerous and chaotic since it requires changes in multiple locations if it has to be modified. This makes duplicated code very prone to copy and paste errors and small mistakes that may not be obvious during development but will lead to a fatal crash at runtime. Many patterns and tools have been developed to mitigate duplicated code (TODO: some references to duplicated code detection, etc.).
 
 \subsection{Comments}
 Comments are part of every programming language and can play an important role in code quality. Subjectively good comments clarify the meaning of the code and help to understand the code. However, comments can become outdated and wrong or provide useless information~\cite{martin_clean_2009}. In a perfect world, the programming language and the programmer would be expressive enough that commenting is not required for clarity. Following the clean code guidelines for naming and functions makes many descriptive comments obsolete, since the function description is encoded in the function name.
@@ -88,7 +89,7 @@ In brief, before writing a comment, the developer should think about expressing 
 \subsection{Data Structures and Objects}
 This chapter describes the rules of data structures and objects. Both store data but the way this data get exposed differ. Objects hide data behind abstractions and have functions that work with these data. Data structures expose the data and do not provide functionality. 
 
-For objects, I. Holland defined the Law of Demeter (LoD) (TODO source Assuring good style for object-oriented programs by K.J. Lieberherr ; I.M. Holland).
+For objects, I. Holland defined the Law of Demeter (LoD)~\cite{lieberherr_assuring_1989}.
 In object-oriented programming, a method $m$ of an object $O$ may only call methods of the following components:
 \begin{itemize}
     \item the object $O$ itself
@@ -163,21 +164,19 @@ This work will focus on the described rules and implement a detection for some r
 \section{Source Code Analysis}\label{sec:code_analysis}
 In order to define and measure code quality, methods for analysing a program and its source code are necessary.
 
-To analyse source code, different techniques are bundled as static code analysis. A static code analysis gathers information about the structure of the source code and program. TODO source Static Code Analysis of IEC 61131-3 Programs: Comprehensive Tool Support and Experiences from Large-Scale Industrial 
+To analyse source code, different techniques are bundled as static code analysis. A static code analysis gathers information about the structure of the source code and program~\cite{prahofer_static_2017}.
 
 The following provides a non-comprehensive overview of the most important methods for code analysis and representation.
 Source code itself is stored as encoded text files. This representation offers no structural information. 
 
-A first processing step is a lexical analysis, also known as tokenization. The tokenization transforms the character stream from the text file into a stream of tokens. This is possible due to the syntactic definition of a programming lanuage, that allows to split the raw text into typed tokens. A token type can be a keyword, operator or an identifier.
-(TODO \url{http://www.cs.man.ac.uk/~pjj/farrell/comp3.html})
-TODO source Basics of Compiler Design by Torben Ægidius Mogensen (FOR ast, tokenizwation, data flow)
+A first processing step is a lexical analysis, also known as tokenization. The tokenization transforms the character stream from the text file into a stream of tokens. This is possible due to the syntactic definition of a programming lanuage, that allows to split the raw text into typed tokens~\cite{mogensen_introduction_2017}. A token type can be for isntance a keyword, operator or an identifier.
 
 With the token stream, a parser can build an Abstract Syntax Tree (AST) that represents the abstract structure of the source code.
 Since the AST represents the code structure, it is possible to traverse the tree-like datastructure to analyse the source code structure.
 
-Another method is the control flow analysis. For the control flow analysis, the program has to be represented as a control flow graph. The control-flow graph represents possible execution paths in a program and consists of nodes and edges. A node represents a basic block, i.e. a code sequence without branching. A directed edge represent jumps in the control flow; e.g. an if-statement would have two outgoing edges, one for a true condition and one for a condition evaluated as false.
+Another method is the control flow analysis. For the control flow analysis, the program has to be represented as a control flow graph. The control-flow graph represents possible execution paths in a program and consists of nodes and edges. A node represents a basic block, i.e. a code sequence without branching. A directed edge represent jumps in the control flow; e.g. an if-statement would have two outgoing edges, one for a true condition and one for a condition evaluated as false~\cite{allen_control_1970}
 
-Besides the control flow, it is possible to analyse the data flow in a data flow graph. With the data-flow analysis it is possible to collect information about the read and write operations to variables. In combination with the control flow graph, the data flow for different control flow can be calculated.
+Besides the control flow, it is possible to analyse the data flow in a data flow graph. With the data-flow analysis it is possible to collect information about the read and write operations to variables. In combination with the control flow graph, the data flow for different control flow can be calculated~\cite{mogensen_introduction_2017}.
 
 Last, a call graph can be computed. A call graph maps all method or function calls starting from the main method. It allows to spot dependencies between modules~\cite{prahofer_static_2017}.
 
@@ -190,13 +189,12 @@ We define three levels of complexity, based on the different source code analysi
     \item[Advanced Level] Rules with medium complexity require a control flow, data flow, call graph analysis or more advanced, deterministic analysis techniques. Furthermore, a combination of different analysis methods from the basic complexity level will be categorised as medium complexity. 
     \item[High Level] The high level of complexity covers the clean code rules we think can not be checked with traditional, deterministic analysis techniques such as those described in \Cref{sec:code_analysis}. For this level, it may be indispensable to use statistical methods like machine learning approaches to create an automated checker. It is important to note that we do not prove that no deterministic algorithm exists. 
 \end{description}
-TODO: simpler: low, medium, high level
 
-Based on these levels, we categorise the clean code rules described in \Cref{sec:clean_code}.
+Based on these levels, we categorise the clean code rules described in \Cref{sec:clean_code}. Tabele TODO gives an overview over all rules and our assigned complexity level.
 
 For naming, all rules have in common, that an algorithm would have to extract the names of various entities like variables, classes, functions from the source code first. The AST provides the names and entity types they describe. Extracting all names is a matter of walking over the AST. We see this in the basic complexity level.
 
-The first important rule is the descriptiveness of names. Assessing the descriptiveness of a name is a problem with a high level of complexity. An algorithm would have to understand the purpose of the source code to determine if the name describes the source code. It is an ongoing research effort to use machine learning on code for different tasks. The tasks of code summarisation explore the use of machine learning to generate a natural language description of source code. In a paper from 2019, Alon et al. describe a neural network to represent code as vectors and \enquote{predict a method's name from the vector representation of its body} (TODO: source code2vec: learning distributed representations of code). Based on that research, it may be possible to compare the summarisation result with the chosen name to detect non-descriptive names. Nevertheless, it may be harder to apply such concepts to variable names, since a variable name has less context information compared to the method name with its method body.
+The first important rule is the descriptiveness of names. Assessing the descriptiveness of a name is a problem with a high level of complexity. An algorithm would have to understand the purpose of the source code to determine if the name describes the source code. It is an ongoing research effort to use machine learning on code for different tasks. The tasks of code summarisation explore the use of machine learning to generate a natural language description of source code. In a paper from 2018, Alon et al. describe a neural network to represent code as vectors and \enquote{predict a method’s name from the vector representation of its body}~\cite{alon_code2vec_2018}. Based on that and following research, it may be possible to compare the summarisation result with the chosen name to detect non-descriptive names. Nevertheless, it may be harder to apply such concepts to variable names, since a variable name has less context information compared to the method name with its method body.
 
 The next rule covers the easy pronunciation of names. A rule violation would be the use of abbreviations or non-dictionary words in variable names that are hard to pronounce. An approach with a basic level of complexity could be a minimum number of characters for every name. A more advanced approach could utilise naming conventions such as camel case or underscore separated words to extract the single words of a name and compare it with a dictionary. While it would help to prevent spelling mistakes and should ensure pronounceability, a dictionary may not contain all words. Especially with domain-specific words, this could lead to false alarms.
 
@@ -227,7 +225,7 @@ For objects, the clean code principles require compliance with the Law of Demete
 
 The next rule discourages the mixing of data structures with objects by introducing logic. Such a hybrid would have accessible member variables and methods. An algorithm can detect those hybrids based on an analysis of the AST. We see such a checker in the basic level of complexity.
 
-For classes, the clean code rule enforces a single responsibility per class. As discussed when detecting a single purpose of a function, detecting a single responsibility of a class requires an understanding of the code. Similarly, a checker would fall into the high level of complexity. On the other hand, it may be possible to use the cohesion metric as an indicator for too many responsibilities of a class. A high cohesion will result in smaller classes that form a logical unit. Smaller logical units can be expected to have fewer responsibilities. Cohesion can be measured as \textit{Lack of Cohesion in Methods}(LCOM) as described by Hitz and Montazeri in TODO MEASURING COUPLING AND COHESION IN OBJECT-ORIENTED SYSTEMS. An analysis of the AST and call graph should provide all information to calculate the LCOM number. Therefore, we see an automated checker for cohesion on the advanced level. Using the cohesion as a heuristic for the responsibilities of a class, we could detect potential violations against the Single-Responsibility-Principle with an advanced level of complexity.
+For classes, the clean code rule enforces a single responsibility per class. As discussed when detecting a single purpose of a function, detecting a single responsibility of a class requires an understanding of the code. Similarly, a checker would fall into the high level of complexity. On the other hand, it may be possible to use the cohesion metric as an indicator for too many responsibilities of a class. A high cohesion will result in smaller classes that form a logical unit. Smaller logical units can be expected to have fewer responsibilities. Cohesion can be measured as \textit{Lack of Cohesion in Methods}(LCOM) as described by Hitz and Montazeri~\cite{Hitz95measuringcoupling}. An analysis of the AST and call graph should provide all information to calculate the LCOM number. Therefore, we see an automated checker for cohesion on the advanced level. Using the cohesion as a heuristic for the responsibilities of a class, we could detect potential violations against the Single-Responsibility-Principle with an advanced level of complexity.
 
 An automated check for the decoupling of dependencies can be performed with an advanced level of complexity. All required information is in the code. Finding all class dependencies is possible with the AST. Following the dependencies, it is possible to determine whether they inherit from an abstract class or implement an interface. In that case, the checker would assume a dependency decoupling. Based on our classification schema, this checker would be in the advanced level of complexity.
 
@@ -281,11 +279,10 @@ M = E - N + 2P
 
 $E$ is the number of edges, $N$ the number of nodes and $P$ the number of connected components.  A connected graph is a subgraph, in which all nodes are connected to each other by a path. Following this definition, the cyclomatic complexity can be calculated. Figure \ref{fig:background_control_flow_graph} shows a visualisation of a sample python function. The control-flow graph has six edges, five nodes and is one connected component. Using equation \ref{eq:cyclomatic_complexity}, the cyclomatic complexity is 3.
 
-MacCabe recommends limiting the cyclomatic complexity to 10. NIST confirms this recommendation in TODO. A lower cyclomatic complexity improves testability since the complexity represents the number of execution paths that need to be tested. Therefore, $M$ is the upper bound for the number of test cases for full branch coverage. 
-Furthermore, studies suggest a positive correlation between cyclomatic complexity and defects in functions. TODO source
+MacCabe recommends limiting the cyclomatic complexity to 10~\cite{mccabe_complexity_1976}. A lower cyclomatic complexity improves testability since the complexity represents the number of execution paths that need to be tested. Therefore, $M$ is the upper bound for the number of test cases for full branch coverage. 
 Software that has to comply to safety standards like ISO 26262 (for electronics in automobiles) or IEC 62304 (for medical devices) are mandated to have a low cyclomatic complexity~\cite{isotc_22sc_32_iso_2018, isotisotc_210_iec_2006c_210}.
 
-Although cyclomatic complexity is used throughout the industry, several shortcomings are under critique. First, complexity from data flow is ignored. Working with a larger number of variables and operations, the code becomes more complex, but the cyclomatic complexity does not take this into account. Second, nested code structures are not considered by the metric, although it adds additional difficulty for understanding. TODO source as Halstead critique.
+Although cyclomatic complexity is used throughout the industry, several shortcomings are under critique. First, complexity from data flow is ignored. Working with a larger number of variables and operations, the code becomes more complex, but the cyclomatic complexity does not take this into account. Second, nested code structures are not considered by the metric, although it adds additional difficulty for understanding~\cite{yu_survey_2010}.
 
 \subsection{Halstead Complexity Measures}
 Maurice Halstead introduced the Halstead complexity measures (HCM) in 1977~\cite{halstead1977elements}. Halstead approached the complexity measure with an empirical approach by defining observable and measurable properties and put them into relations.
@@ -333,13 +330,13 @@ Third, the effort for changes translates into real time following the relation:
     T = \frac{E}{18}s.
 \end{displaymath}
 
-Last, the number of bugs correlates with the following relation TODO cite: A survey on metric of software complexity:
+Last, the number of bugs correlates with the following relation~\cite{yu_survey_2010}:
 \begin{displaymath}
     B = \frac{V}{3000}
 \end{displaymath}
 
-HCM focus on the complexity introduced by data manipulation but ignores complexity from the control-flow. Since the cyclomatic complexity focus on the control-flow complexity but not on the data-flow complexity, it is practical to use both together to supplement each drawback (TODO source: A survey on metric of software complexity
-). Additionally, the correlation with the number of bugs is based on the programmer's skill estimation with a fixed value of 3000. Since this varies between projects, such an experiential and fixed number is doubtable (TODO source as before).
+HCM focus on the complexity introduced by data manipulation but ignores complexity from the control-flow. Since the cyclomatic complexity focus on the control-flow complexity but not on the data-flow complexity, it is practical to use both together to supplement each drawback~\cite{yu_survey_2010}.
+). Additionally, the correlation with the number of bugs is based on the programmer's skill estimation with a fixed value of 3000. Since this varies between projects, such an experiential and fixed number is doubtable~\cite{yu_survey_2010}.
 
 \subsection{Software Maintainability Index}
 The software maintainability index was developed by Dan Coleman and Paul Oman in 1994. 16 HP engineers evaluated 16 software systems and scored it in a range from 0 to 100, with 100 representing best maintainability~\cite{coleman_using_1994}. 
@@ -370,7 +367,7 @@ The following sections provide an overview of a few static code analysis tools w
 \subsection{PyLint}
 PyLint is a code analysis tool for the Python programming language. It is open-source and licensed under the GNU General Public License v2.0 and available for all common platforms. PyLint can be executed as a standalone program or can be integrated into common IDEs like Eclipse. A continuous integration pipeline may include PyLint as well to ensure an analysis on every build.
 
-With PyLint, the developer can make sure the code complies to the PEP8 (TODO) style guide for python coding. This includes name formatting, line length and more. It does not calculate a metric for the code but instead warns about violated principles. Additionally, PyLint can detect common errors like missing import statements that may cause the program to crash at the start or later at runtime. To support refactoring, PyLint can detect duplicated code and will suggest refactoring the code.
+With PyLint, the developer can make sure the code complies to the PEP 8 style guide for python coding~\cite{pep8}. This includes name formatting, line length and more. It does not calculate a metric for the code but instead warns about violated principles. Additionally, PyLint can detect common errors like missing import statements that may cause the program to crash at the start or later at runtime. To support refactoring, PyLint can detect duplicated code and will suggest refactoring the code.
 
 PyLint can be configured to ignore some checks and to disable specific rules. To expand the ruleset, a developer can write a "checker", an algorithm to check for a specific rule. The algorithm can analyse the raw file content, a token stream of the source code or an AST representation. The checker can raise a rule violation by providing the location information and the problem type to the PyLint framework and it will be included in the PyLint analysis report.
 
@@ -400,14 +397,14 @@ Depending on the language, Codacy supports scanning for common security and main
 Codacy allows customisation by disabling certain rules and changing rule parameters like the pattern to fit the rules to the project. 
 
 \subsection{Sonarqube}
-Sonarqube is an analysis tool to maintain high code quality and security. It supports 15 programming languages in the open-source version licensed under the GNU Lesser General Public License, Version 3.0. In the Developer Edition, Sonarqube supports 22 languages and 27 languages in the enterprise edition. Sonarqube is a self-hostable server application with a SonarScanner client module that can be integrated into build pipelines like Gradle and Maven as well as a command-line tool for other build pipelines. The SonarScanner reports the result to the server, that serves a website to review the results. With the Developer Edition, branch and pull request analysis are possible and a pull request will be annotated with the analysis results.
+Sonarqube is an analysis tool to maintain high code quality and security. It supports 15 programming languages in the open-source version licensed under the GNU Lesser General Public License, Version 3.0. In the Developer Edition, Sonarqube supports 22 languages and 27 languages in the enterprise edition. Sonarqube is a self-hostable server application with a SonarScanner client module that can be integrated into build pipelines like Gradle and Maven as well as a command-line tool for other build pipelines. The SonarScanner reports the result to the server, that serves a website to review the results. With the Developer Edition, branch and pull request analysis are possible and a pull request will be annotated with the analysis results. TODO source
 
 For Python, Sonarqube offers more than 170 rules. These rules are in the following categories:
 \begin{description}
     \item[Code Smells:] Code Smells like duplicated String literals are flagged with four different levels of severity (from higher to lower severity): Blocker, Critical, Major, Minor. Explanations and examples are accessible for the developer to understand and fix the issue. The analysis is more in-depth than AST-based solutions since it additionally uses control and data-flow analysis.
     \item[Bug:] Multiple rules cover bugs that would definitively result in a runtime exception and program termination. As an example, calling a function with the wrong number of arguments will be flagged with the highest severity, since it will raise a TypeError during runtime. Although programmers may notice issues like this during coding and testing, the issue can remain hidden if it only triggers a special execution path of the system.
-    \item[Security Hotspot: ] The Security Hotspot analysis unfolds pieces of code that may be a real vulnerability and requires a human review. The scanning has a hotspot detection for seven out of the OWASP Top Ten Web Application security risks (TODO src). A flagged hotspot contains a detailed explanation of the reason for being flagged and a guide on how to review this hotspot. The recommendation to double-check a piece of code can help to prevent a security vulnerability from being deployed to production.
-    \item[Security Vulnerabilities: ]  A security vulnerabilities analysis reveal code that is at risk of being exploited and has to be fixed immediately. Especially misconfiguration of cryptographic libraries can be revealed easily and future damage prevented.   
+    \item[Security Hotspot:] The Security Hotspot analysis unfolds pieces of code that may be a real vulnerability and requires a human review. The scanning has a hotspot detection for seven out of the OWASP Top Ten Web Application security risks (TODO src). A flagged hotspot contains a detailed explanation of the reason for being flagged and a guide on how to review this hotspot. The recommendation to double-check a piece of code can help to prevent a security vulnerability from being deployed to production.
+    \item[Security Vulnerabilities:]  A security vulnerabilities analysis reveal code that is at risk of being exploited and has to be fixed immediately. Especially misconfiguration of cryptographic libraries can be revealed easily and future damage prevented.   
 \end{description}
 
 Additionally, Sonarqube offers several metrics like test coverage and a custom derivate of Cyclomatic Complexity named Cognitive Complexity~\cite{campbell2018cognitive}. The authors see several shortcomings in the original Cyclomatic Complexity model:
@@ -428,6 +425,7 @@ The method-level Cognitive Complexity score represents a relative complexity dif
 
 Developers can extend Sonarqube similarly to PMD. They can write a Java plugin that can access the AST but also a semantic model of the code. Additional, extensions can be created that provide the functionality to other extensions. The Java plugin is compiled into a .jar file and placed into the plugin dir of the Sonarqube installation. For simpler rules, XPath expressions are possible through the web interface and allow a quick extension. For instance, if developers observe bad code style during a pull request review, they can quickly write a rule to enforce this rule in all subsequent pull requests automatically.
 
+TODO
 Integration in continuous integration, manual review
 
 Tools review for all tools that check different stuff
