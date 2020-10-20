@@ -41,17 +41,6 @@ Chaotic code, on the other hand, is harder to read and understand. The author ar
 
 The following sections explain the clean code guidelines following the book by Robert C. Martin~\cite{martin_clean_2009}.TODO give a more detailed overview of the next chapters
 
-\subsection{General Rules}
-The following general rules are basic rules that act as a foundation for more specific rules.
-Following these rules create essential building blocks for the understandability and readability of the code. 
-
-The first rule is to follow standard conventions. Programming languages have conventions on formatting, naming, indentation levels and more. For the programming language Python, the PEP-8 style guide describes the conventions\footnote{\url{https://www.python.org/dev/peps/pep-0008/}} TODO to ref. If developers follow these conventions, the code becomes more familiar for other developers using the same conventions. Furthermore, it is common practice for big open-source projects to have their own contributing guidelines with coding conventions. For example, the Visual Studio Code GitHub repository contains a \enquote{How to contribute} documentation and a section on coding guidelines\footnote{\url{https://github.com/Microsoft/vscode/wiki/Coding-Guidelines}}.  Especially in such large open-source projects, many developers are working asynchronously on code. Therefore, having conventions and enforcing the compliance of the guidelines by rejecting change requests prevents the code from becoming a mosaic of different coding styles.
-
-The second general rule is to keep things simple. This rule states that aiming for a simple solution as well as encoding this solution in a simple code makes it faster to read and understand for developers.
-A simpler software architecture enables a developer to modify code and grasp the impact of these modifications better since a simple code does not hide dependent side-effects behind complex code. Unnecessary complexity, on the other hand, makes it harder to understand the code and dependent side-effects. This could increase the risk to introduce bugs into the software.
-
-The third general rule states that every time a developer touches the code, he should also improve the quality of the code or at least not worsen it. By doing a small fix and postponing the clean code principles, the code will become more chaotic until it is refactored. As a result, every change should keep at least keep the code level quality if not improving it.  
-
 \subsection{Naming}\label{sec:naming}
 The naming section covers several rules for naming variables, functions, types and classes.
 Good naming can make it easier to read and understand code. \enquote{Good} naming is an opinionated topic; For Robert C. Martin, the key factor of good naming is the descriptiveness of names~\cite{martin_clean_2009}. Descriptive names provide the reader with enough information to understand what a variable stores or what a function computes. Abbreviations or symbolic names like \textit{a1, a2} are not descriptive and do not provide information about the meaning. Using symbolic names for mathematical expressions could be an exception to the rule if the naming mirrors the expression.
@@ -195,11 +184,16 @@ Last, a call graph can be computed. A call graph maps all method or function cal
 \section{Clean Code Complexity Levels}
 We described the clean code rules in \Cref{sec:clean_code}. This work focus on the automated checking of clean code rules. Some rules can be checked straighforward with an algorithm wheras others may be too abstract to be checked in an automated way. In this Section, we want to categorise the clean code rules into different complexity levels. The complexity levels are based on the complexity of implementing an automated rule checker. 
 
-We define three levels of complexity, based on the different source code analysis techniques and effort necessary:
+We define three levels of complexity, based on the different source code analysis techniques and effort needed:
 \begin{description}
     \item[Basic Complexity] The level of basic complexity covers all rules that can be checked by analysing the text, token stream or AST of the program.
     \item[Advanced Complexity] Rules with medium complexity require a control flow, data flow, call graph analysis or more advanced, deterministic analysis techniques. Furthermore, a combination of different analysis methods from the basic complexity level will be categorized as medium complexity. 
     \item[High Complexity] The level of high complexity covers the clean code rules we think can not be checked with traditional, deterministic analysis techniques such as those described in \Cref{sec:code_analysis}. For this level, it may be indispensible to use statistical methods like machine learning approaches to create an automated checker. If we do not think of an algorithm that could detect a non-clean code pattern, a machine learning algorithm may be trained to imitate a human decider. It is important to note that we do not proove that no such algorithm exists. Instead, we base our categorisation on the absent of results researching this problem. 
+\end{description}
+
+Based in these levels, we would categorize the clean code rules described in \Cref{sec:clean_code} as follows:
+\begin{description}
+    \item[Standard Conventions] 
 \end{description}
  
 
