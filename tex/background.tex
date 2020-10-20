@@ -47,7 +47,7 @@ Good naming can make it easier to read and understand code. \enquote{Good} namin
 
 To come up with a descriptive name, it is helpful to include a verb or verb expression for function names, because functions express an action. For class names, a noun emphasises the object character of the class.
 
-Another helpful property of a name is an easy pronunciation since it is easier to read and to talk about the code with other developers. Consequently, it is useful to make longer but descriptive and pronounceable names, especially since the autocomplete feature of IDEs will free the developer from typing the long name. Additionally, searching for long names works better than for short names, because long names are more likely to be unambiguous compared to shorter names. An acceptable exception to this rule are short variables in a small scope (e.g. variable \textit{i} in a loop), but using \textit{i} in a large scope could be ambiguous and troublesome for searching and understanding.
+Another helpful property of a name is an easy pronunciation since it is easier to read and to talk about the code with other developers. For reading, the pronounciation is necessary for the inner subvocalization\footnote{the internal speech when reading}. Non-dictionary words or unusual abbreviations are harder to pronounce. Consequently, it is useful to make longer but descriptive and pronounceable names, especially since the autocomplete feature of IDEs will free the developer from typing the long name. Additionally, searching for long names works better than for short names, because long names are more likely to be unambiguous compared to shorter names. An acceptable exception to this rule are short variables in a small scope (e.g. variable \textit{i} in a loop), but using \textit{i} in a large scope could be ambiguous and troublesome for searching and understanding.
 
 An old naming convention is the Hungarian naming convention. In Hungarian naming, the type is encoded as a prefix of a variable name. TODO sample and source. Nowadays, the type encoding is redundant to the automatic type inference of IDEs. The automatic type inference also prevents confusion for the reader if the type in the notation and the actual type are inconsistent. The same logic applies to a prefix for member variables and methods, since an IDE can automatically highlight those different tokens.
 
@@ -186,16 +186,40 @@ We described the clean code rules in \Cref{sec:clean_code}. This work focus on t
 
 We define three levels of complexity, based on the different source code analysis techniques and effort needed:
 \begin{description}
-    \item[Basic Complexity] The level of basic complexity covers all rules that can be checked by analysing the text, token stream or AST of the program.
-    \item[Advanced Complexity] Rules with medium complexity require a control flow, data flow, call graph analysis or more advanced, deterministic analysis techniques. Furthermore, a combination of different analysis methods from the basic complexity level will be categorized as medium complexity. 
-    \item[High Complexity] The level of high complexity covers the clean code rules we think can not be checked with traditional, deterministic analysis techniques such as those described in \Cref{sec:code_analysis}. For this level, it may be indispensible to use statistical methods like machine learning approaches to create an automated checker. If we do not think of an algorithm that could detect a non-clean code pattern, a machine learning algorithm may be trained to imitate a human decider. It is important to note that we do not proove that no such algorithm exists. Instead, we base our categorisation on the absent of results researching this problem. 
+    \item[Basic Level] The level of basic complexity covers all rules that can be checked by analysing the text, token stream or AST of the program.
+    \item[Advanced Level] Rules with medium complexity require a control flow, data flow, call graph analysis or more advanced, deterministic analysis techniques. Furthermore, a combination of different analysis methods from the basic complexity level will be categorized as medium complexity. 
+    \item[High Level] The high level of complexity covers the clean code rules we think can not be checked with traditional, deterministic analysis techniques such as those described in \Cref{sec:code_analysis}. For this level, it may be indispensible to use statistical methods like machine learning approaches to create an automated checker. It is important to note that we do not proove that no deterministic algorithm exists. 
 \end{description}
+TODO: simpler: low, medium, high level
 
-Based in these levels, we would categorize the clean code rules described in \Cref{sec:clean_code} as follows:
-\begin{description}
-    \item[Standard Conventions] 
-\end{description}
+Based in these levels, we categorize the clean code rules described in \Cref{sec:clean_code}.
+
+For naming, all rules have in common, that an algorithm would have to extract the names of entities likevaraibles, classes, functions, etc. from the source code first. The AST provides the names and entity types they describe. Extracting all names is a matter of walking over the AST. We see this in the basic complexity level.
+
+The first important rule is the descriptiveness of names. Assesing the descriptiveness of a name is problem with high level of complexity. An algorithm would have to understand the purpose of the source code to determine if the name describes the source code. It is an ongoing research effort to use machine learning on code for different tasks. The tasks of code summarization explores the use of machine learning to generate a natural language description of source code. In a paper from 2019, Alon et. al describe a neural network to represent code as vectors and \enquote{predict a method's name from the vector representation of its body} (TODO: source code2vec: learning distributed representations of code). Based on that research, it may be possible to compare the summarization result with the choosen name to detect non-descriptive names. Nevertheless, it may be harder to apply such concepts to variable names, since a variable name has less context information compared to the method name with its method body.
+
+The next rule covers the easy pronunciation of names. A rule violation would be the use of abbreviations or non-dicitonary words in variable names that are hard to pronounce. An approach with basic level of complexity could be a minimum number of characters for every name. A more advanced approach could utilize naming conventions such as camel case or underscore seperated words to extract the single words of a name and compare it with a dictionary. While it would help to prevent spelling mistakes and should ensure pronounceability, a dictionary may not contain all words. Especially with domain-specific words, this could lead to false alarms.
+
+Variable names in a small, lcoal scope are excepted from the rule of pronounceability and thus longer names. To determine the scope of a variable, the data-flow analysis could be used. With the analysis, the previous rule could include this exception. Due to the data-flow analysis, we categorize this rule into the advanced level of complexity.
+
+Detecting hungarian notation could be accomplished with regular expressions on the variable names, since the hungarian notation follows predefined notation strategies. Therefore, such a rule checker would be basic level of complexity.
+
+
+For functions, the clean code principles define multiple rules. 
+First, functions should be smaller than 20 lines of code. A checker for this rule would be at the basic level of complexity, since the AST contains all the necessary information about the function body. If the metadata such as line number are retained during AST construction, a checker can calculate the lines of code for the function body.
+
+The next rule covers the function call in the condition and body part of a conditional such as an if-statement. An algorithm can scan the AST to check the condition and body nodes of the conditional statement.
+
+Regarding the purpose of a function, the clean code rules suggest a function to have one purpose and to operate on one abstraction level. Counting the number of purposes requires an understanding of the meaning of the code. Similar understanding would be necessary for the level of abstraction. We argue such a checker would be in the high level of complexity category, since the understanding of code could only be achieved with machine learning. The aforementioned research field of code summarization could be beneficial for this task, too. A natural language description of a function may require the model to \enquote{understand} the purpose and task in orer to articulate it in natural language. It may be possible to use work in this field to detect functions with multiple purposes or abstraction levels.
  
+The rule that limits the number of function arguments is on a basic level of complexity. The AST contains the information about the code structure and therefore all function arguemnts. Counting those requires the algorithm to search for function nodes in the AST and count the number of arguemnts.
+
+The next rule forbids side-effects of a function. Detecting side-effects can be broken down into a two step process.
+First, tracing the data manipulation of a functions is at the advanced level of complexity. With a data-flow analysis and call graph, it is possible to check what varaibles a function manipulates. Second, the classification wether an effect of a function is a side-effect requires an understanding of the intended effect of a function that is described in the name. We argue the understanding of the intended effect is at the high level of complexity. 
+
+The clean code rules discourage the use of error code to indicate exceptions. If the error codes are not part of the programming lanuage specification (as they are not for Python), it could be hard for an automated checker to distinguish between returned error codes and non-error values. There may be indicators such as an early return of a constant value or comparing a returned value with a constant value.This indicators as a heuristic may be good enough for practical use. We would classify such a checker at the high level of complexity. 
+
+The automated checking for repeated code is an active research topic. As described in \Cref{sec:functions}, efforts are made with several tools to detect repeated code. We therefore categorize a code duplication checker to be in the high level of complexity.
 
 \section{Quantitative Metrics for Code Quality}
 To define the quality of a software product, it is necessary to have methods to express the code quality as quantitative units. This has multiple advantages:
