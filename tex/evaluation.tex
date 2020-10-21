@@ -69,7 +69,7 @@ In conclusion, the support vector classifier does not fullfill our acceptance cr
 Furthermore, the train time limits our experiments. It is important to note that we did no further investigation in improving the train time or the perfromance. Maybe we could have increased classification and runtime performance with choosing a different kernel function such as a linear kernel function, but we decided to invest our efforts into the other, more promising models. 
 
 \subparagraph{Finding 2: Random Forest}
-Radnom forest classifier perform well and fullfil our satisficing condition on precision. It achieves f1 scores of over 0.8 for the RN type and over 0.9 for the CCS and CC type.
+Random forest classifier perform well and fullfil our satisficing condition on precision. It achieves f1 scores of over 0.8 for the RN type and over 0.9 for the CCS and CC type.
 The best performing random forest classifier uses a 0.5 oversampling ration, 100 trees, type encoding and no additional class weighting.
 
 
@@ -96,6 +96,9 @@ And finally, we would expect a bigger impact of class balancing, if the random f
 Additionally, encoding the token types results in a slightly better performance than only encoding token values. To further quantify the impact, a more specific experiment setup would be necessary.
 
 \subparagraph{Finding 3: Gradient Boosting Classifier}
+The gradient boosting classifier performs well on all problem types and fulfils our satisficing  metric. We achieve an f1 score of over 0.9 for the RN and CC type and 0.84 for the CCS type. This best performing configuration is trained with 300 boosting stages, a learning rate of 0.2 and type encoding.
+
+%old overall
 The overall best performing gradient boosting works with 300 boosting steps and a learning rate of 0.2. For the RN problem type, it delivers an f1 score of 0.9196, a recall score of 0.8666 and a precision of 0.9796. Comparable performance is measured for the CC type: 0.9008 f1, 0.8673 recall and 0.937 precision. The performance decreases for the CCS type to 0.8419 f1, 0.7902 recall and 0.9009 precision for the same, best-performing configuration. A decrease in performance for the CCS problem type applies to all configuration in comparison to the CC type. Nevertheless, the gradient boosting classifier fulfils our satisficing criteria of a precision score higher than 0.8.
 
 Over- and undersampling does not have a positive effect: The f1 score of the 200 stages, 0.2 learning rate and 1.0 subsampling drops by 0.3459 for a 0.5 oversampling ratio for the RN problem type. With an undersampling ratio of 0.5, the f1 score decreases by 0.3761 to 0.4545 on the test set. The performance deterioration for the CCS and CC type are lower but still significant: For CCS, the f1 score drops by 0.0782 to 0.6948 with oversampling and by 0.0494 to 0.6836 with undersampling. Using over- or undersampling as rebalancing strategies does not improve the performance of the classifier. The best classifier configuration performs better on the RN and CC problem type compared to the CCS problem type (0.9196 and 0.9008 vs 0.84119 f1 on test dataset). This allows two implications: Since the RN type is strongly underrepresented in the train set (class frequency of 0.21\%) compared to the CCS class (2.26\% class frequency), the gradient boosting classifier does not suffer from strong class imbalances. On the other hand, the CCS problem type seems harder to learn, contradictory to our assumptions about the difficulty levels of the different problem types.
