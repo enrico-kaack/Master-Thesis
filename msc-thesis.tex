@@ -58,8 +58,13 @@
 \usepackage{listings}
 \usepackage{color}
 
+%better references
 \usepackage{hyperref}
 \usepackage{cleveref}
+
+%appendix
+\usepackage{appendix}
+
 
 
 \definecolor{mygreen}{rgb}{0,0.6,0}
@@ -231,16 +236,23 @@ An overall short summary of results
 What was successful, what not (and hypotheses why)
 Hints for further future work/extension
 
+
+  
+
 \clearpage
 
 \bibliographystyle{plain}
 \bibliography{references}
 
 \appendix
+\appendixpage
+\addappheadtotoc
 \setcounter{table}{0}
 \renewcommand{\thetable}{A\arabic{table}}
 
+\chapter{RQ2: Model Performances}
 \input{tables/rq2_all_tables.tex}
-\input{tables/rq3_all_tables.tex}  
+\chapter{RQ3: Model Performances on Manipulated Data}
+\input{tables/rq3_all_tables.tex}
 
 \end{document}
