@@ -61,58 +61,105 @@ We list all hyperparameter configurations and the corresponding training, test a
 
 
 \subparagraph{Finding 1: Support Vector Classifier}
-The support vector classifier in our configurations is not able to detect any problem type. We see as the main reason the sensitivity towards class imbalance. The  f1 score of the CCS type is roughly ten times higher than for RN. Additionally, the f1 score for CC is roughly double as high as the score for CCS. Although we measured this difference after training on undersampled data, the factors correlate with the number of samples in the original dataset. The number of samples for CCS is roughly ten times higher than for RN and CC has double the number of samples compared to CCS. TODO explanation??
-Another supporting observation is the positive impact of class balancing. Class balancing increases the recall for all problem types up to 0.79 for RN, 0.5 for CCS and 0.55 for CC. The increase in recall implies a reduction of false-negatives. Such a reduction is possible if the classifier reduces its bias towards the negative class. 
+The support vector classifier in our configurations is not able to detect any problem type. 
+Due to the quadratic time complexity during training described in \Cref{sec:svm_quadratic_complexity}, we were only able to test a few configurations. We tested configurations with a general subsampling and undersampling to reduce the input size and to achieve a manageable training time. Therefore, we do not have data for non-resampled datasets or oversampled datasets to draw reasonable conclusions.
 
-Due to the quadratic time complexity during training described in \Cref{sec:svm_quadratic_complexity}, we were only able to test a few configurations. We tested configurations with a general subsampling and undersampling to reduce the input size and to achieve a manageable training time. Therefore, we do not have data for non-resampled datasets or oversampled datasets to investigate the imbalance impact further.
+We can only observe some effects:
+First, the class balancing increases the recall for all problem types up to 0.79 for RN, 0.5 for CCS and 0.55 for CC. Second, undersampling with a ratio of 0.1 result in a f1 performance of zero for the tested RN and CCS problem types. Third, the performance for the CC type is double the performance for the CCS type (0.11 vs 0.06) and the performance for the CCS type is ten times the performance of the RN type. 
+The zero performance with an 0.1 undersampling ratio may be an indicator of a strong sensitivity for class imbalance. But we have no supporting data for this hypothesis. Jiang Tian et. al describes a poor performance on imbalanced datasets with conventional support vecotr machines.(TODO: source Imbalanced classification using support vector machine ensemble)
 
-In conclusion, the support vector classifier does not fulfil our acceptance criteria of precision higher than 0.8. Especially the sensitivity for class imbalance makes the use for our problem domain with heavily imbalanced datasets pointless.  
-Furthermore, train time limits our experiments. It is important to note that we did no further investigation in improving the train time or performance. Maybe we could have increased classification and runtime performance with choosing a different kernel function such as a linear kernel function. However, we decided to invest our efforts into the other, more promising models. 
+In conclusion, the support vector classifier does not fulfil our acceptance criteria of precision higher than 0.8. Especially the sensitivity for class imbalance makes the use for our problem domain with severely imbalanced datasets pointless.  
+Furthermore, train time limits our experiments. It is important to note that we did no further investigation in improving the train time or performance. Maybe we could have increased classification and runtime performance by choosing a different kernel function such as a linear kernel function or by following strategies adressing this problem (TODO source as before with Jiang Tian et. al). However, we decided to invest our efforts into the other, more promising models. 
 
 \subparagraph{Finding 2: Random Forest}
 Random forest classifier performs well and fulfils our satisficing condition on precision. It achieves f1 scores of over 0.8 for the RN type and over 0.9 for the CCS and CC type.
 The best performing random forest classifier uses a 0.5 oversampling ration, 100 trees, type encoding and no additional class weighting.
 
 
-Our observation indicates that the random forest classifier profit from more data, even with data duplication. We base this thesis on our observations with over- and undersampling the training data. All oversampled configurations perform better on the test set than their not resampled counterparts. This performance improvement is especially large for the RN type, with an f1 score increase of 0.03-0.05. For the CC and CCS problem type, the performance growth is smaller, with only around 0.01 in f1 score. We explain the difference between the problem types in the difference in class frequency. For the RN problem type, only 0.21\% of the samples are labelled positive, whereas 2.66\% of the samples for CCS and 4.87\% of the samples for CC are labelled positive. Oversampling the data with a ratio of 0.5 results in more duplicated samples from the minority class for the RN problem type than for CCS and CC. Table TODO contains detailed measures of the train set size after oversampling.
+Our observation indicates that the random forest classifier profit from more data, even with data duplication. We base this thesis on our observations with over- and undersampling the training data. 
+All oversampled configurations perform better on the test set than their not resampled counterparts. This performance improvement is especially large for the RN type, with an f1 score increase of 0.03-0.05. For the CC and CCS problem type, the performance growth is smaller, with only around 0.01 in f1 score. We explain the difference between the problem types in the difference in class frequency. For the RN problem type, only 0.21\% of the samples are labelled positive, whereas 2.66\% of the samples for CCS and 4.87\% of the samples for CC are labelled positive. Oversampling the data with a ratio of 0.5 results in more duplicated samples from the minority class for the RN problem type than for CCS and CC. \Cref{tab:resampling_size_performance_rf} contains detailed measures of the train set size after oversampling and the performance metrics.
+
 For undersampling, we observe a decrease in performance for all problem types. For the RN problem type, the f1 performance drops up to 0.51, whereas the performance decrease for CCS and CC is lower with up to 0.12 and 0.07, respectively (undersampling ratio of 0.5). We explain this difference again with the difference in class frequency and the resulting change in training size. With an undersampling ratio of just 0.1, fewer samples from the majority class get deleted and the performance for the RN type only deteriorates by 0.08.
-The different performance decrease between the CCS and CC type can also result from the difference in class frequency. The undersampling reduces the training size for CCS to TODO from table whereas for CC just to TODO. With an undersampling ratio of just 0.1, the effect is smaller and does not reflect in the performance statistics for CCS and CC.
+The different performance decrease between the CCS and CC type can also result from the difference in class frequency. The undersampling reduces the training size for CCS to (TODO from table) whereas for CC just to TODO. With an undersampling ratio of just 0.1, the effect is smaller and only visible in for the RN type (see \Cref{tab:resampling_size_performance_rf}).
 
 
+\begin{table}[]
+\begin{tabularx}{\textwidth}{lXXXXll}
+\toprule
+                    & \multicolumn{3}{l}{Test F1 Score} & \multicolumn{2}{l}{Dataset} &  \\ \midrule
+                    & RN        & CCS        & CC     & Size            & Change    &  \\ \midrule
+Original          &  0.7599   &  0.9208    &  0.9211  &  TODO           &           &  \\
+0.5 Oversampling  &  0.8379   &  0.9329    &  0.929   &                 &           &  \\
+1.0 Oversampling  &  0.8358   &  0.9287    &  0.9273  &                 &           &  \\ \midrule
+0.1 Undersampling &  0.6857   &  0.9268    &  0.929   &                 &           &  \\
+0.5 Undersampling &  0.2583   &  0.806     &  0.8632  &                 &           &  \\ \bottomrule
+\end{tabularx}
+\caption{Dataset sizes for different resampling strategies with f1 performance on the test set. The f1 performance for the speciifc resampling is for a configuration with 100 trees, no class weighting and type encoding.}
+\label{tab:resampling_size_performance_rf}
+\end{table}
 
-Our experiments show that the random forest classifier is not very sensitive to class imbalance. Only an extreme class imbalance as for the RN type with a class distribution 0.21\% vs 99.79\% limits the insensitivity of the classifier. We conclude this thesis from two main observations. 
-First, all performance metrics for the CCS and CC problem type are comparable for all configuration without over- or undersampling. If the model would be sensitive to class imbalance, the higher class imbalance of the CCS type (97.34\% vs 2.66\%) should reflect in a worse performance than the CC type. We do not observe such performance differences. By contrast, the class frequency of positive samples for the RN type is by a factor twelve smaller than for the CCS type. The resulting extreme class imbalance seems to affect the performance negatively. 
+
+Our experiments show that the random forest classifier is not very sensitive to class imbalance. Only an extreme class imbalance as for the RN type with a class distribution 0.21\% vs 99.79\% limits the classifier. We conclude this thesis from two main observations. 
+First, all performance metrics for the CCS and CC problem type are comparable for all configuration without over- or undersampling. If the model would be sensitive to class imbalance, the higher class imbalance of the CCS type (97.34\% vs 2.66\%) should reflect in a worse performance than the CC type. We do not observe such performance differences. By contrast, the class frequency of positive samples for the RN type is by a factor twelve smaller than for the CCS type. The resulting severe class imbalance seems to affect the performance negatively. 
 Second, the class weighting has no positive influence on the performance of the classifier. With balanced class weighting, the weighting for each class is adjusted inversely proportional to the class frequency. If the random forest classifier were sensitive to class imbalance, we would expect a performance improvement. Instead, we see a slight deterioration in f1 performance up to 0.04.
 
 
-Type encoding increases the performance of the random forest classifier slightly for the CCS and CC type. We observe a slight increase of up to 0.02. For the RN problem type, we observe a similar improvement with oversampling. For undersampling, we observe a significant decrease of \~0.09 in f1 performance. TODO clarrify that type encoding and over/undersampling is what we are talking about)
-We expected a positive impact as seen for the CCS and CC type since the type encoding reduces the variety of possible input values to the model. For the index-based encoding of the token values, there are 100,001 possible values. In contrast, the number of different token types is significantly smaller with only 61 different types (TODO see attachment list of types of tokeniser). For instance, a string token would always have the same token type, no matter the content of the string. On the other side, the token value would change depending on the string value. We think this would simplify the problems for the model. TODO, we evaluated the feature importance for the random forest in figure TODO).
-The class imbalance may cause the unexpected results from the RN type since the wide variety of possible inputs increases with 40 instead of 20 input values. The number of positive samples that provide the pattern encoded in the token types may be too small to learn it. Supportive for this reasoning are performance improvements for oversampling, with which the model would have more samples to learn this pattern. TODO really?
+Type encoding increases the performance of the random forest classifier slightly for the CCS and CC type of up to 0.02. For the RN problem type, we observe a similar improvement for oversampling with type encoding. For undersampling with type encoding, we observe a significant decrease of \~0.09 in f1 performance. 
+We expected type encoding to have a more significant impact. The types should work as an additional feature the classifier can utilize. With the index-based encoding of the token values, 100,001 possible values can be encoded. The number of different token types is significantly smaller with only 61 different types (see the complete list of possible token types in \Cref{fig:tokenizer_types}). Especially for function and method names, it would allow the model to treat two different function calls as one. 
+However, the improvement is lower than expected. At least for the CCC type, the \texttt{NAME} type of a method call should be easier to learn on than the changing value of the method name.  
 
-
-Overall, it seems like a random forest classifier can handle moderate class imbalance reasonably well. If the classes are severely imbalanced as for the RN problem type, the performance of the classifier suffers.
-We base this conclusion on several observations: First, we see better performance for the CCS and CC problem type overall, both of which have a more balanced distribution than the RN problem type. It is important to note that the different problem types also have different difficulty levels for the model. Nevertheless, we assume the RN type is easier to detect for a model since the model only has to learn two subsequent tokens anywhere in the sequence. Therefore, we attribute this effect to the class distribution, but we remark that this may be tested in an additional, isolated experiment. 
-Second, without over- or undersampling, we observe similar performance for CCS and CC, despite their different frequency in the train set (0.21\% of samples contain the RN type, 2.66\% CCS and 4.87\% CC). 
-Moreover, we would expect a more significant impact of class balancing, if the random forest classifier would be sensitive to class imbalance.
-Additionally, encoding the token types results in a slightly better performance than only encoding token values. To further quantify the impact, a more specific experimental setup would be necessary.
+\begin{center}
+    \fbox{\begin{minipage}{\dimexpr\textwidth-0.5cm}
+    Overall, the random forest classifier handles class imbalance fairly well and can profit from more data, even if it contains duplicates from oversampling. Undersampling decrease the performance of the classifier. Type encoding has slight positive impact on the performance.
+    \end{minipage}}
+\end{center}
 
 \subparagraph{Finding 3: Gradient Boosting Classifier}
 The gradient boosting classifier performs well on all problem types and fulfils our satisficing metric. We achieve an f1 score of over 0.9 for the RN and CC type and 0.84 for the CCS type. This best performing configuration is trained with 300 boosting stages, a learning rate of 0.2 and type encoding.
 
 
 The gradient boosting classifier is sensitive to less training samples or samples with less variety. Two main observations allow this conclusion. First, we observe a decrease in performance for under- and oversampling. For undersampling the RN type with a ratio of 0.5, the f1 score drops from 0.8306 by roughly 45\% and by approximate 41\% for oversampling with a ratio of 0.5. For the CCS type, the f1 score drops from 0.773 by approximately 9\% for over- and undersampling. The smallest drop is for the CC type from 0.8567 by nearly 7\% for over- and undersampling. With undersampling, we reduce the number of examples and with oversampling, we increase the minority class without increasing the variety of samples. Since the performance characteristics for over- and undersampling are comparable, we conclude that more samples with the same variety further decrease the model's performance. The decrease in f1 score is caused by a drop in precision, i.e. an increase of false positives. With less data, the classifier tends to be biased towards the positive class.
-Second, the larger performance drop for the RN problem type and the smallest decrease for the CC type correlates with the number of training samples. A larger decrease in training data results in a larger drop in performance. See table TODO for change in sample size for undersampling. 
+Second, the larger performance drop for the RN problem type and the smaller decrease for the CC type correlates with the number of training samples. A larger decrease in training data results in a larger drop in performance. See table TODO for change in sample size for undersampling. 
 
 The random forest classifier is insensitive towards class imbalance. One supporting point is the aforementioned performance decrease with over- or undersampling. Additionally, the performance of the RN problem type is comparable to the CC problem type despite their difference in class imbalance (0.21\% class frequency for RN vs 4.87\% for CC). 
 
-The random forest classifier has problems learning the CCS type. Contradictory to our assumptions, the CCS problem type is easier to learn than the CC type. The precision is lower by up to 0.05, whereas the recall is lower by up to 0.11 (without resampling and $\geq 200$ boosting stages). TODO find explanation^^ --> problem type CCS is trained on a direct comparison in the condition. if there is a negation it is not seen as rule violation -->maybe it generalises more on the <> as for CC and is confused if it is restricted --> check FP of this configuration
-
+The random forest classifier has problems learning the CCS type. Contradictory to our assumptions, the CC problem type is easier to learn than the CCS type. The precision is lower by up to 0.05, whereas the recall is lower by up to 0.11 (without resampling and $\geq 200$ boosting stages). TODO find explanation^^ --> problem type CCS is trained on a direct comparison in the condition. if there is a negation it is not seen as rule violation -->maybe it generalises more on the <> as for CC and is confused if it is restricted --> check FP of this configuration . 11/20 fp would been detected by cc
 Subsampling the train data for the individual base learner during training has no impact. The performance for all subsampling ratios are identical, so the individual base learners are trained with the same data as before.
+
+
+\begin{lstlisting}[float,floatplacement=H, language=Python, label=lst:gbc_false_positive, caption={False-positive samples for the best performing random forest classifier with 300 boosting stages, a learning rate of 0.2, type encoding and without resampling for the CCS type. We removed spaces between tokens if necessary, but leave the intendation as in the sample.}]
+    if input.dim() == 4 and mode == 'bicubic' : 
+    assert align_corners is not
+DEDENT,NAME,NAME,OP,NAME,OP,OP,OP,NUMBER,
+NAME,NAME,OP,STRING,OP,NEWLINE,INDENT,NAME,
+NAME,NAME,NAME
+########################
+
+input_data = [ indices , values , default ] 
+if <UNKNOWN> and n > 1 : 
+       
+NEWLINE,NAME,OP,OP,NAME,OP,NAME,OP,NAME,OP,
+NEWLINE,NAME,NAME,NAME,NAME,OP,NUMBER,OP,
+NEWLINE,INDENT
+########################
+: 
+<UNKNOWN> 
+if target is none or source is none : 
+    return false 
+
+OP,NEWLINE,INDENT,STRING,NEWLINE,NAME,NAME,
+NAME,NAME,NAME,NAME,NAME,NAME,OP,NEWLINE,
+INDENT,NAME,NAME,NEWLINE,DEDENT
+\end{lstlisting}
 
 The gradient boosting classifier is robust to overfitting the training data. We observe a comparable train and test performance for all non-resampled configurations. Only with under- or oversampling, the classifier seems to overfit the train data, since the test performance is worse the train performance. 
 Another indicator for the robustness is the performance increase when using more boosting stages. Increasing the boosting stages increase the recall and precision for all problem type. Our best model with 300 boosting stages and a 0.2 learning rate can probably be more fine-tuned by increasing the boosting stages and adapting the learning rate. Again, being restraint by the increase in training time, we did not fine-tune the classifier further.
 
-In conclusion, the gradient boosting classifier is robust to overfitting and somewhat improves its performance with more boosting steps. We can also observe robustness for class imbalance and on the other hand sensitivity towards less training data. Subsampling has no effect and we observe an unexpected high difficulty of learning the CCS type for this classifier.
+\begin{center}
+    \fbox{\begin{minipage}{\dimexpr\textwidth-0.5cm}
+        In conclusion, the gradient boosting classifier is robust to overfitting and somewhat improves its performance with more boosting steps. We can also observe robustness for class imbalance and on the other hand sensitivity towards less training data. Subsampling has no effect and we observe an unexpected high difficulty of learning the CCS type for this classifier.
+    \end{minipage}}
+\end{center}
 
 
 \subparagraph{Finding 4: LSTM-Based Neural Network}
@@ -132,8 +179,35 @@ Responsible for the performance drop is a decrease in precision, whereas the rec
 Our model configuration has too many trainable parameters for the problem complexity. We base this assumption on two observations. First, we halved the size of the embedding layer to 16 and consequently reducing the 3,201,795 trainable parameters of the model to roughly half the size. If the model needed all parameters to fit the training data accurately, we would expect a performance drop. Instead, we do not observe any significant change in performance. Due to this observation, we assume a further reduction of the embedding size may be possible without performance loss. However, since this configuration trains in a reasonable time of under an hour without a GPU and has a test performance, we do not investigate this too powerful model further.
 Second, a variation of the epochs and batch size for the training yields no significant difference. We think, the problem detection is too simple for the model and it quickly reaches its optimum. Further training does not increase the model's performance further. 
 
+\begin{center}
+    \fbox{\begin{minipage}{\dimexpr\textwidth-0.5cm}
+        To sum up, we achieve near-perfect performance with our neural network model. We acknowledge, that our model has too many trainable parameters that we do not need for the same performance as shown with the reduction of the embedding layer size. The model does not benefit from resampling. Oversampling has no impact on the test performance and undersampling impairs the training of the model's weight since it reduces the overall number of samples.
+    \end{minipage}}
+\end{center}
 
-To sum up, we achieve near-perfect performance with our neural network model. We acknowledge, that our model has too many trainable parameters that we do not need for the same performance as shown with the reduction of the embedding layer size. The model does not benefit from resampling. Oversampling has no impact on the test performance and undersampling impairs the training of the model's weight since it reduces the overall number of samples.
+\subparagraph{Finding 6}
+We found a weaknes in the way we labeled samples with the rule checkers. We decided to label a sample as rule violation, if all tokens of the problematic line are present. With the sliding window approach, it is possible to have all tokens for the detection in the sample, but missing the first or last newline or intendation tokens. The sample would therefore be labeled as clean code, although the problematic pattern is there. In the analysis of the false-positives for the gradient boosting classifier, we found samples for both cases in the false-positives as seen in \Cref{lst:weaknes_end_start_sliding_window}. In the first sample, not all preceding \texttt{DEDENT} types are within the window, wheras the trailing \texttt{NEWLINE} token is missing in the second sample.
+
+
+
+
+\begin{lstlisting}[float,floatplacement=H, language=Python, label=lst:weaknes_end_start_sliding_window, caption={False-positives of the best gradient boosting classifier with 300 boosting stages, a learning rate of 0.2, type encoding and without resampling for the CCS type. In the first sample, not all preceding \texttt{DEDENT} tokens are in this window. For the second example, the trailing \texttt{NEWLINE} token is missing in the window. Without this encoding issue, both samples would have been detected correctly.}]
+if 'add_host' in <UNKNOWN> : 
+<UNKNOWN> 
+                            <UNKNOWN> = <UNKNOWN> . get ( 'add_host' ,
+DEDENT,DEDENT,DEDENT,NAME,STRING,NAME,
+NAME,OP,NEWLINE,COMMENT,NL,INDENT,NAME,
+OP,NAME,OP,NAME,OP,STRING,OP
+########################
+if vhost.ssl: 
+points += 3 
+
+if points > <UNKNOWN> :
+NL,DEDENT,NAME,NAME,OP,NAME,OP,NEWLINE,
+INDENT,NAME,OP,NUMBER,NEWLINE,NL,DEDENT,
+NAME,NAME,OP,NAME,OP
+\end{lstlisting}
+
 
 \paragraph{Summary}
 \input{tables/rq2_best_per_model.tex}
