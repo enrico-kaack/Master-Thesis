@@ -1,18 +1,17 @@
 % Please add the following required packages to your document preamble:
 % \usepackage{booktabs}
 \begin{table}[]
-    \tabcolsep=0.11cm
-    \begin{tabular}{@{}rccc@{}}
+    \begin{tabularx}{\textwidth}{rXXX}
     \toprule
-    \multicolumn{1}{l}{}                             & RETURN\_NONE         & COND\_COMP\_SIMP & COND\_COMP \\ \midrule
+    \multicolumn{1}{l}{}                             & RN         & CCS & CC \\ \midrule
     \multicolumn{1}{l}{Random Forest}                & \multicolumn{1}{r}{} &            &              \\
     F1                                               & 0.8486               & 0.9352     & 0.9351       \\
     Recall                                           & 0.7404               & 0.8936     & 0.8976       \\
     Precision                                        & 0.9939               & 0.9809     & 0.9759       \\ \midrule
     \multicolumn{1}{l}{SVM}                          &                      &            &              \\
-    F1                                               &                      &            &              \\
-    Recall                                           &                      &            &              \\
-    Precision                                        &                      &            &              \\ \midrule
+    F1                                               &   0.0066             &  0.0622    &   0.1115     \\
+    Recall                                           &   0.0134             &  0.5004    &   0.5535     \\
+    Precision                                        &   0.0044             &  0.0332    &   0.062      \\ \midrule
     \multicolumn{1}{l}{Gradient Boosting Classifier} &                      &            &              \\
     F1                                               & 0.9328               & 0.8489     & 0.9088       \\
     Recall                                           & 0.9005               & 0.7953     & 0.8766       \\
@@ -21,7 +20,7 @@
     F1                                               & 0.9933               & 0.9805     & 0.9783       \\
     Recall                                           & 0.9933               & 0.9779     & 0.9868       \\
     Precision                                        & 0.9933               & 0.9831     & 0.97       \\ \bottomrule
-    \end{tabular}
-    \caption{Best performing classifier for RQ2 based on f1 score of the holdout set. }
+    \end{tabularx}
+    \caption{Best performing classifier for RQ2 based on f1 score of the holdout set. For the SVM, the test score of the configuration with available data is used.}
     \label{tab:rq2_best_classifier}
     \end{table}
