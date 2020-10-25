@@ -1,5 +1,5 @@
 \section{Code Quality}\label{sec:code_quality}
-The term code quality defines an evaluation of source code concerning the readability and understandability the source code. If source code is well-written and can be understood by developers easily, it is considered to be high quality.
+The term code quality defines an evaluation of source code concerning the readability and understandability the source code. If source code is well-written and can be understood by developers easily, it is considered to be high quality. TODO rewrite to reliability, robustness, maintainability, readability siehe Softwarequalität wikipedia seite, gibt besseren eindruck
 
 One of the main reasons why companies and developers aim for high code quality is the maintainability of source code. With a better understandability of the source code, changing it becomes more efficient and less error-prone.
 Software maintenance consists mainly of those activities that involve changing source code:
@@ -180,10 +180,10 @@ Besides the control flow, it is possible to analyse the data flow in a data flow
 
 Last, a call graph can be computed. A call graph maps all method or function calls starting from the main method. It allows to spot dependencies between modules~\cite{prahofer_static_2017}.
 
-\section{Clean Code Complexity Levels}
+\section{Clean Code Complexity Levels}\label{sec:cc_complexity_levels}
 We described the clean code rules in \Cref{sec:clean_code}. This work focus on the automated checking of clean code rules. Some rules can be checked straightforward with an algorithm, whereas others may be too abstract to be checked in an automated way. In this Section, we want to categorise the clean code rules into different complexity levels. The complexity levels are based on the complexity of implementing an automated rule checker. 
 
-We define three levels of complexity, based on the different source code analysis techniques and effort needed:
+We define the taxonomy of complexity in three levels, based on the different source code analysis techniques and effort needed:
 \begin{description}
     \item[Basic Level] The level of basic complexity covers all rules that can be checked by analysing the text, token stream or AST of the program.
     \item[Advanced Level] Rules with medium complexity require a control flow, data flow, call graph analysis or more advanced, deterministic analysis techniques. Furthermore, a combination of different analysis methods from the basic complexity level will be categorised as medium complexity. 

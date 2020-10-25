@@ -58,8 +58,19 @@
 \usepackage{listings}
 \usepackage{color}
 
+%better references
 \usepackage{hyperref}
 \usepackage{cleveref}
+
+%appendix
+\usepackage{appendix}
+
+%box
+\usepackage{fbox}
+
+%multicompumn for itemize
+\usepackage{multicol}
+
 
 
 \definecolor{mygreen}{rgb}{0,0.6,0}
@@ -185,7 +196,7 @@ This is the abstract.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\chapter{Introduction}\label{intro}
+\chapter{Introduction}\label{chap:intro}
 This chapter contains an overview of the topic as well as the goals and contributions of your work.
 Description of the domain
 Description of the problem
@@ -196,7 +207,7 @@ Outline of own contributions and results
 
 
 
-\chapter{Background and Related Work}\label{background}
+\chapter{Background and Related Work}\label{chap:background}
 General description of the relevant methods/techniques
 
 What has been done so far to address the problem (closer related work)
@@ -205,7 +216,7 @@ Possible weaknesses of the existing approaches
 
 \input{tex/background.tex}
 
-\chapter{Approach}
+\chapter{Approach}\label{chap:approach}
 Approach(es) without the quantitative results (or only selected results to motivate the choices/the problems)
 
 What has possibly failed (short)
@@ -216,7 +227,7 @@ What could be possible method extensions/improvements
 
 \input{tex/approach.tex}
 
-\chapter{Quantitative Evaluation}
+\chapter{Quantitative Evaluation}\label{chap:evaluation}
 Research questions
 Description of the evaluation environment/setup
 Results/answers per research question
@@ -226,10 +237,13 @@ Note: see
 
 \input{tex/evaluation.tex}
 
-\chapter{Conclusion}
+\chapter{Conclusion}\label{chap:conclusion}
 An overall short summary of results
 What was successful, what not (and hypotheses why)
 Hints for further future work/extension
+
+\input{tex/conclusion.tex}
+  
 
 \clearpage
 
@@ -237,10 +251,16 @@ Hints for further future work/extension
 \bibliography{references}
 
 \appendix
+\appendixpage
+\addappheadtotoc
 \setcounter{table}{0}
 \renewcommand{\thetable}{A\arabic{table}}
 
+\chapter{RQ2: Model Performances}
 \input{tables/rq2_all_tables.tex}
-\input{tables/rq3_all_tables.tex}  
+\chapter{RQ3: Model Performances on Manipulated Data}
+\input{tables/rq3_all_tables.tex}
+\chapter{Tokenizer Types}
+\input{tables/tokenizer_types.tex}
 
 \end{document}

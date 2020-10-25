@@ -1,16 +1,108 @@
-\section{Motivation}
-- clean code violations can result in bad maintainable code
-- multiple tools exist, do not cover all clean code principles
-- tooling is important for productive use and for students learning clean code principles
---> we therefore give an clean code overview, create a software platform to check for rules that can be expanded for teaching use and productive use and we try to use machine learning models to classify code as clean or unclean code so it may be possible for users to collect samples of unclean code and train the classifier without writing a complex rule or if a rule is not possible since the clean code rule is rather subjective
+The rise of information technology with computers over the last decades allowed humanity to process data and solve problems in unprecedented performance. Computers require instruction in order to fulfil its purpose. The common language between humans and computers are programming languages. Software developers use programming languages to write source code that instructs computers to process data and solve problems. While the machine only follows the instructions described by the source code, the humans have to understand the purpose of the instructions. 
 
-\section{Goals}
-- overview of clean code principles
-- group CC principles into differrent abstraction levels concerning the methods used to check rule compliance (RegEx, AST-Based, Data-Flow, Dependency Graph, none (Machine learning))
-- develop a software plaform that can check for rule compliance, extendable by plugins
-- implement some plugins plugins into the platform 
-- analyse the use of machine learning models such as svm, gradient boosting classifier, random forest and a neural network on clean code violation detection
-- manipulate the code to simulate a 'noise' on the data to test if the models are able to detect the same problem in a different way, that they have not seen during training
+In today's world, software becomes a vast market with a revenue of over 450 billion U.S. dollars in 2019 (TODO source \url{https://www.statista.com/forecasts/963597/software-revenue-in-the-world} ). Creating new code often requires to read and understand preexisting code. As a consequence, it is essential to make code as readable and understandable as possible. 
+
+The objectives of the clean code principles are readability and understandability of source code. A set of rules and recommendations about writing code to be easy to read and understand. For the computer, it is irrelevant if the human can understand the code since it only executes the instructions. However, any developer who reads clean code profits from it. In \Cref{list:motivating_example}, the upper listing shows an implementation of an algorithm without paying attention to clean code rules. In the bottom listing, the same algorithm is implemented following the clean code rules such as having one purpose per function or method calls in if-conditions. Executing the code will yield the same result. However, it is far simpler to understand the bottom than the top code. Reading the clean \texttt{get\_students\_eligible\_for\_exam} function let the developer immediately understand the two eligibility criterias for the exam. The comments like in the upper example are not even necessary, since the code is self-describing.
+Consequently, using or modifying the right code is much easier and time-saving.
+
+\begin{figure}[h]
+\begin{tabular}{p{\textwidth}}
+\begin{minipage}{1\textwidth}
+\centering
+\begin{lstlisting}[basicstyle=\tiny, language=Python, label=lst:tokens_1, caption={}]
+class Student():
+    def __init__(self, name):
+        self.name = name
+        self.exercises = []
+
+def get_students_eligible_for_exam(students):
+    #filter for students with enough points
+    enough_points = []
+    for student in students:
+      points = 0
+      for e in student.exercises:
+        points += e
+      if points >= 60:
+        enough_points.append(student)
+    
+    #only students with at least 8 completed exercise
+    eligible = []
+    for student in enough_points:
+      if len(student.exercises) >= 8:
+        eligible.append(student)
+    return eligible
+\end{lstlisting}
+\end{minipage}
+\\
+\begin{minipage}[c]{1\textwidth}
+\centering
+\begin{lstlisting}[basicstyle=\tiny, language=Python, label=lst:tokens_2, caption={}]
+class Student():
+    def __init__(self, name):
+        self.name = name
+        self.exercises = []
+    
+class ExamEligibilityChecker():
+    MIN_NUMBER_OF_POINTS = 60
+    NUMBER_OF_SOLVED_EXERCISES = 8
+    
+    def has_student_enough_points(student):
+        total_points = 0
+        for exercise in student.exercises:
+            total_points += exercise
+        return total_points >= ExamEligibilityChecker.MIN_NUMBER_OF_POINTS
+    
+    def has_student_enough_completed_exercises(student):
+        return len(student.exercises) >= ExamEligibilityChecker.NUMBER_OF_SOLVED_EXERCISES
+
+def get_students_eligible_for_exam(students):
+    eligible_students = []
+        for student in students:
+        if ExamEligibilityChecker.has_student_enough_points(student) 
+        and ExamEligibilityChecker.has_student_enough_completed_exercises(student):
+            eligible_students.append(student)
+    return eligible_students    
+\end{lstlisting}
+\end{minipage}
+\end{tabular}
+\caption[Motivating example for clean code vs non-clean code]{Motivating example code that checks, if a student is eligible for an exam. The first listing shows a smaller, more chaotic version of an implementation. The second example applies some clean code rules like a single purpose per function or method calls in if-conditions. Further clean code improvements are possible.}
+\label{list:motivating_example}
+\end{figure}
+
+
+An automated tool for checking violations of the clean code rule would preserve the readability and understandability of the code for future modifications. Integrated into a build pipeline, it could reject code changes if necessary and act as a quality gate.
+Furthermore, it can teach students about clean code rules. In practical works, an automated checker could assess the students' code and recommend improvements. The students can change the code and get immediate feedback if they bettered or worsen the code.
+
+
+\section{Objectives and Contributions}
+This thesis focus on the automated detection of clean code violations on Python source code. 
+We have the following main objectives:
+\begin{itemize}
+    \item Design and implement a platform that can be extended with different automated checkers.
+    \item Compare machine learning models on detecting code patterns that violate the clean code rules.
+    \item Evaluate the generalisation capabilities of unseen pattern variations.  
+\end{itemize}
+
+To fulfil the objectives, we made the following contributions:
+\begin{itemize}
+    \item We provide an overview of code quality, clean code rules, quantitative metrics and existing tools.
+    \item We introduce a taxonomy for implementation complexity of automated checker for clean code violations.
+    \item We contribute a design and implementation of the clean code analysis platform (CCAP) with focus on extensibility, useability and integration capabilities.
+    \item We extend the CCAP with checkers for returning \texttt{None} and using direct comparisons in conditionals.
+    \item We compare our CCAP with preexisting tools.
+    \item We collect a dataset and evaluate a support-vector classifier, random forest classifier, gradient boosting classifier and an LSTM-based neural network on detecting problematic code patterns for that we may not find a deterministic checker.
+    \item We introduce an automated way to manipulate the code to contain unseen problem variations.
+    \item We simulate the impact of having a hand-collected dataset on the machine-learning models if the samples do not contain all possible variations of a problem pattern. We give ideas on how to handle the situation in an time-optimising way.
+\end{itemize}
+
+For evaluation, we will discuss the following research questions:
+\begin{description}
+    \item[RQ1] What is the utility of the CCAP besides existing tools? 
+    \item[RQ2] How do different models compare on the task of detecting non-clean code?
+    \item[RQ3] Do machine-learning-based models cover a larger variety of cases than rule-based checker? 
+\end{description}
+
 
 \section{Structure}
-Here you describe the structure of the thesis. For example:
+The remainder of this thesis is organised as follows: In \Cref{chap:background}, we introduce code quality and clean code principles. We then classify the clean code principles depending on the implementation complexity of an automated checker. We introduce several quantitative metrics to measure code quality and provide an overview of existing tools that can determine the code quality and clean code violations to an extend. 
+In \Cref{chap:approach}, we describe our approach for the CCAP and the machine-learning-based clean code classification. We evaluate the CCAP and machine-learning models and answer the research questions in \Cref{chap:evaluation}. Finally, we conclude our work with a summary and outlook in \Cref{chap:conclusion}.
