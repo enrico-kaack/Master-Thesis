@@ -258,8 +258,16 @@ Compared to the performance for the RN types, the performance values are at leas
 \subparagraph{Finding 3}\label{finding:better_vs_worse}
 \textit{The more fine-tuning during training, the less the model generalise for the modified problems.}
 
-All models on the modified problem types behave contrary to the unmodified problem types in the previous experiments. The hyperparameter combinations with a worse performance in the previous experiment score better in this evaluation. By contrast, the best model configurations from the previous experiment are among the worst-performing models for this evaluation.  
-TODO diagram model performance previous vs now
+All models on the modified problem types behave contrary to the unmodified problem types in the previous experiments. The hyperparameter combinations with a worse performance in the previous experiment score better in this evaluation. By contrast, the best model configurations from the previous experiment are among the worst-performing models for this evaluation. In \Cref{fig:rq3_performance_comparison}, we plotted the f1 performance of the baseline, manipulated RN and CCS. For each classifier, we sorted the models descending on the baseline f1 score. The baseline performance is the performance of the CC model from the previous experiment on the manipualted CC data. It correlates with the performance of the CC model on the original holdout data in the previous experiment. The overall picture shows, that the models with the best baseline performance have a low performance on the manipualted datasets. With decreasing baseline performance, the performance of the manipualted CCS increases for the random forest and gradient boosting classifier. The manipualted RN type follows this pattern for the random forest classifier and the LSTM. 
+
+
+\begin{figure}[h]
+    \begin{center}
+        \input{diagrams/rq3_performance_comparison.pgf}
+    \end{center}
+    \caption[F1 performance of the models, sorted by the baseline f1 score.]{F1 performance of the models, sorted by the baseline f1 score. The baseline performance correlates with the performance of the CC type in the previous experiment. With a worse performance in the previous experiment, the performance for the manipualted types increases.}
+    \label{fig:rq3_performance_comparison}
+\end{figure}
 
 We observe this behaviour on different hyperparameters we tuned for better performance in the previous experiment. It applies to both problem types.
 For the random forest classifier, undersampling the training set lead inevitably to worse performance in the previous experiment than without undersampling. In this experiment, the undersampled random forest classifier leads to the overall best scores. For gradient boosting classifier, the models without resampling scored best in the previous experiment and are performing worst in this experiment. Additionally, increases in boosting stages that lead to an improvement in the previous experiment now lead to a deterioration in performance. 
