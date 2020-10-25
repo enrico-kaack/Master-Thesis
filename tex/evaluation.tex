@@ -135,7 +135,7 @@ With the CCS subset, we restrict the classifier to only detect a direct comparis
 \textit{Subsampling the train data for the individual base learner during training has no impact.} The performance for all subsampling ratios are identical, so the individual base learners are trained with the same data as before.
 
 
-\begin{lstlisting}[float,floatplacement=H, language=Python, label=lst:gbc_false_positive, caption={False-positive samples for the best performing random forest classifier with 300 boosting stages, a learning rate of 0.2, type encoding and without resampling for the CCS type. We removed spaces between tokens if necessary, but leave the intendation as in the sample.}]
+\begin{lstlisting}[float=h, language=Python, label=lst:gbc_false_positive, caption={False-positive samples for the best performing random forest classifier with 300 boosting stages, a learning rate of 0.2, type encoding and without resampling for the CCS type. We removed spaces between tokens if necessary, but leave the intendation as in the sample.}]
     if input.dim() == 4 and mode == 'bicubic' : 
     assert align_corners is not
 DEDENT,NAME,NAME,OP,NAME,OP,OP,OP,NUMBER,
