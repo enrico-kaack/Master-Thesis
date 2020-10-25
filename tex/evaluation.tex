@@ -46,7 +46,7 @@ As we have shown with the CCAP and the analysis plugins, it is possible to write
 
 For this research question, we will evaluate different machine learning models on different code patterns and compare the results.
 
-\paragraph{Approach}
+\paragraph{Approach}\label{par:approach}
 For answering the research question, we will use the approach detailed in chapter \ref{chap:clean_code_classification}.  The dataset, consisting of 18 projects from GitHub, is prepared as described in chapter \ref{chap:clean_code_classification_dataset}. The data is split into 90\% train and 10\% test data. We use the training dataset to train Random Forest, Gradient Boosting Classifier, Support Vector Machines and an LSTM-based neural network. Due to the class imbalance, we will additionally train with an oversampled dataset (oversampling rate of 0.5) and an undersampled dataset (undersampling rate of 0.5). Since our test set contains real-world code samples, we expect it to represent a real-world label distribution, and we, therefore, accept the potential effects of the data imbalance. Nevertheless, we will try to train with an over- and undersampled dataset to observe the effect on the performance.
 
 Our evaluation metrics are recall, precision and the combined f1 score. Due to the data imbalance, accuracy is not a meaningful metric. A high recall means a high detection rate of non-clean code. The costs of a false negative prediction are potential costs in unclean code (maintainability, understandability). With high precision, a detected non-clean code sample is likely to be a non-clean code sample and the system reports less false positives. The immediate cost of false-positive predictions (resulting in a lower precision) is the extra developer time needed.
@@ -224,7 +224,7 @@ NAME,NAME,OP,NAME,OP
 
  Both random forest and gradient boosting classifier, fulfil the satisficing condition for all problem types. Interestingly, they supplement each other: For the RN problem type, the gradient boosting classifier performs better with an f1 score of 0.9328, whereas the random forest classifier surpasses the gradient boosting classifier for the CCS and CC problem type with 0.9352 and 0.9351 f1. As discussed, we explain the former result with the better insensitivity to a class imbalance of the gradient boosting classifier. In contrast, the latter seems to be harder to learn for the gradient boosting classifier. Especially the difficulties for the CCS type are unexpected and do not affect the random forest classifier or neural network.
 
- \subsection{RQ3: Do Machine-Learning Based Models Cover a Larger Variety of Cases Than Rule-Based Checker? }
+\subsection{RQ3: Do Machine-Learning Based Models Cover a Larger Variety of Cases Than Rule-Based Checker? }\label{rq:3}
 
 \paragraph{Motivation}
 For the previous research question, we trained models on a dataset. We created the dataset by downloading open-source repositories and applying our analysis plugins from \Cref{sec:analysis_plugins} to label samples as clean or non-clean code. With this automated approach, it is simple to generate a dataset and to scale the dataset to any size needed for training. Such algorithms (checkers) that detect non-clean code are the prerequisite for the dataset and successful training of machine learning models. This research question wants to put the machine learning approach into a scenario, in which this prerequisite is not met and we lack a checker to generate a labelled dataset. 

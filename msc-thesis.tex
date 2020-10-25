@@ -74,6 +74,10 @@
 %diagrams
 \usepackage{pgfplots}
 
+%csv simple
+\usepackage{csvsimple}
+
+
 \definecolor{mygreen}{rgb}{0,0.6,0}
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
 \definecolor{mymauve}{rgb}{0.58,0,0.82}
@@ -198,50 +202,45 @@ This is the abstract.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \chapter{Introduction}\label{chap:intro}
-This chapter contains an overview of the topic as well as the goals and contributions of your work.
-Description of the domain
-Description of the problem
-Summary of the approach
-Outline of own contributions and results
+
+%This chapter contains an overview of the topic as well as the goals and contributions of your work.
+%Description of the domain
+%Description of the problem
+%Summary of the approach
+%Outline of own contributions and results
 
 \input{tex/introduction.tex}
 
 
-
 \chapter{Background and Related Work}\label{chap:background}
-General description of the relevant methods/techniques
-
-What has been done so far to address the problem (closer related work)
-
-Possible weaknesses of the existing approaches
+%General description of the relevant methods/techniques
+%What has been done so far to address the problem (closer related work)
+%Possible weaknesses of the existing approaches
 
 \input{tex/background.tex}
 
 \chapter{Approach}\label{chap:approach}
-Approach(es) without the quantitative results (or only selected results to motivate the choices/the problems)
-
-What has possibly failed (short)
-
-What has worked and why
-
-What could be possible method extensions/improvements
+%Approach(es) without the quantitative results (or only selected results to motivate the choices/the problems)
+%What has possibly failed (short)
+%What has worked and why
+%What could be possible method extensions/improvements
 
 \input{tex/approach.tex}
 
 \chapter{Quantitative Evaluation}\label{chap:evaluation}
-Research questions
-Description of the evaluation environment/setup
-Results/answers per research question
-Optional comparison to prior work
-Discussion and analysis of strengths/problems
-Note: see 
+%Research questions
+%Description of the evaluation environment/setup
+%Results/answers per research question
+%Optional comparison to prior work
+%Discussion and analysis of strengths/problems
+%Note: see 
 
 \input{tex/evaluation.tex}
 
 \chapter{Conclusion}\label{chap:conclusion}
-An overall short summary of results
-What was successful, what not (and hypotheses why)
-Hints for further future work/extension
+%An overall short summary of results
+%What was successful, what not (and hypotheses why)
+%Hints for further future work/extension
 
 \input{tex/conclusion.tex}
   
@@ -263,5 +262,12 @@ Hints for further future work/extension
 \input{tables/rq3_all_tables.tex}
 \chapter{Tokenizer Types}
 \input{tables/tokenizer_types.tex}
+\chapter{Dataset}
+\begin{table}[h]
+     \footnotesize
+     \csvautobooktabular{appendix/repository_list.csv}
+     \caption{Open-source repositories we used for our dataset. }
+     \label{tab:repos_hashes}
+\end{table}
 
 \end{document}

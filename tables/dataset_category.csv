@@ -1,0 +1,19 @@
+Organisation,Project,Domain
+scikit-learn,scikit-learn ,Data Science
+pytorch,pytorch ,Data Science
+explosion,spaCy , Data Science
+bokeh,bokeh ,Data Science
+pandas-dev,pandas ,Data Science
+keras-team,keras ,Data Science
+django,django ,Web Server
+pallets,flask ,Web Server
+tiangolo,fastapi ,Web Server
+tornadoweb,tornado ,Web Server
+encode,django-rest-framework ,Web Server
+jakubroztocil,httpie ,Web Requests
+home-assistant,core ,Home Automation
+certbot,certbot ,Automation
+google,python-fire ,Automation
+apache,airflow ,Automation
+ansible,ansible ,Automation
+docker,compose ,Containerization

@@ -24,7 +24,7 @@ In the execution phase, the input handling component scans the input directory f
 The input component scans the given input directory for all Python source code files and parse the source code into an AST. 
 For scanning the input directory, an algorithm will walk recursively over all folders and files. The detection of Python source code files is based on the file ending \textit{.py}. The algorithm will return a list of file paths and the corresponding file content. 
 Next, the AST parser is called and will add a parsed AST object to the list besides the file path and content. This list will be passed to the analysis plugins by the analysis plugin handler.  An alternative approach would be to not read and parse the code in the input component, but instead, let the plugins read and parse the file content if needed. With many files to scan, the latter approach would have a lower memory footprint since the file content and the AST will not be held in memory. Consequently, every analysis plugin has to perform an expensive read operation from disk and the performance scales with the number of files and the number of analysis plugins. 
-If the input component reads all files, the information is held in the main memory and the performance only scales with the number of files. Since the files are text-based, the number of files needed to exceed the main memory is expected to be high enough to fit most projects. (TODO sample calculation?).
+If the input component reads all files, the information is held in the main memory and the performance only scales with the number of files. Since the files are text-based, the number of files needed to exceed the main memory is expected to be high enough to fit most projects.
 
 The analysis plugin handler manages all analysis plugins. This component finds all plugins, executes the plugin and collects the reported results.
 During the initialisation phase of the core component, the analysis plugin handler will scan the plugin directory for all Python files. It imports all Python files and scans those for classes, that inherit from an abstract \textit{AbstractAnalysisPlugin} class. The abstract class defines all methods that need to be implemented in the concrete plugin subclass. The analysis plugin handler instantiates all found classes.
@@ -102,10 +102,10 @@ matches = re.finditer(r"return None", source_file.content, re.MULTILINE | re.DOT
                     problems.append(ReturnNullProblem(a.file_path, return_value.lineno))\end{lstlisting}
     \end{minipage}
 
-This implementation covers only the simple case, in which \textit{return None} is written explicitly. Of course, several modifications are possible, that would not be detected by this plugin and would require more sophisticated algorithms. Evaluating, if machine learning models trained on this simple rule can also detect such modifications is part of the second part in research question 3 (TODO: check, jump link).
+This implementation covers only the simple case, in which \textit{return None} is written explicitly. Of course, several modifications are possible, that would not be detected by this plugin and would require more sophisticated algorithms. Evaluating, if machine learning models trained on this simple rule can also detect such modifications is part of the second part in \hyperref[rq:3]{RQ3}.
 
 Since detection alone is not a great help for the user, a useful description of the problem is necessary. 
-As described in section \ref{sec:background:returning_none_and_error_handling}, there are some alternatives to returning none. If none happens due to an error, it is better to raise an exception and provoke an explicit error handling, which prevents runtime errors. If the standard return type is a collection, an empty list is more appropriate, since the function caller will most likely write the logic for an unknown amount of list items. However, if the standard return type is a single object, it is not apparent what to return. With PEP484 (TODO source), an optional type was introduced for type hints in Python 3. Using a static type checker for Python like mypy (TODO source) outputs a warning if a developer forgets to check an optional for not being none. 
+As described in section \ref{sec:background:returning_none_and_error_handling}, there are some alternatives to returning none. If returning \texttt{None} due to an error, it is better to raise an exception and provoke an explicit error handling, which prevents runtime errors. If the standard return type is a collection, an empty list is more appropriate, since the function caller will most likely write the logic for an unknown amount of list items. However, if the standard return type is a single object, it is not apparent what to return. With PEP484 (TODO source), an optional type was introduced for type hints in Python 3. Using a static type checker for Python like mypy (TODO source) outputs a warning if a developer forgets to check an optional for not being none. 
 
 \paragraph{Condition with Comparison}\label{sec:condition_comparison}
 The second plugin detects a direct comparison in a conditional statement. For better readability and understandability, it is suggested to use a function call with an appropriate name that evaluates to true or false. This function call allows a natural reading of the conditional statement without deciphering the meaning of the boolean logic.
@@ -238,7 +238,7 @@ For the following reasons, we dismissed this approach:
     \item Manual labeling does not ensure correct labeling. A human can make mistakes or can subjectivly misinterpret chaotic code as clean code. The quality of the dataset could suffer and limit the machine learning models performance.
 \end{enumerate}
 \subparagraph{Solution 4:}
-Given any amount of Python files, we could use the analysis plugins from section TODO analysis plugin to reliably detect violations of the corresponding rule. Based on this labeled data, we can train the classifier to detect these rules. If there would be a labeled dataset for more complex clean code rules, we could transfer the findings to these more complex rules. We choose this solution as to solve the dataset problem and train classifier, with more details given in chapter TODO. As a second step, we manipulated the input data, so the original analysis plugin could not detect the still existing problems anymore. With the second step, we show that the classifier generalise well enough to may work on complex clean code rules.
+Given any amount of Python files, we could use the analysis plugins from \Cref{sec:analysis_plugins} to reliably detect violations of the corresponding rule. Based on this labeled data, we can train the classifier to detect these rules. If there would be a labeled dataset for more complex clean code rules, we could transfer the findings to these more complex rules. We choose this solution as to solve the dataset problem and train classifier, with more details given in \Cref{sec:data_encoding}. As a second step, we manipulated the input data, so the original analysis plugin could not detect the still existing problems anymore. With the second step, we show that the classifier generalise well enough to may work on complex clean code rules.
 
 \paragraph{Inbalanced Dataset}\ref{sec:inbalanced_dataset}
 A second challenge is a major inbalance between the classes labeled as problematic code and clean code. For the three different problem types, RETURN NONE, CONDITION COMPARISON SIMPLE and CONDITION COMPARISON, the class distribution is shown in table \ref{tab:class_distribution_in_dataset}.
@@ -258,7 +258,7 @@ A second challenge is a major inbalance between the classes labeled as problemat
 
 
 \subparagraph{Solution 1:}
-Due to the inbalance, we do not choose accuracy as a suitable evaluation metric, since classifiying all samples as clean code would result in a accuracy of 99.79\% for the RETURN NONE problem type. Instead, we use precision and recall as metric, with a f1 score as single, weighted metric. More details about the metrics are in chapter TODO.
+Due to the inbalance, we do not choose accuracy as a suitable evaluation metric, since classifiying all samples as clean code would result in a accuracy of 99.79\% for the RETURN NONE problem type. Instead, we use precision and recall as metric, with a f1 score as single, weighted metric. More details about the metrics are in \Cref{par:approach}.
 
 \subparagraph{Solution 2:}
 We will apply undersampling and oversampling techniques on the data and evalaute the difference in model performance. Undersampling removes random samples from the majority class and thus balance class labels. Oversampling replicates random samples from the minority class to balance class labels while also increasing the overall amount of data. This technique is only used on the trainings data. Since it changes the data distribution, an additional train-dev dataset is used as an additional test set to evaluate the impact of the resampling on the model performance. 
@@ -267,17 +267,21 @@ We will apply undersampling and oversampling techniques on the data and evalaute
 Our approach of training different classifier is a solution to the data inbalance, since different classifier have a different sensitivity to data balance. 
 
 \paragraph{SVM quadratic complexity in training}\label{sec:svm_quadratic_complexity}
-Support-Vector Machines have a quadratic time complexity on the number of trainings data. Consequently, the training takes a lot of time and the oversampling strategy worsen the trainingstime additionally. 
+The implementation of the support vector machine has a quadratic time complexity on the number of trainings data~\cite{abdiansah_time_2015}. Consequently, the training takes a lot of time and the oversampling strategy worsen the trainingstime additionally. 
 \subparagraph{Solution:}
 We reduced the number of experiments with SVM and just evaluate some simple cases for baseline performance. 
 
-source: 
-TODO ime Complexity Analysis of Support Vector Machines
-(SVM) in LibSVM
 
 \subsection{Dataset}\label{chap:clean_code_classification_dataset}
-The source of our dataset are open-source python projects on GitHub. We queried the top starred python repositories and handselected 18 repositories. Although most top stared repositories are data science frameworks, we additional choose projects from domains such as web server, automation and containerisation. See table TODO for a list of all 18 repositories
-A script downlaoded all projects in their main branch with the current head. See table TODO attachment for the corresponding git hashs. Afterwads, we removed all non-python files. 
+The source of our dataset are open-source python projects on GitHub. We queried the top starred Python repositories and handselected 18 repositories. Although most top stared repositories are data science frameworks, we additional choose projects from domains such as web server, automation and containerisation. In \Cref{tab:repos_domains}, we list all projects with the corresponding domain.
+\begin{table}[h]
+    \centering
+    \csvautobooktabular{tables/dataset_category.csv}
+    \caption{Open-source repositories we used in our dataset and their corresponding domain. }
+    \label{tab:repos_domains}
+\end{table}
+
+A script downlaoded all projects in their main branch with the current head. See \Cref{tab:repos_hashes} for the corresponding git hashs. Afterwads, we removed all non-python files. 
 Next, we uniformly sampled 20\% of all files and seperated those into a holdout set for final testing. Additionally, we perform our train/test split on the file level and not on the sample level. As described later in chapter \ref{sec:data_encoding}, we use a sliding window approach to convert source files with dynamic length into fixed length samples. Due to the sliding window approach, we may have one problematic code line in multple samples. If we would do a train/test split on sample level, we may indroduce samples covering one problematic line at different positions in both datasets (see figure TODO for visualisation). This would diminish the validity of metrics calculated from the test dataset. Table \ref{tab:lstm_wrong_train_test_split} shows an example for a train and test metrics of an neural network with LSTM cells. Without over- or undersampling, we achieve near perfect results for all problem types. If we apply undersampling to the train data, we basically remove some samples labeled as negative (in this case containing clean code). We observe a drop in precision but a near perfect recall.
 A decrease in precision and a constant recall means an increase in false positives. Since we removed some negative samples with undersampling, the overfitted model has not seen those samples that exist in the test set. 
 Consequently, we decided to perform a train/test split on file level as described earlier.
@@ -366,7 +370,7 @@ TODO per project analysis table in attachments.
 \subsection{Processing}
 For the processing steps, we create a pipeline with the d6tflow framework\footnote{\url{https://github.com/d6t/d6tflow}}. Each processing step is a task, that stores its results depending on the parameter configuration in a pickle file. This allows to define a pipeline once and run it with different parameter combinations. The scheduler automatically determines what tasks to run and what task outputs are already stored in pickle files. Consequently, running the pipeline is more efficient and repeatable.
 
-The processing pipeline consists of tasks to read the files into a datastructure, to processes source code and find the problems, to create a vocab dictionary, to convert the data into labeled samples and to split the data into a train, traintest and test set. See overview TODO for a schematic representation of the pipeline.
+The processing pipeline consists of tasks to read the files into a datastructure, to processes source code and find the problems, to create a vocab dictionary, to convert the data into labeled samples and to split the data into a train, traintest and test set. See \Cref{fig:pipeline_rq2} for a schematic representation of the pipeline.
 
 \begin{figure}
     \includegraphics[width=1\textwidth]{img/ML/Pipeline_RQ2.pdf}
@@ -402,7 +406,7 @@ TODO train test split before, or is it better here?
 
 
 \subsubsection{Code Manipulation}\label{sec:approach_code_manipulation}
-In research question TODO, we evaluate the models generalisation to detect similar pattern the model was not trained on. Therefore, we manipulate the code that it is still a rule violation, but the original analysis plugins would not spot them. The pipeline for code manipulation differ from the pipeline for RQ2 by an additional code manipulation task and a removal of the training step (see figure )
+In research question \hyperref[rq:3]{RQ3}, we evaluate the models generalisation to detect similar pattern the model was not trained on. Therefore, we manipulate the code that it is still a rule violation, but the original analysis plugins would not spot them. The pipeline for code manipulation differ from the pipeline for RQ2 by an additional code manipulation task and a removal of the training step (see figure )
 
 \begin{figure}
     \includegraphics[width=1\textwidth]{img/ML/Pipeline_RQ3.pdf}
