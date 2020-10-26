@@ -354,7 +354,7 @@ The processing pipeline consists of tasks to read the files into a datastructure
 \begin{figure}
     \includegraphics[width=1\textwidth]{img/ML/Pipeline_RQ2.pdf}
     \label{fig:pipeline_rq2}
-    \caption[Schematic representation of the pipeline for RQ2 with configurable parameters.]{Schematic representation of the pipeline for RQ2 with configurable parameters. TODO describe}
+    \caption[Schematic representation of the pipeline to train and test models.]{Schematic representation of the pipeline for \hyperref[rq:2]{RQ2} to train and test models with configurable parameters. First, the pipeline reads the source code into memory, extract the vocabulary (\textit{TaskVocabCreator}) and identify all problem types (\textit{TaskRuleProcessor}). It the converts the code of dynamic length into fixed-size samples (\textit{TaskPrepareXY}). This sub-pipeline runs seperate for the train and test set. In \textit{TaskTrainTestSplit}, both datasets are combined and over- or undersampling is applied to the train set. The train set is used to train different classifiers wheras the train and test set are used for evaluation.}
 \end{figure}
 
 
@@ -390,12 +390,12 @@ Since we use a sliding window approach to convert source files with dynamic leng
 \end{figure}
 
 \subsubsection{Code Manipulation}\label{sec:approach_code_manipulation}
-In research question \hyperref[rq:3]{RQ3}, we evaluate the models generalisation to detect similar pattern the model was not trained on. Therefore, we manipulate the code that it is still a rule violation, but the original analysis plugins would not spot them. The pipeline for code manipulation differ from the pipeline for RQ2 by an additional code manipulation task and a removal of the training step (see figure )
+In research question \hyperref[rq:3]{RQ3}, we evaluate the models generalisation to detect similar pattern the model was not trained on. Therefore, we manipulate the code that it is still a rule violation, but the original analysis plugins would not spot them. The pipeline for code manipulation differ from the pipeline for RQ2 by an additional code manipulation task and a removal of the training step (see \Cref{fig:pipeline_RQ3}).
 
 \begin{figure}
     \includegraphics[width=1\textwidth]{img/ML/Pipeline_RQ3.pdf}
     \label{fig:pipeline_RQ3}
-    \caption{Pipeline for code manipulation and evaluation. TODO detailed description}
+    \caption[Pipeline for code manipulation and evaluation.]{Pipeline for code manipulation and evaluation. The prerpocessing part is like in \Cref{fig:pipeline_rq2} but with an additional \textit{TaskCodeManipulator} to manipulate the code as described in \Cref{sec:approach_code_manipulation}. The random forest classifier, svm and gradient boosting classifier require different evaluation code as the LSTM, so two \textit{TaskEval*} are used.  }
 \end{figure}
 
 

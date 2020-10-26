@@ -40,7 +40,7 @@ In summary, CCAP offers a good, but not best in class expandability with analysi
 We see the CCAP as an addition to the powerful Sonarqube. The simple, yet robust expandability of the CCAP could supplement the shortcomings of Sonarqube in its powerful, but complex expandability. For instance, a code reviewer could code problematic code into a simple python plugin, distributes it to the team and would hopefully not reencounter the same problem.
 Additionally, the CCAP could be used to teach about Clean Code and to enforce specific coding rules to students, since the local setup is straightforward. Clean Code rules could be turned into analysis plugins by students or teachers without having to understand a complicated interface.
 
-\subsection{RQ2: How Do Different Models Compare on the Task of Detecting Non-Clean Code?}
+\subsection{RQ2: How Do Different Models Compare on the Task of Detecting Non-Clean Code?}\label{rq:2}
 \paragraph{Motivation}
 As we have shown with the CCAP and the analysis plugins, it is possible to write an algorithm that can detect specific code patterns like non-clean code patterns. If we can write a well-tested detection algorithm, we do not need error-prone machine learning models to detect code patterns. Nonetheless, if we can not design an algorithm that detects the desired code pattern reliably, we may perform better using a machine learning model. Additionally, if we encode a subjective pattern, it may not be possible to design an algorithm to detect such a pattern objectively. As a solution, we could label code parts as our pattern and use machine learning approaches to extract rules to detect such a pattern implicitly.
 
