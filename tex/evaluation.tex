@@ -123,8 +123,22 @@ However, the improvement is lower than expected. At least for the CCC type, the 
 \textit{The gradient boosting classifier performs well on all problem types and fulfils our satisficing metric.} We achieve an f1 score of over 0.9 for the RN and CC type and 0.84 for the CCS type. This best performing configuration is trained with 300 boosting stages, a learning rate of 0.2 and type encoding.
 
 
-\textit{The gradient boosting classifier is sensitive to less training samples or samples with less variety.} Two main observations allow this conclusion. First, we observe a decrease in performance for under- and oversampling. For undersampling the RN type with a ratio of 0.5, the f1 score drops from 0.8306 by roughly 45\% and by approximate 41\% for oversampling with a ratio of 0.5. For the CCS type, the f1 score drops from 0.773 by approximately 9\% for over- and undersampling. The smallest drop is for the CC type from 0.8567 by nearly 7\% for over- and undersampling. With undersampling, we reduce the number of examples and with oversampling, we increase the minority class without increasing the variety of samples. Since the performance characteristics for over- and undersampling are comparable, we conclude that more samples with the same variety further decrease the model's performance. The decrease in f1 score is caused by a drop in precision, i.e. an increase of false positives. With less data, the classifier tends to be biased towards the positive class.
-Second, the larger performance drop for the RN problem type and the smaller decrease for the CC type correlates with the number of training samples. A larger decrease in training data results in a larger drop in performance. See table TODO for change in sample size for undersampling. 
+\textit{The gradient boosting classifier is sensitive to less training samples or samples with less variety.} Two main observations allow this conclusion. First, we observe a decrease in performance for under- and oversampling (see  \Cref{tab:resampling_size_performance_gbc}). For undersampling the RN type with a ratio of 0.5, the f1 score drops from 0.8306 by roughly 45\% and by approximate 41\% for oversampling with a ratio of 0.5. For the CCS type, the f1 score drops from 0.773 by approximately 9\% for over- and undersampling. The smallest drop is for the CC type from 0.8567 by nearly 7\% for over- and undersampling. With undersampling, we reduce the number of examples and with oversampling, we increase the minority class without increasing the variety of samples. Since the performance characteristics for over- and undersampling are comparable, we conclude that more samples with the same variety further decrease the model's performance. The decrease in f1 score is caused by a drop in precision, i.e. an increase of false positives. With less data, the classifier tends to be biased towards the positive class.
+Second, the larger performance drop for the RN problem type and the smaller decrease for the CC type correlates with the number of training samples. A larger decrease in training data results in a larger drop in performance. 
+
+\begin{table}[]
+    \tabcolsep=0.11cm
+    \begin{tabularx}{\textwidth}{lXXX|XXX}
+    \toprule
+                        & \multicolumn{3}{c}{Test F1 Score} & \multicolumn{3}{c}{Dataset}   \\ \midrule
+                        & RN        & CCS        & CC     & RN            & CCS         & CC          \\ \midrule
+    No resampling     &  0.8306   &  0.773    &  0.8567  &  4,950,329    & 4,950,329   & 4,950,329   \\
+    0.5 oversampling  &  0.4847   &  0.6948   &  0.7933  &  7,409,925    & 7,228,141   & 7,064,008   \\
+    0.5 undersampling &  0.4545   &  0.6836   &  0.7925  &  31,137       & 394,704     & 722,970     \\ \bottomrule
+    \end{tabularx}
+    \caption{Dataset sizes for different resampling strategies with f1 performance on the test set. The f1 performance for the speciifc resampling is the gradient boosting classifier with 200 stages, a learning rate of 0.2 and type encoding.}
+    \label{tab:resampling_size_performance_gbc}
+    \end{table}
 
 \textit{The random forest classifier is insensitive towards class imbalance.} One supporting point is the aforementioned performance decrease with over- or undersampling. Additionally, the performance of the RN problem type is comparable to the CC problem type despite their difference in class imbalance (0.21\% class frequency for RN vs 4.87\% for CC). 
 
