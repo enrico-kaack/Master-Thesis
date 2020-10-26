@@ -13,8 +13,12 @@ A more specific requirement is Python as an input and extension language. After 
 
 \subsection{Architecture}
 The CCAP architecture is divided into a main part and two extension possibilities: An extension with analysis plugins adds automated checkers for more rules that are validated by the system. Adding an output plugin allows specifying the output format to fit custom workflow needs.
-The main part consists of four components: A core component to act as an orchestration unit, a component for handling the source code input and a component for handling the analysis plugins as well as output plugins. The design follows the requirements and goals for the platform. 
-(TODO: High-level architecture schematic diagram)
+The main part consists of four components: A core component to act as an orchestration unit, a component for handling the source code input and a component for handling the analysis plugins as well as output plugins. The design follows the requirements and goals for the platform. \Cref{fig:overview_ccap} provides a high-level overview of the components.
+\begin{figure}
+    \includegraphics[width=1\textwidth]{img/CCAP/overview_diagram.pdf}
+    \caption[High level schematic overview of the CCAP.]{High level schematic overview of the CCAP. The core component is the orchastration unit, the source handler parsed the source code files and the two plugin handler search for and execute the analysis and output plugins. }
+    \label{fig:overview_ccap}
+\end{figure}
 
 The core component contains the main function and handles argument validation and parsing. Furthermore, it orchestrates other components by initialising and executing those. This process is divided into the argument parsing, initialisation and execution phase:
 In the argument parsing phase, the command line arguments are parsed and validated. It validates the existence of the required input directory argument and the optional plugin path configuration for the analysis plugins and the output plugins. Additionally, the logging level and the output format can be defined. The latter determines, which output plugin will be used, although the existence of the specified plugin is not validated in this phase. A parsing or validation error will cause a program termination without further processing.
