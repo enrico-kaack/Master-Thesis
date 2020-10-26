@@ -190,7 +190,37 @@ We define the taxonomy of complexity in three levels, based on the different sou
     \item[High Level] The high level of complexity covers the clean code rules we think can not be checked with traditional, deterministic analysis techniques such as those described in \Cref{sec:code_analysis}. For this level, it may be indispensable to use statistical methods like machine learning approaches to create an automated checker. It is important to note that we do not prove that no deterministic algorithm exists. 
 \end{description}
 
-Based on these levels, we categorise the clean code rules described in \Cref{sec:clean_code}. Tabele TODO gives an overview over all rules and our assigned complexity level.
+Based on these levels, we categorise the clean code rules described in \Cref{sec:clean_code}. \Cref{tab:complexity_level_overview} gives an overview over all rules and our assigned complexity level.
+
+
+\begin{table}[h]
+\begin{tabularx}{\textwidth}{XXccc}
+\toprule
+&     & \multicolumn{3}{c}{Level} \\ \midrule
+Category&Rule & Basic  & Advanced  & High \\ \midrule
+Naming&Descriptiveness&&& X\\
+Naming&Pronunciation&X&X& \\
+Naming&Names in Small Scope&&X& \\
+Naming&Hungarian Notation&X&& \\
+Functions&Length&X&&\\
+Functions&Conditional Function Call&X&& \\
+Functions&Purpose&&&X\\
+Functions&Levels of Abstraction&&&X\\
+Functions&Number of Arguements&X&& \\
+Functions&Side-Effects&&X&X\\
+Functions&Error Code Detection&&&X \\
+Functions&Duplicated Code&&&X \\
+Comments&Detecting Necessary Comments&&&X \\
+Objects&Law Of Demeter&&X& \\
+Objects&Mix with Data Structures&X&& \\
+Classes&Single Responsibility&&X&X \\
+Classes&Decouple Dependencies&&X& \\
+Errors&Return None&X&& \\
+\bottomrule
+\end{tabularx}
+\caption{Overview of our categorization of automated approaches to check for compliance with the clean code rules.}
+\label{tab:complexity_level_overview}
+\end{table}
 
 For naming, all rules have in common, that an algorithm would have to extract the names of various entities like variables, classes, functions from the source code first. The AST provides the names and entity types they describe. Extracting all names is a matter of walking over the AST. We see this in the basic complexity level.
 
@@ -206,7 +236,7 @@ Detecting Hungarian notation could be accomplished with regular expressions on t
 For functions, the clean code principles define multiple rules. 
 First, functions should be smaller than 20 lines of code. A checker for this rule would be at the basic level of complexity since the AST contains all the necessary information about the function body. If the metadata such as line number is retained during AST construction, a checker can calculate the lines of code for the function body.
 
-The next rule covers the function call in the condition and body part of a conditional such as an if-statement. An algorithm can scan the AST to check the condition and body nodes of the conditional statement.
+The next rule covers the function call in the condition and body part of a conditional such as an if-statement. An algorithm can scan the AST to check the condition and body nodes of the conditional statement. Such an checker would have a basic level of complexity.
 
 Regarding the purpose of a function, the clean code rules suggest a function to have one purpose and to operate on one abstraction level. Counting the number of purposes requires an understanding of the meaning of the code. Similar understanding would be necessary for the level of abstraction. We argue such a checker would be in the high level of complexity category since the understanding of code could only be achieved with machine learning. The aforementioned research field of code summarisation could be beneficial for this task, too. A natural language description of a function may require the model to \enquote{understand} the purpose and task in order to articulate it in natural language. It may be possible to use work in this field to detect functions with multiple purposes or abstraction levels.
  
@@ -229,7 +259,7 @@ For classes, the clean code rule enforces a single responsibility per class. As 
 
 An automated check for the decoupling of dependencies can be performed with an advanced level of complexity. All required information is in the code. Finding all class dependencies is possible with the AST. Following the dependencies, it is possible to determine whether they inherit from an abstract class or implement an interface. In that case, the checker would assume a dependency decoupling. Based on our classification schema, this checker would be in the advanced level of complexity.
 
-The last clean code rule prevents the return of the null value as an error code or as an indication for no result. A checker could prevent this with a basic level of complexity. It could search for all \texttt{return} statements in the AST and check for the \texttt{null} constant.
+Last, the clean code rule prevents the return of the null value as an error code or as an indication for no result. A checker could prevent this with a basic level of complexity. It could search for all \texttt{return} statements in the AST and check for the \texttt{null} constant.
 
 \section{Quantitative Metrics for Code Quality}
 To define the quality of a software product, it is necessary to have methods to express the code quality as quantitative units. This has multiple advantages:
