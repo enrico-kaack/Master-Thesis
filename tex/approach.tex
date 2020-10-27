@@ -49,7 +49,7 @@ These problems are instances of a problem class inheriting from \texttt{Abstract
     \item Give reasons why this code is seen as problematic.
     \item Show guidance and examples on how to fix the problem and improve the code.
 \end{itemize}
-Although it is possible to use one plugin for multiple, different problem types, having one plugin for one problem type helps to reuse and share the plugin. Additionally, it can be disabled easily by removing the plugin from the plugin folder.
+Although it is possible to use one plugin for multiple, different problem types, having one plugin for one problem type helps to reuse and share the plugin. Additionally, it can be disabled easily by removing the plugin from the plugin folder and complies to the Single-Responsibility Rule.
 
 
 \begin{lstlisting}[language=Python, label=lst:return_none_problem_override, caption={Example for overwriting the \texttt{AbstractAnalysisProblem} with a concrete implementation. The problem name and description are overwritten.}]
@@ -72,7 +72,7 @@ In order to extend the CCAP with an analysis plugin, the following steps are req
 While these are the minimum required steps to implement the plugin, the developer is free to add additional methods, classes or import libraries as necessary.
 Furthermore, it is advisable to implement several tests to ensure the plugins correctness. CCAP uses the pytest\footnote{\url{https://docs.pytest.org/en/stable/}} libtrary for testing. Implementing a test is as easy as writing a function with a \enquote{test\_} prefix and running the \texttt{pytest} command. The plugin can be tested by simulating a call from the CCAP core with a mocked \texttt{ParsedSourceFile}. 
 
-\paragraph{Return None Plugin}
+\subsection{Return None Plugin}\label{sec:return_none_ccap_implementation}
 A rather simple analysis plugin demonstrates the capabilities of the CCAP: The Return None Plugin scans the source code for functions that return the \texttt{None} value. Returning texttt{None} may result in runtime exceptions if the function caller does not expect and handle a potential \texttt{None} return. Although the None can be returned directly or as a value of the returning variable, this plugin only focus on the explicit \texttt{return None} statement to showcase the options for the developer to analyse the source code. We will later refer to this problem type as \texttt{RETURN\_NONE} (RN).
 
 Detecting a \texttt{return None} statement is possible in multiple ways. The following shows the possibilities for a developer to implement such a detector:
@@ -117,8 +117,8 @@ The second plugin detects a direct comparison in a conditional statement. For be
 An if-statement consists of a condition, a body and an else part. If the condition evaluates to \texttt{true}, the body is executed. Otherwise, the else part is executed. Any logical expression or a function call will be evaluated in the condition. A simple algorithm to detect a comparison in the condition would take the AST, search for \texttt{if} nodes, and check if the condition part is a compare node.
 However, the simple algortihm would not detect a negation and a logic AND/OR conjunction. Consequently, a recursive algorithm has to follow logic operators and checks the expressions for comparison nodes. The simple approach does not provide value for the CCAP, but we use if for the machine learning evaluation. We later refer to the code detected with this algorithm as \texttt{CONDITION\_COMPARISON\_SIMPLE}.
 
-Following these considerations, an advanced algorithm would scan for \texttt{if} nodes in the AST. The conditional part as a boolean expression is evaluated in a recursive. It can be a boolean operation (like AND/OR) or a unary operator (like NOT). In these cases, the function will be called recursively with the respective expressions. If the conditional part is neither a boolean operation nor a unary operator, the function returns \texttt{true} if a single expression is not a function or method call. A function or method call is recommended by the clean code rules instead of a comparison to maintain readability. We will later refer to this advanced algorithm as 
-The last case would be the base case in the recursion. \Cref{lst:condition_coparison} shows the Python implementation of this algorithm and the detected code patterns as \texttt{CONDITION\_COMPARISON}.
+Following these considerations, an advanced algorithm would scan for \texttt{if} nodes in the AST. The conditional part as a boolean expression is evaluated in a recursive. It can be a boolean operation (like AND/OR) or a unary operator (like NOT). In these cases, the function will be called recursively with the respective expressions. If the conditional part is neither a boolean operation nor a unary operator, the function returns \texttt{true} if a single expression is not a function or method call. A function or method call is recommended by the clean code rules instead of a comparison to maintain readability. 
+The last case would be the base case in the recursion. \Cref{lst:condition_coparison} shows the Python implementation of this algorithm and the detected code patterns. We will later refer to the problem type of this advanced algorithm as \texttt{CONDITION\_COMPARISON} (CC). 
 \begin{lstlisting}[float, floatplacement=h, language=Python, label=lst:condition_coparison, caption={Recursive function to analyse an if statement for direct comparisons. Since a condition should contain a method call, the function returns False if this is not the case.}]
 def _check_if_direct_comparison(self, node):
     if isinstance(node, ast.BoolOp):
@@ -190,30 +190,40 @@ Continuing on configuration possibilities, having configuration possibilities fo
 Last, a feature to disable problem reporting for a specific code location could bring a boost in user acceptance. While some clean code rules are objective and can be measured precisely, some rules may not apply to every occurrence of the situation. For instance, the clean code guidelines generally suggest not to have more than three function arguments; it may be necessary or even inevitable to have four arguments. The CCAP would report this as a problem, but the user should be able to decide if it is acceptable. In this case, the problem type on this specific location should not be reported in the future. In the current version, the user has no way to ignore a specific problem. Consequently, the number of problems the user has to ignore will accumulate over time until the user abandons the tool since it does not provide an added value over the frustration of manually ignoring problems.
 
 \section{Clean Code Classification}\label{chap:clean_code_classification}
-In the previous chapter, we have presented a platform to check for clean code rules. This platform requires analysis plugins to detect certain problems. These handwritten rules work well on certain rules, but certain rules may require a complicated analysis of the AST, the data-flow or the inter-module dependencies. Some rules, on the other hand, are subjective and we do not see a way of detection those rule violations with an algorithm.
-Therefore, this chapter introduces an approach to evaluate different supervised machine learning models to classify code into clean code or problematic code. Furthermore, we describe how we modify the code to test the generalisation capabilities of the models. The mentioned machine learning models include random forest classifier, support-vector-Machines, gradient boosting classifier and a recurrent neural network based on Long short-term memory units. 
+In the previous chapter, we presented a platform to check for clean code rules. This platform requires analysis plugins to detect specific problems. These handwritten rules work well for rules with a basic level of complexity, but certain rules of advanced level of complexity may require a complicated analysis of the AST, the data-flow or the inter-module dependencies. Furthermore, rules with an high level of complexity can be subjective and we do not see a way of detection those rule violations with a deterministic algorithm.
 
-The objectives are to train, evaluate and compare Source Code Snippet Classification models and to modify the input data to represent a problematic code in an unseen way.
+Therefore, this chapter introduces an approach to evaluate different supervised machine learning models to classify code into clean code or problematic code. Furthermore, we describe how we modify the code to test the generalisation capabilities of the models. The mentioned machine learning models include random forest classifier, support-vector machines, gradient boosting classifier and a recurrent neural network model based on Long Short Term Memory units. 
 
-In the following, we describe the approach in detail. The structure follows a machine-learning typical pipeline of data collection, preprocessing, encoding, splitting and training. 
+The objectives are twofold: For \hyperref[rq:2]{RQ2}, we train, evaluate and compare the different models on the detection of different code violations. Then we manipulate the source code to test in \hyperref[rq:3]{RQ3}, how well the models generalise to non-seen variations of the rule violations.
+
+To achieve our objectives, we will train our models on the dection of three problem types: 
+\begin{enumerate}
+    \item The \texttt{RETURN\_NONE} (RN) problem type covers a \texttt{return None} statement in Python code (see \Cref{sec:return_none_ccap_implementation}). A detector would report such a statement as this problem type.
+    \item A detector for the \texttt{CONDITION\_COMPARISON\_SIMPLE} (CCS) problem types detects a comparison operator in the condition of an if-statement. It does not detect the comparison if it is nested with logical expressions. The dection algorithm is further described in \Cref{sec:condition_comparison}.
+    \item With the \texttt{CONDITION\_COMPARISON} (CC) type, we describe wether the condition inside an if-statement contains other expressions then boolean logic and function calls. The CC type is a superset of the CCS problems. 
+\end{enumerate}
+From the three problem types, we think the RN type is the easiest type to spot, since the model only has to spot the same statement in every sample. The CC type is more complex to spot and the model would have to learn the connection between the if-statement and the possible logic expressions. The same applies for the CCS type, that should be easier to detect than the CC type due to less variations. Additionally, we use the trained model on the CCS subset and test it with a manipulated CC superset to asses the generalisation to unseen variations in \hyperref[rq:3]{RQ3}.
+
+In the following, we describe the approach in detail. First, we descibe challenges and our solutions. Second, we describe our dataset and our split in train, test and holdout set. Afterwards, we describe our pipeline of processing the raw files into samples with fixed size, our encoding approach and our code manipualtion for \hyperref[rq:3]{RQ3}. In the final section, we describe the machine learning models and parameters we use for all research questions.
 
 \subsection{Challenges}
 \paragraph{Lack of datasets}
-The most crucial components of every machine learning experiment are labelled datasets. For clean code detection, our research has shown no datasets with labelled clean code violations that could be used.
-As a result, we evaluated different approaches:
+The most crucial precodnition of supervised machine learning experiments are labelled datasets. For clean code detection, we did not find a suitable dataset with labelled clean code violations in our research. 
+As a result, we evaluated different approaches to create such a dataset:
 
 \subparagraph{Solution 1:}
-Related research fields like code completion often use the py150 dataset to train models~\cite{raychev2016probabilistic}. This dataset contains 150.000 python files, sourced from GitHub. For supervised classification tasks, this dataset is inadequate due to its missing labels.  
+Related research fields like code completion often use the py150 dataset to train models~\cite{raychev2016probabilistic}. This dataset contains 150.000 python files, sourced from GitHub. For our supervised classification tasks, this dataset is inadequate due to its missing labels.  
 
 \subparagraph{Solution 2:}
-Another possible data source would be git commit histories. We could scan the history for commits that fixed unclean code. The previous code could then be labelled \enquote{unclean} and the committed code would be \enquote{clean}.
+Another possible data source could be git commit histories. We could scan the history for commits that fixed unclean code. The previous code could then be labelled \enquote{unclean} and the committed code would be \enquote{clean}.
 Same applies to issues and referenced pull requests on GitHub.
-We dismissed this approach for several reasons (see \Cref{fig:commit_messages} for an illustrative example):
+We dismissed this approach for several reasons:
 \begin{enumerate}
-    \item There is no annotation in neither issues descriptions nor git commit messages that would reliably tell if the change is changing a violation of the clean code rules.
+    \item There is no standardised annotation in neither issues descriptions nor git commit messages that would indicate reliably if the code change is fixing a violation of the clean code rules.
     \item Even if we would be able to find commits that improve chaotic code, we could not ensure automatically, that the commit message is correct and only the improvement is included in the commit.
     \item Searching for commits, we found several clean code improvements and refactorings of large portions of the codebase in one commit. Additionally, it is often not explicitly mentioned, which rule applied for the improvement. Consequently, training with such data could only lead to binary classification into clean code or unclean code. From a practical standpoint, it is advantageous to name the explicit rule violation and to explain how to improve.
 \end{enumerate}
+\Cref{fig:commit_messages} offers an illustrative example of commit messages from different projects. First, there is no consistent annoation schema to display clean code optimisation. Second, a commit may include multiple changes like the second example. Finally, the first commit shows a large refactoring that most likely fixes several problems and not only clean code violations.
 
 \begin{figure}
     \begin{subfigure}{\textwidth}
@@ -225,57 +235,62 @@ We dismissed this approach for several reasons (see \Cref{fig:commit_messages} f
     \begin{subfigure}{\textwidth}
         \includegraphics[width=1\linewidth]{img/ML/commit_messages/screen_3.png}
     \end{subfigure}
-    \caption[Example commit messages that underline the inconsistency in commit message naming]%
-    {Example commit messages from different repositories. Those examples highlight (1) the missing naming convention, (2) inclusion of additional performance improvements and (3) several edits in multiple files. Those commits are found by searching GitHub for \enquote{clean code improvements} and filtering for Python language and commits. Sources: \footnotemark[1], \footnotemark[2], \footnotemark[3]  }
+    \caption[Example commit messages that underline the inconsistency in commit message naming.]
+    {Example commit messages from different repositories. Those examples highlight (1) the missing naming convention, (2) inclusion of additional performance improvements, and (3) several edits in multiple files. Those commits are found by searching GitHub for \enquote{clean code improvements} and filtering for Python language and commits. Sources: \footnotemark[1], \footnotemark[2], \footnotemark[3]  }
     \label{fig:commit_messages}
 \end{figure}
 \footnotetext[1]{\url{https://github.com/Zadigo/ecommerce_template/commit/db2655c7ba16add17db221761fabda28e0128761}}
 \footnotetext[2]{\url{https://github.com/gbaranski/homeflow/commit/7d06d9f6ea78530e5a542f71f6ddd536e2d55bb7}}
 \footnotetext[3]{\url{https://github.com/ptimofeyeff/distributed-computing/commit/ff5e1322611a0c3b3c62556d7a775441630df252}}
+TODO put sources somewhere else
+
 \subparagraph{Solution 3:}
-Although Python code is available in abundance in form of open-source projects, it is possible to manually label source code that violates clean code guidelines. 
+Since Python code is available in abundance in form of open-source projects, it is possible to manually label source code that violates clean code rules. 
 For the following reasons, we dismissed this approach:
 \begin{enumerate}
-    \item Curating a hand-labelled dataset is a lot of work that takes time. 
+    \item Curating a hand-labelled dataset is a time-consuming task. 
     \item Manual labelling does not ensure correct labelling. A human can make mistakes or can subjectively misinterpret chaotic code as clean code. The quality of the dataset could suffer and limit the machine learning models performance.
 \end{enumerate}
+
 \subparagraph{Solution 4:}
-Given any amount of Python files, we could use the analysis plugins from \Cref{sec:analysis_plugins} to reliably detect violations of the corresponding rule. Based on this labelled data, we can train the classifier to detect these rules. If there would be a labelled dataset for more complex clean code rules, we could transfer the findings to these more complex rules. We choose this solution to solve the dataset problem and train classifier, with more details given in \Cref{sec:data_encoding}. As a second step, we manipulated the input data, so the original analysis plugin could not detect the still existing problems anymore. With the second step, we show that the classifier generalise well enough to may work on complex clean code rules.
+Given any amount of Python files, we could use the analysis plugins from \Cref{sec:analysis_plugins} to reliably detect violations of the corresponding rule. Based on this labelled data, we could train the classifier to detect those rule violations. The analysis plugins only cover rule violations of basic level of complexity so the trained classifier could only detect rule violations that could also be detected by a basic checker. But if there would be a labelled dataset for more complex clean code rules, we could transfer the findings to these more complex rules. 
 
-\paragraph{Inbalanced Dataset}\label{sec:inbalanced_dataset}
-A second challenge is a major imbalance between the classes labelled as problematic code and clean code. For the three different problem types, RETURN NONE, CONDITION COMPARISON SIMPLE and CONDITION COMPARISON, the class distribution is shown in \Cref{tab:class_distribution_in_dataset}.
+We choose this solution to solve the dataset problem and train classifier. We can automatically generate a labelled data with correct and consistent labels. Furthermore, this solution allows to scale the dataset size if necessary. We will use the analysis plugins to label the three problem types: \texttt{RETURN NONE} (RN), \texttt{CONDITION COMPARISON SIMPLE} (CCS) and \texttt{CONDITION COMPARISON} (CC). However, this implies that we train classifier to detect rule violations that could be detected by simple analysis plugins. If a labelled dataset for rules with a high level of complexity becomes available, we hope to transfer our findings to those rule violations as well.
+In \hyperref[rq:3]{RQ3} we will then test those classifier on unseen variations of the rule violations to test the generalisation of the models. This gives an outlook on the transfer the training on rules with an high level complexity by simulating a hand-labelled training set that is limited in problem variations.
 
+\paragraph{Imbalanced Dataset}\label{sec:inbalanced_dataset}
+A second challenge is a major imbalance between the samples labelled as problematic code and clean code. For the three different problem types, RN, CCS, and CC, the class distribution is shown in \Cref{tab:class_distribution_in_dataset}. The imbalance is especially severe for the RN type, since only two out of 1000 samples contain the rule violation. For the CCS and CC type, the class are slightly more balanced with 26 and 49 samples with rule violations out of 1000.
 
-
-\begin{table}[]
-    \begin{tabular}{@{}llll@{}}
+\begin{table}[b]
+    \centering
+    \begin{tabular}{@{}crrr@{}}
     \toprule
-    Label  & RETURN NONE & CONDITION SIMPLE & CONDITION COMPARISON \\ \midrule
+    Label  & \multicolumn{1}{c}{RN} & \multicolumn{1}{c}{CCS} & \multicolumn{1}{c}{CC} \\ \midrule
     0 & 99.79\%     & 97.36\%          & 95.14\%              \\
     1 & 0.21\%      & 2.64\%           & 4.86\%               \\ \bottomrule
     \end{tabular}
-    \caption{Class distribution for the train/test dataset before the split. Label [0] represents clean code and label [1] marks problematic code of the corresponding category.}
+    \caption[Class distribution for the dataset.]{Class distribution for the dataset. Label [0] represents clean code and label [1] marks problematic code of the corresponding category.}
     \label{tab:class_distribution_in_dataset}
     \end{table}
 
 
 \subparagraph{Solution 1:}
-Due to the imbalance, we do not choose accuracy as a suitable evaluation metric, since classifying all samples as clean code would result in an accuracy of 99.79\% for the RETURN NONE problem type. Instead, we use precision and recall as metrics, with an f1 score as a single, weighted metric. More details about the metrics are in \Cref{par:approach}.
+Due to the imbalance, we do not choose accuracy as a suitable evaluation metric, since classifying all samples as clean code would result in an accuracy of 99.79\% for the RN problem type. Instead, we use precision and recall as metrics, with an f1 score as a single, weighted metric. More details about the metrics are in \Cref{par:approach}.
 
 \subparagraph{Solution 2:}
-We will apply undersampling and oversampling techniques on the data and evaluate the difference in model performance. Undersampling removes random samples from the majority class and thus balance class labels. Oversampling replicates random samples from the minority class to balance class labels while also increasing the overall amount of data. This technique is only used in the training data. Since it changes the data distribution, an additional train-dev dataset is used as an additional test set to evaluate the impact of the resampling on the model performance. TODO not up to date
+We will apply undersampling and oversampling techniques on the data and evaluate the difference in model performance. Undersampling removes random samples from the majority class and thus balance class labels. Oversampling replicates random samples from the minority class to balance class labels while also increasing the overall amount of data. This technique is only used for the training data since it would distort the evaluation results when applied to test data as well.
 
 \subparagraph{Solution 3:}
-Our approach of training different classifier is a solution to the data imbalance since different classifier has a different sensitivity to data balance. 
+Our approach of training different classifier is a solution to the data imbalance since different classifier have a different sensitivity to data balance. 
 
 \paragraph{SVM quadratic complexity in training}\label{sec:svm_quadratic_complexity}
-The implementation of the support vector machine has a quadratic time complexity on the number of training data~\cite{abdiansah_time_2015}. Consequently, the training takes a lot of time and the oversampling strategy worsen the training time additionally. 
+The implementation of the support-vector machine has a quadratic time complexity on the number of training data~\cite{abdiansah_time_2015}. Consequently, the training takes a lot of time and the oversampling strategy worsen the training time additionally since it introduces more samples.
 \subparagraph{Solution:}
-We reduced the number of experiments with SVM and just evaluate some simple cases for baseline performance. 
+We reduce the number of experiments with SVM and just evaluate some simple cases for baseline performance. 
 
 
 \subsection{Dataset}\label{chap:clean_code_classification_dataset}
-The source of our dataset are open-source python projects on GitHub. We queried the top starred Python repositories and handselected 18 repositories. Although most top stared repositories are data science frameworks, we additional choose projects from domains such as web server, automation and containerisation. In \Cref{tab:repos_domains}, we list all projects with the corresponding domain.
+The source of our dataset are open-source Python projects on GitHub. We queried the top starred Python repositories and handselected 18 repositories. Although most top stared repositories are data science frameworks, we explicitly choose projects from other domains such as web server, automation and containerisation. In \Cref{tab:repos_domains}, we list all projects with the corresponding domain.
 \begin{table}[h]
     \centering
     \csvautobooktabular{tables/dataset_category.csv}
@@ -284,7 +299,7 @@ The source of our dataset are open-source python projects on GitHub. We queried 
 \end{table}
 
 A script downloaded all projects in their main branch with the current head. See \Cref{tab:repos_hashes} for the corresponding git hashes. Afterwards, we removed all non-python files. 
-Next, we uniformly sampled 20\% of all files and separated those into a holdout set for final testing. Additionally, we perform our train/test split on the file level and not on the sample level. We describe the reason for the file level split later in \Cref{sec:train_test_split}.
+Next, we uniformly sampled 20\% of all files and separated those into a holdout set for testing and for the code manipulation in \hyperref[rq:3]{RQ3}. Additionally, we perform our train/test split on the file level and not on the sample level. We describe the reason for the file level split later in \Cref{sec:train_test_split}.
 
 We ensured to have similar data and label distribution on all data sets. \Cref{tab:general_data_distribution} shows general and problem-specific metrics on file level for the train, test and holdout set. The problem-specific metrics are collected after processing the code files as described in \Cref{sec:data_encoding}. We define the metrics as follows:
 
@@ -292,17 +307,17 @@ We calculate the \textit{average lines of code per file} for $n$ files with $l_i
 \[
   \textit{average LOC per File} = \frac{\sum_{i=0}^n{l_i}}{n}  
 \]
-For the \textit{proportion of lines of code containing a problem}, we assume one line contains the problem. Therefore, we define this metric for $n$ files with $l_i$ lines of code per for the $i$th file and $p_i$ problems in the $i$th file as follows:
+For the \textit{proportion of lines of code containing a problem}, we assume one line contains the problem. Therefore, we define this metric for $n$ files with $l_i$ lines of code for the $i$th file and $p_i$ problems in the $i$th file as follows:
 \[
     \textit{LOCs containing problem} = \frac{\sum_{i=0}^n{p_i}}{\sum_{i=0}^n{l_i}}
 \]
-Last, we calculate the number of problems per file for $n$ file and $p_i$ problems in the $i$th file as:
+Last, we calculate the number of problems per file for $n$ files and $p_i$ problems in the $i$th file as:
 \[
     \textit{Problems per File} = \frac{\sum_{i=0}^n{p_i}}{n}
 \]
 
-The most important metrics for the data distribution is the proportion of lines of code containing the problem type and the average number of problems per file. For the first, we observe a maximal difference of 0.02 percentage points for the RN problem type, 0.11 percentage points for CCS and 0.13 percentage points for the CC problem type. This directly translates into the label distribution on sample level shown in \Cref{tab:class_distribution} with a maximal difference 0.06, 0.26 and 0.31 percentage points for the three problem types.
-The number of problems per file is lower in the test set for the CCS and CC problem type. Nevertheless, since the first metric and the label frequency are comparable, we assume our datasets have a similar data distribution. 
+The most important metrics for the data distribution is the proportion of lines of code containing the problem type and the average number of problems per file. For lines of code containing the problem type, we observe a maximal difference of 0.02 percentage points between the datasets for the RN problem type, 0.11 percentage points for CCS and 0.13 percentage points for the CC problem type. This directly translates into the class distribution as shown in \Cref{tab:class_distribution} with a maximal difference 0.06, 0.26 and 0.31 percentage points for the three problem types.
+The number of problems per file is lower in the test set for the CCS and CC problem type. Nevertheless, the size of a file may vary and thus the number of problems per file may vary too. Since the lines of code containing the problem and the class frequencies are compareable, our datasets have a compareable data distribution.
 
 TODO per-project analysis table in attachments.
 
@@ -322,7 +337,7 @@ TODO per-project analysis table in attachments.
     \multirow{2}{*}{Condition Comparison}        & LOCs containing problem & 2.34\%  & 2.31\%  & 2.44\%  \\
                                                  & Problems per File       & 4.44    & 3.85  & 4.42    \\ \bottomrule
     \end{tabularx}
-    \caption{General and problem specific metrics for the train, test and holdout set. The lines of code containing a problem and the problems per file are similiar.}
+    \caption{General and problem specific metrics for the train, test and holdout set.}
     \label{tab:general_data_distribution}
 \end{table}
 
@@ -337,7 +352,7 @@ TODO per-project analysis table in attachments.
     \multirow{2}{*}{Condition Comparison}        & [0] & 95.13\%  & 95.21\%  & 94.9\%  \\
                                                  & [1] & 4.87\%   & 4.79\%  & 5.1\%    \\ \bottomrule
     \end{tabularx}
-    \caption{Label frequency for all problem types on the train, test and holdout set.}
+    \caption{Class frequencies for all problem types on the train, test and holdout set. We observe a compareable class distribution amoung the datasets for each problem type.}
     \label{tab:class_distribution}
 \end{table}
 
@@ -349,42 +364,43 @@ TODO per-project analysis table in attachments.
 \end{figure}
 
 \subsection{Processing}
-For the processing steps, we create a pipeline with the d6tflow framework\footnote{\url{https://github.com/d6t/d6tflow}}. Each processing step is a task that stores its results depending on the parameter configuration in a pickle file. This allows to define a pipeline once and run it with different parameter combinations. The scheduler automatically determines what tasks to run and what task outputs are already stored in pickle files. Consequently, running the pipeline is more efficient and repeatable.
+For the processing steps, we create a pipeline with the d6tflow framework\footnote{\url{https://github.com/d6t/d6tflow}}. Each processing step is a task that stores its results depending on the parameter configuration in a pickle file. This allows to define a pipeline once and run it with different parameter combinations. The scheduler automatically determines what tasks to run and what task outputs are already stored. Consequently, running the pipeline is more efficient and repeatable.
 
-The processing pipeline consists of tasks to read the files into a data structure, to processes source code and find the problems, to create a vocab dictionary, to convert the data into labelled samples and to split the data into a train, traintest and test set. TODO outdated) See \Cref{fig:pipeline_rq2} for a schematic representation of the pipeline.
+The processing pipeline consists of tasks to read the files into a data structure, to processes source code and find the problems, to create a vocab dictionary, to convert the data into labelled samples. In \Cref{fig:pipeline_rq2}, we provide a schematic representation of the pipeline.
 
 \begin{figure}
     \includegraphics[width=1\textwidth]{img/ML/Pipeline_RQ2.pdf}
-    \caption[Schematic representation of the pipeline to train and test models.]{Schematic representation of the pipeline for \hyperref[rq:2]{RQ2} to train and test models with configurable parameters. First, the pipeline reads the source code into memory, extract the vocabulary (\textit{TaskVocabCreator}) and identify all problem types (\textit{TaskRuleProcessor}). It the converts the code of dynamic length into fixed-size samples (\textit{TaskPrepareXY}). This sub-pipeline runs seperate for the train and test set. In \textit{TaskTrainTestSplit}, both datasets are combined and over- or undersampling is applied to the train set. The train set is used to train different classifiers wheras the train and test set are used for evaluation.}
+    \caption[Schematic representation of the pipeline to train and test models.]{Schematic representation of the pipeline for \hyperref[rq:2]{RQ2} to train and test models with configurable parameters. First, the pipeline reads the source code into memory, extract the vocabulary (\texttt{TaskVocabCreator}) and identify all problem types (\texttt{TaskRuleProcessor}). It the converts the code of dynamic length into fixed-size samples (\texttt{TaskPrepareXY}). This sub-pipeline runs seperate for the train and test set. In \texttt{TaskTrainTestSplit}, both datasets are combined and over- or undersampling is applied to the train set. The train set is used to train different classifiers wheras the train and test set are used for evaluation.}
     \label{fig:pipeline_rq2}
 \end{figure}
 
 
 \subsubsection{Files into internal Data Structure}
-First, a scanner walks recursively in all subdirectories of the input folder to find all files. If the file has a \textit{.py} extension, its file path and the file content will be stored in a dictionary. The dictionaries for all file are collected into a list. 
+First, a scanner walks recursively over all subdirectories of the input folder to find all files. If the file has a \texttt{.py} extension, its file path and the file content will be stored in a dictionary. The dictionaries for all file are collected into a list. 
 Reading all files into main memory increases the performance for downstream tasks since main memory access is faster than disk access. Although the size of the system's main memory limits the dataset size, a file contains text and is just several kilobytes in size. The train dataset with 13,330 files is 86.47MB in accumulated file size.
 
 \subsubsection{Problem Detection}\label{sec:problem_detection}
-As a next step, the analysis plugins from the CCAP (see \Cref{sec:analysis_plugins}) process every file and store the line number along with the problem type. As a result, for every file list of problematic line numbers and the corresponding type is available for further processing. The CCAP only covers the two analysis plugins for the problem types CONDITION COMPARISON and RETURN NONE. For model training, we introduce the simple algorithm to detect comparisons in conditions as problem type CONDITION COMPARISON SIMPLE (described in \Cref{sec:condition_comparison})
-
-
+As a next step, the analysis plugins from the CCAP (see \Cref{sec:analysis_plugins}) process every file and store the line number along with the problem type (RN, CCS, or CC). As a result, for every file, a list of problematic line numbers and the corresponding type is available for further processing. 
 
 \subsubsection{Data Encoding}\label{sec:data_encoding}
-The data encoding step transforms the internal data representation into input vectors $x$ and output vectors $y$. The transformation is described in the following, multi-stage process.
-
+The data encoding step transforms the internal data representation into the input vector $x$ and output vector $y$. One $(x,y)$ pair describes a samples with input and ground truth label. The transformation happens in the following, multi-stage process:
 \paragraph{Fixed Length Sequence}
 The length of the source code is dynamic, whereas the input size of our models is fixed. Therefore, the character stream of variable length has to be transformed into a token stream of fixed size. 
-To extract meaningful tokens from the character stream, we use the python tokeniser from its standard library. The tokeniser separates the character stream based on the python syntax definition into tokens. All tokens contain a token type (like a name or operator token), the corresponding characters in the source code and a start and end position (line and column number). Next, the token stream is divided into a fixed size token sequence using a sliding window approach (size: 20, step size: 3).
+To extract meaningful tokens from the character stream, we use the Python tokeniser from its standard library. The tokeniser separates the character stream based on the python syntax definition into tokens. All tokens contain a token type (like a name or operator token), the corresponding characters in the source code and a start and end position (line and column number). Afterwards, the token stream is divided into a fixed size token sequence using a sliding window approach. The step and window size are configureable, and we use a window size of 20 and a step size of 3 in our experiments. The sliding window operation is part of the \texttt{TaskPrepareXY} step in the pipeline.
 \paragraph{Vocabulary Creation}
-To represent a token value with a number, every token value needs a numeric representation. Therefore, the occurrence of each token value is counted and the index in a descending ordered list for each token value represents the token as an integer. To ignore potential capitalisation mismatches, all token values are lower-case. The overall size of the vocabulary is configurable. If the size is smaller than the size of the distinct token value set, the least common token values will be replaced by an unknown token. The unknown token has a numeric representation one bigger than the vocabulary size. We found that using a vocabulary size of 100,000 results in an acceptable 3.9\% unknown token frequency.
+In order to feed the textual token values into a model, we need to transform it into a numeric representation. Since our token values can be the entire value of a string literal, we can not encode every single token value into a number. We create a vocabulary with a limitied size that contains the most common token values and a numerical representation for all other values.
+Therefore, the occurrence of each token value is counted and sorted based on their frequency. To ignore potential capitalisation mismatches, all token values are lower-case. The overall size of the vocabulary is configurable. If the size is smaller than the size of the distinct token value set, the least common token values will be replaced by an unknown token. The unknown token has a numeric representation one bigger than the vocabulary size. We found that using a vocabulary size of 100,000 results in an acceptably low 3.9\% of token values being unknown. In our pipeline, the task \texttt{TaskVocabCreator} creates the vocabulary.
 \paragraph{Index-Based Encoding}
-The textual token values are encoded with an Index-Based encoding. The most common token values have a numerical representation based on their index in a vocabulary (created with all token values of the train data). Optional, the type of each token is encoded by its numerical representation in the standard library. The type and value encoding are then combined alternating in a final encoding vector that represents an input sample.
+The textual token values are encoded with an Index-Based encoding. The most common token values have a numerical representation based on their index in a vocabulary (created with all token values of the train data). Optional, the type of each token is encoded by its numerical representation in the standard library (see \Cref{fig:tokenizer_types}). The type and value encoding are then combined alternating in a final encoding vector $x_i$ for every sample $i$.
 \paragraph{Label Extraction}
-With the internal representation, the ground truth is encoded as a line number. A transformation is necessary to label each sample corresponding to a given problem type. Label 1 is assigned if the sample contains the given problem type. A sample contains a problem type if it contains all tokens from the problematic line. If the sample is missing a token of the problematic line at the beginning or end, the label is 0 for non-problematic code. 
+With the internal representation, the ground truth is encoded as a line number. This representation has to be transformed in a label $y_i$ for the given input vector $x_i$ for sample $i$. Label 1 is assigned if the sample contains the given problem type. A sample contains a problem type if it contains all tokens from the problematic line. If the sample is missing a token of the problematic line at the beginning or end, the label is 0 for non-problematic code.
+After the label extraction in the pipeline step \texttt{TaskPrepareXY}, we have a list of input vectors $x$ and a list of ground truth labels $y$. With this, we can train and test our models.
 
 \subsubsection{Train/Test Split}\label{sec:train_test_split}
-In \Cref{chap:clean_code_classification_dataset}, we described to create a train, test and holdout dataset by file-level separation and not by sample level splitting.
-Since we use a sliding window approach to convert source files with dynamic length into fixed-length token sample samples, we may have one problematic code line in multiple samples. If we would do a train/test split on a sample level, we may introduce samples covering one problematic pattern at different positions in both datasets. \Cref{fig:encoding_sliding_window} illustrates multiple windows covering one sample. This unclean separation would diminish the validity of metrics calculated from the test and holdout dataset. 
+In \Cref{chap:clean_code_classification_dataset}, we described to create a train, test and holdout dataset by file-level separation and not by splitting the samples. The reason for this approach is our sliding window concept. Since we use the sliding window to convert source files with dynamic length into fixed-length token sample samples, we may have one problematic code pattern in multiple samples. The difference would be in the location inside the sample and the surrounding tokens, wheras the pattern remains the same.
+If we would do a train/test split on a sample level, we may introduce samples covering one problematic pattern in both datasets. \Cref{fig:encoding_sliding_window} illustrates multiple windows covering one sample. 
+
+This unclean separation would diminish the validity of metrics calculated from the test and holdout dataset. Therefore, we split on file level and perform the previous preprocessing seperately for training and test dataset. Only the vocabulary generation happens on the training file for both processing steps. In \texttt{TaskPrepareXY} in the pipeline, we then merge those two pipelines for training and testing (see \Cref{fig:pipeline_rq2}).
 \begin{figure}
     \includegraphics[width=1\textwidth]{img/ML/encoding_sliding_window_problem.pdf}
     \caption[Sliding window approach on source code containing a problematic \texttt{return None}]{Sliding window approach on source code containing a problematic \texttt{return None}. Multiple windows will contain the problematic sample. Consequently, we can not split on a sample level, since the same problem would be in the train and test set. Instead, we split on file level to have a clean separation between the datasets.}
@@ -402,11 +418,11 @@ In research question \hyperref[rq:3]{RQ3}, we evaluate the models' generalisatio
 
 
 \paragraph{Return None}\label{par:manipulation_return_none}
-For the problem type RETURN NONE, we manipulate the code to have an inline if statement that only returns None in one branch. Therefore, a function may still return None, but the analysis plugin would not detect this. \Cref{lst:return_none_modified} shows an example for this case. Although a modification of the analysis plugin could cover the variations as well, we want to see how well machine learning models could perform on this task.
+For the RN problem type, we manipulate the code to have an inline if statement that only returns \texttt{None} in one branch. Therefore, a function may still return None, but the analysis plugin would not detect it. \Cref{lst:return_none_modified} shows an example for this case. Although a modification of the analysis plugin could cover the variations as well, we want to see how well machine learning models could perform on this task.
 
-To modify the original code, we use the preprocessed code with problems detected as in \Cref{sec:problem_detection}. For every source code line containing the RETURN NONE problem, we use regular expressions to replace the \textit{return None} with a variation as seen in \Cref{lst:return_none_modified}. 
+To modify the original code, we use the preprocessed code with problems detected as in \Cref{sec:problem_detection}. For every source code line containing the RN problem, we use regular expressions to replace the \textit{return None} with a variation as seen in \Cref{lst:return_none_modified}. 
 
-The following data encoding step is similar to the one for model training, although this modified samples will only be used during evaluation.
+The subsequent data encoding step is similar to the one for model training, although this modified samples will only be used during evaluation.
 
 \begin{minipage}[c]{\linewidth}
 \begin{lstlisting}[language=Python, label=lst:return_none_modified, caption={Samples for returning None. The first return would be flagged by the analysis plugin; the second and third return are modified variations that would be ignored by the analysis plugin. The performance of the machine learning models on detecting the latter will be evaluated.}]
@@ -420,40 +436,42 @@ def f(a,b):
     #not detected by the analysis plugin
     return a if a < b else None \end{lstlisting}
 \end{minipage}
-\paragraph{Condition Comparison}
-The analysis for the CONDITION COMPARISON problem type is an advancement of the analysis of the CONDITION COMPARISON SIMPLE problem type.  See \Cref{lst:conidtion_comparison_modified} for examples of the different analysis results.
-Since the results of CONDITION COMPARISON are the modification of the CONDITION COMPARISON SIMPLE, we use the first as ground truth for evaluating the generalisation. Since the CONDITION COMPARISON SIMPLE problems are a subset of the CONDITION COMPARISON problems, we use a similar approach as before (see \Cref{par:manipulation_return_none}) to transform all problem occurrences to be undetectable by the CONDITION COMPARISON SIMPLE analysis plugin.
+\paragraph{Condition Comparison}\label{par:manipulation_condition_comparison}
+We want to test the generalisation of the model trained on the CCS types by evaluating on the labelled data for the CC type. 
+Since the dataset for the CC type includes the CCS subset, we manipulate the CC dataset to only contain samples the CCS was not trained on. The sample in \Cref{lst:conidtion_comparison_modified} shows the maniplation to ensure, all CC problems were not part of the CCS training set. The implementation uses a similar regular expression approach as described in \Cref{par:manipulation_return_none}
 
-\begin{lstlisting}[language=Python, label=lst:conidtion_comparison_modified, caption={Sample statements for the differnce between the two analysis plugins CONDITION COMPARISON and CONDITION COMPARISON SIMPLE.  }]
+\begin{lstlisting}[language=Python, label=lst:conidtion_comparison_modified, caption={Sample statements for the differnce between the two analysis plugins CC and CCS.  }]
     def f(a,b):
     #detected by CONDITION COMPARISON SIMPLE
     #detected by CONDITION COMPARISON
     if a < b:
         pass 
 
+    #manipulated
     #not detected by CONDITION COMPARISON SIMPLE
     #detected by CONDITION COMPARISON
     if not a < b:
         pass 
 
+    #manipulated
     #not detected by CONDITION COMPARISON SIMPLE
     #detected by CONDITION COMPARISON
-    if isSmaller(a,b) or a < b:
+    if is_smaller(a,b) and b < c::
         pass \end{lstlisting}
 
 \subsection{Models}
-Classifying code samples is a binary classification problem since we consider each problem type as a separate classification task. We train and evaluate a random forest classifier, a support vector machine-based classifier, a gradient boosting classifier and a neural network with LSTM cells.
+Classifying code samples is a binary classification problem since we consider each problem type as a separate classification task. We train and evaluate a random forest classifier, a support-vector machine-based classifier, a gradient boosting classifier and a neural network with LSTM cells.
 
 \paragraph{Random Forest}
-We use a random forest classifier with 100 decision trees to perform the binary classification. Additional to over- and undersampling, we experiment with an automatic class weighting inverse proportional to class frequency. The other hyperparameter follows the default implementation of the scikit-learn library: The quality measure of a split follows the Gini function, the tree depth is unlimited and the number of features to consider for each split is the square-root of the number of features overall.
+We use a random forest classifier with 100 decision trees to perform the binary classification. Additional to over- and undersampling, we experiment with an automatic class weighting inverse proportional to class frequency. The other hyperparameter follows the default implementation of the scikit-learn library: The quality measure of a split follows the Gini function, the tree depth is unlimited and the number of features to consider for each split is the square-root of the number of features overall. We use the implementation in the scikit-learn library in version 0.23.2. TODO cite scikit-learn as on official website
 \paragraph{Support Vector Machine}
-We use the support vector classification from the scikit-learn library. As a kernel function, we choose the radial basis function for a performance baseline. Additionally, we try the class weighting inverse proportional to the class frequency to combat the imbalanced dataset.
+We use the support-vector classification from the scikit-learn library TODO ref. As a kernel function, we choose the radial basis function for a performance baseline. Additionally, we try the class weighting inverse proportional to the class frequency to combat the imbalanced dataset.
 \paragraph{Gradient Boosting Classifier}
-For gradient boosting classifier, we mainly vary the number of boosting steps and the learning rate. Furthermore, we experiment with stochastic gradient boosting by setting the subsample parameter to 0.4 and 0.7. Other hyperparameter settings follow the default value of the scikit-learn library.
+For gradient boosting classifier, we mainly vary the number of boosting steps and the learning rate. Furthermore, we experiment with stochastic gradient boosting by setting the subsample parameter to 0.4 and 0.7. Other hyperparameter settings follow the default value of the scikit-learn library TODO ref.
 \paragraph{Neural Networks with LSTM Cells}
 Our neural network consists of five layers (see \Cref{lst:lstm}). First, we use an embedding layer with an embedding size of 32. The input is the Index-Based encoded samples without type encoding. This layer is trained end-to-end with the complete network on the trainings-data. Furthermore, this layer covers most trainable parameters of the model. As a hidden layer, we use 10 LSTM cells with a prior and posterior dropout layer with a default 0.2 dropout. To perform binary classification, our model ends with a dense mapping onto a single neuron. The binary result is determined based on a 0.5 threshold for the output of the last neuron.
 
-We vary the hyperparameters for batch size, number of epochs, embedding size and number of LSTM cells.
+We vary the hyperparameters for batch size, number of epochs, embedding size and number of LSTM cells. For implementation, we use Keras in version 2.4.3. TODO cite
 
 \begin{lstlisting}[label=lst:lstm, caption={Summary of our LSTM network. We use an embedding layer of size 32, 10 LSTM cells, a dropout layer before and after the LSTM layer with a default dropout ratio of 0.2 and a dense mapping to a single output neuron for binary classification with a threshold of 0.5.}]
 Layer (type)                 Output Shape              Param #
