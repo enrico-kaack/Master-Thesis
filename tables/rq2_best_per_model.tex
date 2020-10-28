@@ -1,10 +1,11 @@
 % Please add the following required packages to your document preamble:
 % \usepackage{booktabs}
 \begin{table}[]
-    \begin{tabularx}{\textwidth}{rXXX}
+    \centering
+    \begin{tabular}{rrrr}
     \toprule
-    \multicolumn{1}{l}{}                             & RN         & CCS & CC \\ \midrule
-    \multicolumn{1}{l}{Random Forest}                & \multicolumn{1}{r}{} &            &              \\
+    \multicolumn{1}{l}{}                             & \multicolumn{1}{c}{RN}         & \multicolumn{1}{c}{CCS} & \multicolumn{1}{c}{CC} \\ \midrule
+    \multicolumn{1}{l}{Random Forest}                &  &            &              \\
     F1                                               & 0.8486               & 0.9352     & 0.9351       \\
     Recall                                           & 0.7404               & 0.8936     & 0.8976       \\
     Precision                                        & 0.9939               & 0.9809     & 0.9759       \\ \midrule
@@ -20,7 +21,7 @@
     F1                                               & 0.9933               & 0.9805     & 0.9783       \\
     Recall                                           & 0.9933               & 0.9779     & 0.9868       \\
     Precision                                        & 0.9933               & 0.9831     & 0.97       \\ \bottomrule
-    \end{tabularx}
+    \end{tabular}
     \caption{Best performing classifier for RQ2 based on f1 score of the holdout set. For the SVM, the validation performance of the configuration with available data is used.}
     \label{tab:rq2_best_classifier}
     \end{table}
