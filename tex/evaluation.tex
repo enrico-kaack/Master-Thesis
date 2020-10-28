@@ -17,7 +17,7 @@ We formulate this objectives into the following research questions that will lea
 Several tools are established that aim to improve code quality and detect unclean code (see \Cref{sec:tool_comparison}). Every new tool with similar claims has to prove its usefulness besides the preexisting tools. For this reason, we compare the CCAP with preexisting tools to evaluate its utility.
 
 \paragraph{Approach}
-To answer this research question, we compare the CCAP with existing tools based on the design goals extensibility, useability and integration. Additionally, we will mention and compare useful features unique to existing tools. Finally, we asses if it can supplement or replace existing tools. As described in section \ref{sec:tool_comparison}, the compared tools are Sonarcube, PMD Source Code Analyser Project, Codacy and PyLint.
+To answer this research question, we compare the CCAP with existing tools based on the design goals extensibility, useability and integration. Additionally, we will mention and compare useful features unique to existing tools. Finally, we asses if it can supplement or replace existing tools. As described in \Cref{sec:tool_comparison}, the compared tools are Sonarcube, PMD Source Code Analyser Project, Codacy and PyLint.
 
 \paragraph{Results}
 TODO vergleichstabelle
@@ -62,7 +62,7 @@ As we have shown with the CCAP and the analysis plugins, it is possible to write
 
 
 \paragraph{Approach}\label{par:approach}
-For answering the research question, we will use the approach detailed in chapter \ref{chap:clean_code_classification}.  The dataset, consisting of 18 projects from GitHub, is prepared as described in chapter \ref{chap:clean_code_classification_dataset}. First, 20\% of all files are moved to a seperate holdout dataset. We split the remaining files into 90\% train and 10\% validation data. We use the training dataset to train Random Forest Classifier, Gradient Boosting Classifier, Support Vector Machines and an LSTM-based neural network. Due to the class imbalance, we will additionally train with an oversampled dataset (oversampling rate of 0.5) and an undersampled dataset (undersampling rate of 0.5). Since our datasets contain real-world code samples, we expect them to represent a real-world label distribution, and we, therefore, accept the potential effects of the data imbalance. 
+For answering the research question, we will use the approach detailed in \Cref{chap:clean_code_classification}.  The dataset, consisting of 18 projects from GitHub, is prepared as described in chapter \Cref{chap:clean_code_classification_dataset}. First, 20\% of all files are moved to a seperate holdout dataset. We split the remaining files into 90\% train and 10\% validation data. We use the training dataset to train Random Forest Classifier, Gradient Boosting Classifier, Support Vector Machines and an LSTM-based neural network. Due to the class imbalance, we will additionally train with an oversampled dataset (oversampling rate of 0.5) and an undersampled dataset (undersampling rate of 0.5). Since our datasets contain real-world code samples, we expect them to represent a real-world label distribution, and we, therefore, accept the potential effects of the data imbalance. 
 
 Our evaluation metrics are recall, precision and the combined f1 score. As described in \Cref{sec:inbalanced_dataset}, accuracy is not a meaningful metric due to the data imbalance. We choose the f1 score as combined metric, since we see recall and precision as equally important. This opinion is ensured by the f1 score that is the harmonic mean of recall and precision.
 Our reasoning to weight recall and precision equally is as follows:
@@ -198,7 +198,7 @@ Another indicator for the robustness is the performance increase when using more
 \textit{Our implementation of an LSTM-based neural network performs well and fulfils our satisficing condition.} We achieve an f1 score of over 0.97 for all problem types without resampling, 10 LSTM cells, an embedding size of 32 and training with 2 epochs and 256 batch size. 
 
 
-Since we have a remarkably high performance, we do not vary all parameters. Instead, we use a 0.5 under- and oversampling as for other models, vary the batch size and number of epochs and try reducing the size of the embedding layer since this layer contains the majority of the trainable parameter (see listing \ref{lst:lstm}).
+Since we have a remarkably high performance, we do not vary all parameters. Instead, we use a 0.5 under- and oversampling as for other models, vary the batch size and number of epochs and try reducing the size of the embedding layer since this layer contains the majority of the trainable parameter (see \Cref{lst:lstm}).
 
 
 \textit{Oversampling does not have a measurable impact on our LSTM-based neural network.} The f1 performance with a 0.5 oversampling is not significantly different from the performance without oversampling. We observe overfitting on the train data with a near-perfect recall and precision. The test performance remains higher than 0.97 f1 score. Although the model overfits to the train data, it still generalises well enough with comparable performance to the models trained on the original class distribution.
@@ -277,7 +277,7 @@ NAME,NAME,OP,NAME,OP
 
 \paragraph{Summary}
 \input{tables/rq2_best_per_model.tex}
- Table \ref{tab:rq2_best_classifier} shows the performance score of the best performing model of each classifier for all problem types.
+ \Cref{tab:rq2_best_classifier} shows the performance score of the best performing model of each classifier for all problem types.
  The SVM performs poorly and does not meet our mandatory satisficing condition of precision higher than 0.8. Therefore, we will not evaluate it further. On the other hand, the LSTM-based neural network model outperforms all other models on this classification task for all problem types.
 
  Both random forest and gradient boosting classifier, fulfil the satisficing condition for all problem types. Interestingly, they supplement each other: For the RN problem type, the gradient boosting classifier performs better with an f1 score of 0.9328, whereas the random forest classifier surpasses the gradient boosting classifier for the CCS and CC problem type with 0.9352 and 0.9351 f1. As discussed, we explain the former result with the better insensitivity to a class imbalance of the gradient boosting classifier. In contrast, the latter seems to be harder to learn for the gradient boosting classifier. Especially the difficulties for the CCS type are unexpected and do not affect the random forest classifier or neural network.
@@ -291,7 +291,7 @@ This scenario transfers to clean code rules with a high level of complexity (as 
 
 \paragraph{Approach}
 To answer this research question, we use all models except the support vector classifier from the previous research question for all three problem types: 
-We use the models trained on the RN problem type to simulate scenarios (1). First, we manipulate the holdout dataset as described in \ref{sec:approach_code_manipulation}. The code still contains returns of \texttt{None}, although it is not explicitly written as two consecutive code tokens. We want to explore if a model generalised well enough to detect unseen variations of the problem type. With the manipulation, we ensure that all samples contain the unseen variations and our performance metrics only refer to those samples. 
+We use the models trained on the RN problem type to simulate scenarios (1). First, we manipulate the holdout dataset as described in \Cref{sec:approach_code_manipulation}. The code still contains returns of \texttt{None}, although it is not explicitly written as two consecutive code tokens. We want to explore if a model generalised well enough to detect unseen variations of the problem type. With the manipulation, we ensure that all samples contain the unseen variations and our performance metrics only refer to those samples. 
 
 Second, we simulate scenario (2) of having trained on a subset of all variations with the CCS models. The CCS model was trained on a subset of the CC problem patterns. We manipulate all occurrences of the CC problem type to contain only patterns that are not in the subset for the CCS training. It is important to note that the class frequency of positive samples changes from the trained 2.51\% to the 5.1\% positive samples for the manipulated CC type in the holdout set.
 
