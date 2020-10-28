@@ -1,46 +1,59 @@
-In this chapter, we will evalute the approach described in \Cref{chap:approach}. First, we will define the research questions. Afterwards, we will describe the motivation, details of the approach, and the results per research question. We explain the results we observe and give possible improvements.
+In this chapter, we will evalute the approach described in \Cref{chap:approach}. First, we will define the research questions. Afterwards, we will describe the motivation, details of the approach, and the results per research question. We explain the results we observe and recommend possible improvements.
 
 \section{Research Questions}
+The main objectives of this work are twofold: First, we design and implement the CCAP as a platform for automated code checking. We compare our platform with preexisting tools and validate, if the CCAP can supplement or replace an existing tool. 
+Second, we use machine learning models to detect violations of a clean code rule. We train models to detect a specific problem pattern and evaluate the generalisation capabilities on unseen pattern variations. By testing on unseen pattern variations, we want to simulate a real-world scenario for checking for rules with high level of complexity. For rules with an high level of complexity, we can not generate a labelled dataset automatically. Instead we have to hand-collect samples, that may be limited in variety.
 
+We formulate this objectives into the following research questions that will lead this evaluation:
 \begin{description}
-    \item[RQ1] What is the utility of the CCAP besides existing tools? 
-    \item[RQ2] How do different models compare on the task of detecting non-clean code?
-    \item[RQ3] Do machine learning-based models cover a larger variety of cases than rule-based checker? 
+    \setlength{\itemsep}{1pt}
+    \item[RQ1]What is the utility of the CCAP besides existing tools? 
+    \item[RQ2]How do different models compare on the task of detecting non-clean code?
+    \item[RQ3]Do machine learning-based models cover a larger variety of cases than rule-based checker? 
 \end{description}
 
 \subsection{RQ1: What Is the Utility of the CCAP Besides Existing Tools?}
 \paragraph{Motivation}
-Several tools are established that aim to improve code quality and detect unclean code. Every new tool with similar claims has to prove its usefulness beside the preexisting tools. We compare the CCAP with existing tools based on the design goals expandability, useability and integration. Additionally, we will mention and compare useful features unique to existing tools.
+Several tools are established that aim to improve code quality and detect unclean code (see \Cref{sec:tool_comparison}). Every new tool with similar claims has to prove its usefulness besides the preexisting tools. For this reason, we compare the CCAP with preexisting tools to evaluate its utility.
+
 \paragraph{Approach}
-To evaluate, if the CCAP is a useful addition, we compare different features to see, if it can supplement or replace existing tools. As described in section \ref{sec:tool_comparison}, the compared tools are Sonarcube, PMD Source Code Analyser Project, Codacy and PyLint.
+To answer this research question, we compare the CCAP with existing tools based on the design goals extensibility, useability and integration. Additionally, we will mention and compare useful features unique to existing tools. Finally, we asses if it can supplement or replace existing tools. As described in section \ref{sec:tool_comparison}, the compared tools are Sonarcube, PMD Source Code Analyser Project, Codacy and PyLint.
 
 \paragraph{Results}
-Table TODO shows a summary of the features.
 
-\subparagraph{Finding 1: Expandability}
-For expandability of analysis plugins, CCAP is comparable to PyLint, that also offer plugins to analyse the raw string, the token stream or the AST. PMD allows plugins to analyse the AST or define XPath rules. Since XPath rules can be used in the CCAP as well (using a third-party library in the plugin), PMD offers fewer expansion possibilities. Sonarqube, on the other hand, provides the most possibilities for extension. Not only can developers analyse the AST, specify XPath rules, but they have access to an additional semantic model of the code that provides direct access to structures such as methods, parameters, return values. This semantic model simplifies analysis in comparison to the AST analysis.
-Additionally, Sonarqube allows plugins to expose an API for other plugins to use. This different type of plugin further increases the possibilities for rule checking plugins. The least expandability offers Codacy, that allow customising or disabling existing rules, but does not offer to add rules to the existing ruleset.
+\subparagraph{Finding 1: Extensibility}
+The extensibility of CCAP with analysis plugins is comparable to PyLint, that also offer plugins to analyse the raw string, the token stream or the AST. PMD allows plugins to analyse the AST or define XPath rules. Since XPath rules can be used in the CCAP as well (using a third-party library in the plugin), PMD offers fewer expansion possibilities. Sonarqube, on the other hand, provides the most possibilities for extension. Not only can developers analyse the AST or specify XPath rules, but they have access to an additional semantic model of the code that provides direct access to structures such as methods, parameters, and return values. This semantic model simplifies an analysis in comparison to the AST analysis.
+Additionally, Sonarqube allows plugins to expose an API for other plugins to use. With plugins that expose funcitonality to other plugins, the possibilites for rule checking plugins increases further and functionality can be reused. The least expandability offers Codacy, that allows customising or disabling existing rules. However, it does not offer to add rules to the existing ruleset.
 
-Regarding output plugins, no compared tool offers the output customisation of CCAP. PMD and PyLint have different predefined output formats like JSON, HTML, CSV or text. Although PyLint allows customising the message format using a formatting string as a command-line argument, they do not offer extensions for the output. Sonarqube displays the analysis reports in its WebUI. The scanner tool, SonarScanner, sends the reports to the server component, that renders the results in the browser. Codacy's local scanner produces text output; the cloud version also has a WebUI.
+Regarding output plugins, no compared tool offers the output customisation of CCAP. PMD and PyLint have different predefined output formats like JSON, HTML, CSV, or text. Although PyLint allows customising the message format using a formatting string as a command-line argument, they do not offer extensions for the output. Sonarqube displays the analysis reports in its WebUI. The scanner tool, SonarScanner, sends the reports to the server component, that renders the results in the browser. Codacy's local scanner produces text output; the cloud version also has a WebUI. 
+With the extension possibility of CCAP, we offer the developer a simple mechanism to adapt the output to its own needs. While this feature is unique, the result could also be achieved by parsing the JSON ouput of e.g. PyLint in a subsequent step.
 
-\subparagraph{Finding 2: Integration shortcomings}
-The CCAP has significant shortcomings in its integrations into IDEs, build processes and CI pipelines. All contestant tools provide plugins for build systems like Gradle or Maven. Except for Codacy, all tools have IDE integrations into the most common editors. Sonarqube and Codacy have integrations into source control systems. Same applies to PMD and PyLint since they are included in Codacy and therefore have the same integrations.
+\subparagraph{Finding 2: Integration}
+The CCAP has significant shortcomings in its integrations into IDEs, build processes and CI pipelines. All contestant tools provide plugins for build systems like Gradle or Maven. Except for Codacy, all tools have IDE integrations into the most common editors. Sonarqube and Codacy have integrations into source control systems. Same applies to PMD and PyLint when bundled with Codacy.
 
 \subparagraph{Finding 3: Useability}
-For a plugin developer, the useability of the plugin system is simple for CCAP and PyLint. Both tools have the same plugin mechanism and a simple plugin interface. PMD has a similar, straightforward plugin interface, but its Java plugin has to be bundled into a jar file before adding to the classpath. The latter applies to Sonarqube as well; additionally, the powerful and rich plugin API makes it harder to use.
+Useability is defined as the\enquote{extent to which a system, product or service can be used by specified users to achieve specified goals with effectiveness, efficiency and satisfaction in a specified context of use}(TODO source ISO 9241 \url{https://www.iso.org/standard/63500.html} ). For the tools, we identify two main user groups: the plugin developers want to encode a rule to be checked automatically and the developers want to analyse their code. We compare the useability for the tools with the focus on the efficiency, measured as required time to achieve a useful output.
 
-For the user, installing CCAP is like installing every other python package. Running from the command-line is fast and can be automated, e.g. using git pre-commit hooks. The same workflow would be achieved with PyLint. Sonarqube is more complex to install due to its multiple components, but after the setup, the WebUI and integrations into most developers workflow have the best useability. Codacy as a cloud service only requires permission to access the source code repository to start scanning the code.
+For a plugin developer, the useability of the plugin system is simple for CCAP and PyLint. Both tools have the same plugin mechanism and a simple plugin interface. A simple interface reduces the required time to understand and use the interface.
+PMD has a similar, straightforward plugin interface, but its Java plugin requires an extra bundling step before adding to the classpath. The latter applies to Sonarqube as well; additionally, the powerful and rich plugin API of Sonarqube is contrary to the simple plugin interface of CCAP and PyLint. While this opens more possiblities to the developer, it requires more time to understand the possibilities. Especially, if a developer want to quickly encode a problematic pattern that does not fit an XPath rule, the more complicated plugin interface of Sonarquabe can decrease the efficiency. 
 
-\subparagraph{Finding 4: Multi-Language scanning}
-Sonarqube, PMD and Codacy offer multi-language scanning. This multi-language ability is advantageous for code repositories with multiple languages and for reusing the same tools and infrastructure for multiple projects with different programming languages. Supporting multi-language scanning is not possible with CCAP and would require a modification of the architecture: The source handler would have to scan the files with respect to their programming language and transform those into a language-independent representation. Other parts of the architecture would remain similar. Although multi-language support was not a design goal, it would be a significant advantage for adoption.
+For the developer, installing CCAP is like installing every other python package. Running from the command-line is fast and can be automated, e.g. using git pre-commit hooks. The same workflow could be achieved with PyLint and PMD. Sonarqube is more complex to install due to its multiple components, but after the setup, the WebUI and integrations into most developers workflows have a compareable or better useability than CCAP or PyLint. Codacy as a cloud service has the simplest setup by granting access to the source code repository to start scanning the code. The setup of the local scanner requires a configuration with a project token to retrieve information from the cloud service.
 
-\subparagraph{Finding 5: Maturity and Community-Support}
-The maturity and community-support of tools impact the integration of the tools into the developer workflow. Some integrations are community-made and shared, so everybody has an advantage. The community support would also be necessary for CCAP to write and share additional analysis plugins and to integrate into different workflows. Since the CCAP is at the beginning, it does not have a community that promote the integration and extension by other developers.
+\subparagraph{Finding 4: Multi-Language Scanning}
+Sonarqube, PMD and Codacy offer multi-language scanning. This multi-language ability is advantageous for code repositories with multiple languages and for reusing the same tools and infrastructure for multiple projects with different programming languages. 
+
+Supporting multi-language scanning is not possible with CCAP and would require a modification of the architecture: The source handler would have to scan the files with respect to their programming language and transform those into a language-independent representation. Other parts of the architecture could remain similar. Although multi-language support was not a design goal, it would be a significant advantage for adoption.
+
+\subparagraph{Finding 5: Maturity and Community Support}
+The maturity and community-support of tools impact the integration of the tools into the developer workflow. Some integrations are community-made and shared, so everybody has an advantage. 
+CCAP has no community support, since it has not been released. The community support would be necessary for CCAP to write and share additional analysis plugins and to integrate into different workflows. 
 
 \paragraph{Summary}
-In summary, CCAP offers a good, but not best in class expandability with analysis plugins. It has a high useability for plugin developer and users. The lack of integrations for different workflows reflects the lack of community support and maturity. 
-We see the CCAP as an addition to the powerful Sonarqube. The simple, yet robust expandability of the CCAP could supplement the shortcomings of Sonarqube in its powerful, but complex expandability. For instance, a code reviewer could code problematic code into a simple python plugin, distributes it to the team and would hopefully not reencounter the same problem.
-Additionally, the CCAP could be used to teach about Clean Code and to enforce specific coding rules to students, since the local setup is straightforward. Clean Code rules could be turned into analysis plugins by students or teachers without having to understand a complicated interface.
+In summary, CCAP offers a good, but not best in class extensibility with analysis plugins. It has a high useability for plugin developer and users. The lack of integrations for different workflows reflects the lack of community support and maturity. 
+We see the CCAP as an addition to the powerful Sonarqube. The simple, yet robust expandability of the CCAP could supplement the shortcomings of Sonarqube in its powerful, but complex expandability. For instance, a code reviewer could easily encode problematic code patterns into a plugin with Python, distributes it to the team, and would hopefully not reencounter the same problem again. With Sonarqube, the effort to understand the plugin interface may surpass the time the reviewer is willing to invest.
+Additionally, the CCAP could be used to teach about Clean Code and to enforce specific coding rules to students, since the local setup is straightforward. Clean Code rules could be turned into analysis plugins by students or teachers without having to understand a complicated interface or requiring a server setup.
+
+With an increase in adoption and further development, the drawbacks of integration and community support would diminish. It has the potential to become an equal contestant to PyLint.
 
 \subsection{RQ2: How Do Different Models Compare on the Task of Detecting Non-Clean Code?}\label{rq:2}
 \paragraph{Motivation}

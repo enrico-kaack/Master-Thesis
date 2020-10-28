@@ -1,6 +1,6 @@
 The rise of information technology with computers over the last decades allowed humanity to process data and solve problems in unprecedented performance. Computers require instruction in order to fulfil its purpose. The common language between humans and computers are programming languages. Software developers use programming languages to write source code that instructs computers to process data and solve problems. While the machine only follows the instructions described by the source code, the humans have to understand the purpose of the instructions. 
 
-In today's world, software becomes a vast market with a revenue of over 450 billion U.S. dollars in 2019 (TODO source \url{https://www.statista.com/forecasts/963597/software-revenue-in-the-world} ). Creating new code often requires to read and understand preexisting code. As a consequence, it is essential to make code as readable and understandable as possible. 
+In today's world, software becomes a vast market with a revenue of over 450 billion U.S. dollars in 2019 (TODO source \url{https://www.statista.com/forecasts/963597/software-revenue-in-the-world} or gartner \url{https://www.gartner.com/en/newsroom/press-releases/2019-10-07-gartner-says-global-it-spending-to-grow-06-in-2019#:~:text=The%20enterprise%20software%20market%20will,2018%20(see%20Table%201).}). Creating new code often requires to read and understand preexisting code. As a consequence, it is essential to make code as readable and understandable as possible. 
 
 The objectives of the clean code principles are readability and understandability of source code. A set of rules and recommendations about writing code to be easy to read and understand. For the computer, it is irrelevant if the human can understand the code since it only executes the instructions. However, any developer who reads clean code profits from it. In \Cref{list:motivating_example}, the upper listing shows an implementation of an algorithm without paying attention to clean code rules. In the bottom listing, the same algorithm is implemented following the clean code rules such as having one purpose per function or method calls in if-conditions. Executing the code will yield the same result. However, it is far simpler to understand the bottom than the top code. Reading the clean \texttt{get\_students\_eligible\_for\_exam} function let the developer immediately understand the two eligibility criterias for the exam. The comments like in the upper example are not even necessary, since the code is self-describing.
 Consequently, using or modifying the right code is much easier and time-saving.
@@ -95,11 +95,12 @@ To fulfil the objectives, we made the following contributions:
     \item We simulate the impact of having a hand-collected dataset on the machine-learning models if the samples do not contain all possible variations of a problem pattern. We give ideas on how to handle the situation in an time-optimising way.
 \end{itemize}
 
-For evaluation, we will discuss the following research questions:
+Based on our main objectives, we will evaluate the following research question:
 \begin{description}
-    \item[RQ1] What is the utility of the CCAP besides existing tools? 
-    \item[RQ2] How do different models compare on the task of detecting non-clean code?
-    \item[RQ3] Do machine-learning-based models cover a larger variety of cases than rule-based checker? 
+    \setlength{\itemsep}{1pt}
+    \item[RQ1]What is the utility of the CCAP besides existing tools? 
+    \item[RQ2]How do different models compare on the task of detecting non-clean code?
+    \item[RQ3]Do machine-learning-based models cover a larger variety of cases than rule-based checker? 
 \end{description}
 
 
