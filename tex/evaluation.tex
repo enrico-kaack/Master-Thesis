@@ -33,7 +33,7 @@ With the extension possibility of CCAP, we offer the developer a simple mechanis
 The CCAP has significant shortcomings in its integrations into IDEs, build processes and CI pipelines. All contestant tools provide plugins for build systems like Gradle or Maven. Except for Codacy, all tools have IDE integrations into the most common editors. Sonarqube and Codacy have integrations into source control systems. Same applies to PMD and PyLint when bundled with Codacy.
 
 \subparagraph{Finding 3: Useability}
-Useability is defined as the\enquote{extent to which a system, product or service can be used by specified users to achieve specified goals with effectiveness, efficiency and satisfaction in a specified context of use}(TODO source ISO 9241 \url{https://www.iso.org/standard/63500.html} ). For the tools, we identify two main user groups: the plugin developers want to encode a rule to be checked automatically and the developers want to analyse their code. We compare the useability for the tools with the focus on the efficiency, measured as required time to achieve a useful output.
+ISO 9241 defines useability is defined as the\enquote{extent to which a system, product or service can be used by specified users to achieve specified goals with effectiveness, efficiency and satisfaction in a specified context of use}~\cite{isotc_159sc_4_iso_2018}. For the tools, we identify two main user groups: the plugin developers want to encode a rule to be checked automatically and the developers want to analyse their code. We compare the useability for the tools with the focus on the efficiency, measured as required time to achieve a useful output.
 
 For a plugin developer, the useability of the plugin system is simple for CCAP and PyLint. Both tools have the same plugin mechanism and a simple plugin interface. A simple interface reduces the required time to understand and use the interface.
 PMD has a similar, straightforward plugin interface, but its Java plugin requires an extra bundling step before adding to the classpath. The latter applies to Sonarqube as well; additionally, the powerful and rich plugin API of Sonarqube is contrary to the simple plugin interface of CCAP and PyLint. While this opens more possiblities to the developer, it requires more time to understand the possibilities. Especially, if a developer want to quickly encode a problematic pattern that does not fit an XPath rule, the more complicated plugin interface of Sonarquabe can decrease the efficiency. 
@@ -214,8 +214,26 @@ Since we have a remarkably high performance, we do not vary all parameters. Inst
 
 
 \textit{The LSTM-based neural network is sensitive to fewer train data.} We draw this conclusion based on the performance deterioration for undersampled train sets (see \Cref{tab:resampling_size_performance_lstm}). For the RN type, undersampling results in a significant drop in performance from 0.987 by roughly 36\%. For CCS and CC, the performance decrease is smaller at less than 3\%. As described before, the train set of the RN type is significantly smaller after undersampling than for the CCS and CC type, due to the lower class frequency of the minority class of only 0.21\% before undersampling. Therefore, more samples from the majority class are deleted during undersampling and the variety decreases. In combination with many trainable parameters in our model, the model fails to fit the training data correctly. 
-Responsible for the performance drop is a decrease in precision, whereas the recall remains high. In other words, the false-positive rate increases by factor 100 to 0.3\%. By removing negative samples and variety in training, we think it becomes more challenging for the model to detect negative samples correctly. Furthermore, the recall remains high, which is a sign that the model tends to classifiy more records into the positive class.
-TODO: recall hoch precision runter heißt mehr als 1 klassifiziert.  warum? model confidence: er wird sich unsicherer (mehr confidence in der mitte) in der vorhersage. er lernt weniger weil wenger daten. perfekte modele haben perfekte u shape)
+Responsible for the performance drop is a decrease in precision, whereas the recall remains high. In other words, the false-positive rate increases by factor 100 to 0.3\%. By removing negative samples and variety in training, we think it becomes more challenging for the model to detect negative samples correctly. Furthermore, the recall remains high, which is a sign that the model tends to classifiy more records into the positive class. In \Cref{fig:conf_diagram_undersampling}, we see this trend towards the positive class but with increased unconfidence. Without undersampling, the model is very confident about the true negatives and false positives but is unconfident with some samples.  
+
+
+
+\begin{figure}[ht]
+	\begin{tabular}{c}
+		\begin{subfigure}{0.5\linewidth}
+            \resizebox{1\textwidth}{!}{\input{diagrams/rq2_lstm_not_resampled_confidence_histogram.pgf}}
+			\caption{Confidence Histogram after training without resampling.}
+			\label{fig:conf_diagram_without_resampling}
+		\end{subfigure}%
+		\begin{subfigure}{0.5\linewidth}
+            \resizebox{1\textwidth}{!}{\input{diagrams/rq2_lstm_undersampled_confidence_histogram.pgf}}
+			\caption{Confidence Histogram after training with a 0.5 undersampling-ratio.}
+			\label{fig:conf_diagram_undersampling}
+		\end{subfigure}%
+	\end{tabular}
+	\caption[Confidence Histogram for the LSTM model with non-resampled and resampled training set.]{Confidence Histogram for predicting the holdout set for an LSTM trained with an embedding size of 32, three epochs, a batch size of 256 and 10 LSTM-cells}
+	\label{fig:eval:distribution}
+\end{figure}
 
 
 \begin{table}[]
@@ -325,7 +343,7 @@ The LSTM-based neural network results draw a similar picture. The undersampling 
 We would explain this observation separate for the RN and CCS type:
 For the RN type, the models probably only learnt the direct token sequence (as described in \hyperref[finding:return_none_manipulated_bad]{Finding 1}). The better it learnt this sequence, the better its performance on the previous experiment. For this experiment, the models that only learnt to look for a \texttt{return} and a \texttt{None} somewhere in the token stream achieve a higher result. In contrast, it performed poorly on the previous experiment. Consequently, we assume the poor performing models from the previous experiment followed this pattern. (TODO can i proof this point with FP from the evaluation? maybe find samples in which there are just these two tokens, TODO eignetlich sollte auch das in dem experiment gut ufnktionieren wenn die nur für return und none irgendwo suchen)
 
-The CCS problem type, simulating scenario (2), offered more variety to learn from, as discussed. If the model learnt from this variety a general problem structure, fine-tuning the hyperparameters for the previous experiment would restrict this generality to only CCS patterns. We assumed in \Cref{finding:rq2_gbc} that the gradient boosting classifier get restricted by the CCS type and is more likely to learn the CC pattern. In this experiment, the best gradient boosting classifier configuration surpasses all other models. Additionally, it surpasses the baseline performance measure of the model trained on the unmodified CC type that we assumed to perform better. This solidifies our assumptions about the learning of the CCS type. We think this explanation applies to other models (TODO false positives from previous experiment anschauen und sehen ob da CC type die indikatoren waren).
+The CCS problem type, simulating scenario (2), offered more variety to learn from, as discussed. If the model learnt a general problem structure from this variety, fine-tuning the hyperparameters for the previous experiment would restrict this generality to only CCS patterns. We assumed in \Cref{finding:rq2_gbc} that the gradient boosting classifier get restricted by the CCS type and is more likely to learn the CC pattern. In this experiment, the best gradient boosting classifier configuration surpasses all other models. Additionally, it surpasses the baseline performance measure of the model trained on the unmodified CC type that we assumed to perform better. This solidifies our assumptions about the learning of the CCS type. We think this explanation applies to other models (TODO false positives from previous experiment anschauen und sehen ob da CC type die indikatoren waren).
 
 The explanations differ for both scenarios, but their common ground is an insufficient amount of variety. While the RN type has only one variety in the problem pattern, the CCS rules restricted the variety to the subset.
 
