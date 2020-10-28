@@ -204,7 +204,7 @@ To achieve our objectives, we will train our models on the dection of three prob
 \end{enumerate}
 From the three problem types, we think the RN type is the easiest type to spot since the model only has to spot the same statement in every sample. The CC type is more complex to spot and the model would have to learn the connection between the if-statement and the possible logic expressions. The same applies to the CCS type, that should be easier to detect than the CC type due to fewer variations. Additionally, we use the trained model on the CCS subset and test it with a manipulated CC superset to assess the generalisation to unseen variations in \hyperref[rq:3]{RQ3}.
 
-In the following, we describe the approach in detail. First, we describe the challenges and our solutions. Second, we describe our dataset and our split in train, test and holdout set. Afterwards, we describe our pipeline of processing the raw files into samples with a fixed size, our encoding approach and our code manipulation for \hyperref[rq:3]{RQ3}. In the final section, we describe the machine learning models and parameters we use for all research questions.
+In the following, we describe the approach in detail. First, we describe the challenges and our solutions. Second, we describe our dataset and our split in train, validation and holdout set. Afterwards, we describe our pipeline of processing the raw files into samples with a fixed size, our encoding approach and our code manipulation for \hyperref[rq:3]{RQ3}. In the final section, we describe the machine learning models and parameters we use for all research questions.
 
 \subsection{Challenges}
 \paragraph{Lack of datasets}
@@ -275,7 +275,7 @@ We combined the following solutions:
 Due to the imbalance, we do not choose accuracy as a suitable evaluation metric, since classifying all samples as clean code would result in an accuracy of 99.79\% for the RN problem type. Instead, we use precision and recall as metrics, with an f1 score as a single, weighted metric. More details about the metrics are in \Cref{par:approach}.
 
 \subparagraph{Solution 2:}
-We will apply undersampling and oversampling techniques on the data and evaluate the difference in model performance. Undersampling removes random samples from the majority class and thus balance class labels. Oversampling replicates random samples from the minority class to balance class labels while also increasing the overall amount of data. This technique is only used for the training data since it would distort the evaluation results when applied to test data as well.
+We will apply undersampling and oversampling techniques on the data and evaluate the difference in model performance. Undersampling removes random samples from the majority class and thus balance class labels. Oversampling replicates random samples from the minority class to balance class labels while also increasing the overall amount of data. This technique is only used for the training data since it would distort the evaluation results when applied to validation data as well.
 
 \subparagraph{Solution 3:}
 Our approach of training different classifier is a solution to the data imbalance since different classifiers have a different sensitivity to data balance. 
@@ -296,9 +296,9 @@ The source of our dataset are open-source Python projects on GitHub. We queried 
 \end{table}
 
 A script downloaded all projects in their main branch with the current head. See \Cref{tab:repos_hashes} for the corresponding git hashes. Afterwards, we removed all non-python files. 
-Next, we uniformly sampled 20\% of all files and separated those into a holdout set for testing and the code manipulation in \hyperref[rq:3]{RQ3}. Additionally, we perform our train/test split on the file level and not on the sample level. We describe the reason for the file level split later in \Cref{sec:train_test_split}.
+Next, we uniformly sampled 20\% of all files and separated those into a holdout set for testing and the code manipulation in \hyperref[rq:3]{RQ3}. Additionally, we perform our train/validation split on the file level and not on the sample level. We describe the reason for the file level split later in \Cref{sec:train_test_split}.
 
-We ensured to have similar data and label distribution on all data sets. \Cref{tab:general_data_distribution} shows general and problem-specific metrics on file level for the train, test and holdout set. The problem-specific metrics are collected after processing the code files as described in \Cref{sec:data_encoding}. We define the metrics as follows:
+We ensured to have similar data and label distribution on all data sets. \Cref{tab:general_data_distribution} shows general and problem-specific metrics on file level for the train, validation and holdout set. The problem-specific metrics are collected after processing the code files as described in \Cref{sec:data_encoding}. We define the metrics as follows:
 
 We calculate the \textit{average lines of code per file} for $n$ files with $l_i$ as the lines of code for file $i$ with the following equation:
 \[
@@ -314,7 +314,7 @@ Last, we calculate the number of problems per file for $n$ files and $p_i$ probl
 \]
 
 The most important metrics for the data distribution is the proportion of lines of code containing the problem type and the average number of problems per file. For lines of code containing the problem type, we observe a maximal difference of 0.02 percentage points between the datasets for the RN problem type, 0.11 percentage points for CCS and 0.13 percentage points for the CC problem type. This directly translates into the class distribution as shown in \Cref{tab:class_distribution} with a maximal difference 0.06, 0.26 and 0.31 percentage points for the three problem types.
-The number of problems per file is lower in the test set for the CCS and CC problem type. Nevertheless, the size of a file may vary, and thus the number of problems per file may vary too. Since the lines of code containing the problem and the class frequencies are comparable, our datasets have a comparable data distribution over the different dataset splits.
+The number of problems per file is lower in the validation set for the CCS and CC problem type. Nevertheless, the size of a file may vary, and thus the number of problems per file may vary too. Since the lines of code containing the problem and the class frequencies are comparable, our datasets have a comparable data distribution over the different dataset splits.
 
 TODO per-project analysis table in attachments?
 
@@ -323,7 +323,7 @@ TODO per-project analysis table in attachments?
     \begin{tabularx}{\textwidth}{@{}llXXX@{}}
         \toprule
     %\cmidrule(l){2-4}
-    \multirow{4}{*}{}                            & Metric                  & Train & Test & Holdout \\ \cmidrule(l){2-5} 
+    \multirow{4}{*}{}                            & Metric                  & Train & Validation & Holdout \\ \cmidrule(l){2-5} 
                                                  & Lines of Code           & 2,530,455 & 246,813 & 671,554 \\
                                                  & Number of Files         & 13,330  &  1,481 & 3,702   \\
                                                  & average LOC per File    & 189.83  & 166.65  & 181.40     \\ \midrule
@@ -334,14 +334,14 @@ TODO per-project analysis table in attachments?
     \multirow{2}{*}{Condition Comparison}        & LOCs containing problem & 2.34\%  & 2.31\%  & 2.44\%  \\
                                                  & Problems per File       & 4.44    & 3.85  & 4.42    \\ \bottomrule
     \end{tabularx}
-    \caption{General and problem specific metrics for the train, test and holdout set.}
+    \caption{General and problem specific metrics for the train, validation and holdout set.}
     \label{tab:general_data_distribution}
 \end{table}
 
 \begin{table}[]
     \begin{tabularx}{\textwidth}{@{}lXXXX@{}}
     \toprule
-    Problem Type                                 & Label& Train & Test & Holdout \\ \midrule 
+    Problem Type                                 & Label& Train & Validation & Holdout \\ \midrule 
     \multirow{2}{*}{Return None}                 & [0] & 99.79\%  & 99.73\% & 99.78\%  \\
                                                  & [1] & 0.21\%   & 0.27\%  & 0.22\%    \\ \midrule
     \multirow{2}{*}{Condition Comparison Simple} & [0] & 97.34\%   &  97.49\%  & 97.23\%  \\
@@ -349,14 +349,14 @@ TODO per-project analysis table in attachments?
     \multirow{2}{*}{Condition Comparison}        & [0] & 95.13\%  & 95.21\%  & 94.9\%  \\
                                                  & [1] & 4.87\%   & 4.79\%  & 5.1\%    \\ \bottomrule
     \end{tabularx}
-    \caption{Class frequencies for all problem types on the train, test and holdout set. We observe a compareable class distribution amoung the datasets for each problem type.}
+    \caption{Class frequencies for all problem types on the train, validation and holdout set. We observe a compareable class distribution amoung the datasets for each problem type.}
     \label{tab:class_distribution}
 \end{table}
 
 
 \begin{figure}
     \includegraphics[width=1\textwidth]{img/ML/Data_split.pdf}
-    \caption{Split of the dataset. First, 20\% of all files are seperated into a holdout set for later testing. The remainding 80\% of the files are split into 90\% training and 10\% test data. }
+    \caption{Split of the dataset. First, 20\% of all files are seperated into a holdout set for later testing. The remainding 80\% of the files are split into 90\% training and 10\% validation data. }
     \label{fig:data_split}
 \end{figure}
 
@@ -367,7 +367,7 @@ The processing pipeline consists of tasks to read the files into a data structur
 
 \begin{figure}
     \includegraphics[width=1\textwidth]{img/ML/Pipeline_RQ2.pdf}
-    \caption[Schematic representation of the pipeline to train and test models.]{Schematic representation of the pipeline for \hyperref[rq:2]{RQ2} to train and test models with configurable parameters. First, the pipeline reads the source code into memory, extract the vocabulary (\texttt{TaskVocabCreator}) and identify all problem types (\texttt{TaskRuleProcessor}). It the converts the code of dynamic length into fixed-size samples (\texttt{TaskPrepareXY}). This sub-pipeline runs seperate for the train and test set. In \texttt{TaskTrainTestSplit}, both datasets are combined and over- or undersampling is applied to the train set. The train set is used to train different classifiers wheras the train and test set are used for evaluation.}
+    \caption[Schematic representation of the pipeline to train and validate models.]{Schematic representation of the pipeline for \hyperref[rq:2]{RQ2} to train and validate models with configurable parameters. First, the pipeline reads the source code into memory, extract the vocabulary (\texttt{TaskVocabCreator}) and identify all problem types (\texttt{TaskRuleProcessor}). It the converts the code of dynamic length into fixed-size samples (\texttt{TaskPrepareXY}). This sub-pipeline runs seperate for the train and validation set. In \texttt{TaskTrainValidationSplit}, both datasets are combined and over- or undersampling is applied to the train set. The train set is used to train different classifiers wheras the train and validation set are used for evaluation.}
     \label{fig:pipeline_rq2}
 \end{figure}
 
@@ -393,14 +393,14 @@ The textual token values are encoded with an Index-Based encoding. The most comm
 With the internal representation, the ground truth is encoded as a line number. This representation has to be transformed in a label $y_i$ for the given input vector $x_i$ for sample $i$. Label 1 is assigned if the sample contains the given problem type. A sample contains a problem type if it contains all tokens from the problematic line. If the sample is missing a token of the problematic line at the beginning or end, the label is 0 for non-problematic code.
 After the label extraction in the pipeline step \texttt{TaskPrepareXY}, we have a list of input vectors $x$ and a list of ground truth labels $y$. With this, we can train and test our models.
 
-\subsubsection{Train/Test Split}\label{sec:train_test_split}
-In \Cref{chap:clean_code_classification_dataset}, we described to create a train, test and holdout dataset by file-level separation and not by splitting the samples. The reason for this approach is our sliding window concept. Since we use the sliding window to convert source files with dynamic length into fixed-length token sample samples, we may have one problematic code pattern in multiple samples. The difference would be in the location inside the sample and the surrounding tokens, whereas the pattern remains the same.
-If we would do a train/test split on a sample level, we may introduce samples covering one problematic pattern in both datasets. \Cref{fig:encoding_sliding_window} illustrates multiple windows covering one sample. 
+\subsubsection{Train/Validation Split}\label{sec:train_test_split}
+In \Cref{chap:clean_code_classification_dataset}, we described to create a train, validation and holdout dataset by file-level separation and not by splitting the samples. The reason for this approach is our sliding window concept. Since we use the sliding window to convert source files with dynamic length into fixed-length token sample samples, we may have one problematic code pattern in multiple samples. The difference would be in the location inside the sample and the surrounding tokens, whereas the pattern remains the same.
+If we would do a train/validation split on a sample level, we may introduce samples covering one problematic pattern in both datasets. \Cref{fig:encoding_sliding_window} illustrates multiple windows covering one sample. 
 
-This unclean separation would diminish the validity of metrics calculated from the test and holdout dataset. Therefore, we split on file level and perform the previous preprocessing separately for training and test dataset. Only the vocabulary generation happens on the training file for both processing steps. In \texttt{TaskPrepareXY} in the pipeline, we then merge those two pipelines for training and testing (see \Cref{fig:pipeline_rq2}).
+This unclean separation would diminish the validity of metrics calculated from the validation and holdout dataset. Therefore, we split on file level and perform the previous preprocessing separately for training and validation dataset. Only the vocabulary generation happens on the training file for both processing steps. In \texttt{TaskPrepareXY} in the pipeline, we then merge those two pipelines for training and validation (see \Cref{fig:pipeline_rq2}).
 \begin{figure}
     \includegraphics[width=1\textwidth]{img/ML/encoding_sliding_window_problem.pdf}
-    \caption[Sliding window approach on source code containing a problematic \texttt{return None}]{Sliding window approach on source code containing a problematic \texttt{return None}. Multiple windows will contain the problematic sample. Consequently, we can not split on a sample level, since the same problem would be in the train and test set. Instead, we split on file level to have a clean separation between the datasets.}
+    \caption[Sliding window approach on source code containing a problematic \texttt{return None}]{Sliding window approach on source code containing a problematic \texttt{return None}. Multiple windows will contain the problematic sample. Consequently, we can not split on a sample level, since the same problem would be in the train and validation set. Instead, we split on file level to have a clean separation between the datasets.}
     \label{fig:encoding_sliding_window}
 \end{figure}
 
