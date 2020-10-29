@@ -63,7 +63,7 @@
 \usepackage{cleveref}
 
 %appendix
-\usepackage{appendix}
+\usepackage{appendix, apptools}
 
 %box
 \usepackage{fbox}
@@ -77,6 +77,15 @@
 %csv simple
 \usepackage{csvsimple}
 
+%appendix chapter size 
+\usepackage{titlesec}
+
+
+\usepackage{float}
+
+\AtAppendix{%
+\titleformat{\chapter}[display]{\normalfont\bfseries\large}{\chaptertitlename~\thechapter}{1em}{}
+\titlespacing*{\chapter}{0pt}{0pt}{0pt}}%
 
 \definecolor{mygreen}{rgb}{0,0.6,0}
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
@@ -265,13 +274,16 @@ Thank you.
 \setcounter{table}{0}
 \renewcommand{\thetable}{A\arabic{table}}
 
-\chapter{RQ2: Model Performances}
+
+
+
+\chapter*{RQ2: Model Performances}
 \input{tables/rq2_all_tables.tex}
-\chapter{RQ3: Model Performances on Manipulated Data}
+\chapter*{RQ3: Model Performances on Manipulated Data}
 \input{tables/rq3_all_tables.tex}
-\chapter{Tokenizer Types}
+\chapter*{Tokenizer Types}
 \input{tables/tokenizer_types.tex}
-\chapter{Dataset}
+\chapter*{Dataset}
 \begin{table}[h]
      \footnotesize
      \csvautobooktabular{appendix/repository_list.csv}
