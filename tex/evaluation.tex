@@ -118,7 +118,7 @@ No resampling     &  0.7599   &  0.9208    &  0.9211  &  4,950,329    & 4,950,32
 0.1 undersampling &  0.6857   &  0.9268    &  0.929   &  114,169      & 1,447,248   & 2,650,890   \\
 0.5 undersampling &  0.2583   &  0.806     &  0.8632  &  31,137       & 394,704     & 722,970     \\ \bottomrule
 \end{tabularx}
-\caption{Dataset sizes for different resampling strategies with f1 performance on the validation set. The f1 performance for the speciifc resampling is the random forest classifier with 100 trees, no class weighting and type encoding.}
+\caption[Dataset sizes for different resampling strategies and performance for random forest classifier]{Dataset sizes for different resampling strategies with f1 performance on the validation set. The f1 performance for the speciifc resampling is the random forest classifier with 100 trees, no class weighting and type encoding.}
 \label{tab:resampling_size_performance_rf}
 \end{table}
 
@@ -154,7 +154,7 @@ Second, the larger performance drop for the RN problem type and the smaller decr
     0.5 oversampling  &  0.4847   &  0.6948   &  0.7933  &  7,409,925    & 7,228,141   & 7,064,008   \\
     0.5 undersampling &  0.4545   &  0.6836   &  0.7925  &  31,137       & 394,704     & 722,970     \\ \bottomrule
     \end{tabularx}
-    \caption{Dataset sizes for different resampling strategies with f1 performance on the validation set. The f1 performance for the speciifc resampling is the gradient boosting classifier with 200 stages, a learning rate of 0.2 and type encoding.}
+    \caption[Dataset sizes for different resampling strategies and performance for gradient boosting classifier]]{Dataset sizes for different resampling strategies with f1 performance on the validation set. The f1 performance for the speciifc resampling is the gradient boosting classifier with 200 stages, a learning rate of 0.2 and type encoding.}
     \label{tab:resampling_size_performance_gbc}
     \end{table}
 
@@ -237,7 +237,7 @@ Responsible for the performance drop is a decrease in precision, whereas the rec
     0.5 oversampling  &  0.9859   &  0.9781   &  0.9745  &  7,409,925    & 7,228,141   & 7,064,008   \\
     0.5 undersampling &  0.6294   &  0.9564   &  0.9561  &  31,137       & 394,704     & 722,970     \\ \bottomrule
     \end{tabularx}
-    \caption{Dataset sizes for different resampling strategies with f1 performance on the validation set. The f1 performance for the speciifc resampling is the LSTM with an embedding size of 32, 10 lstm cells, a training on 3 epochs with a batch size of 256.}
+    \caption[Dataset sizes for different resampling strategies and performance for random forest classifier]{Dataset sizes for different resampling strategies with f1 performance on the validation set. The f1 performance for the speciifc resampling is the LSTM with an embedding size of 32, 10 lstm cells, a training on 3 epochs with a batch size of 256.}
     \label{tab:resampling_size_performance_lstm}
 \end{table}
 

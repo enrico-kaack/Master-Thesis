@@ -235,8 +235,7 @@ We dismissed this approach for several reasons:
     \begin{subfigure}{\textwidth}
         \includegraphics[width=1\linewidth]{img/ML/commit_messages/screen_3.png}
     \end{subfigure}
-    \caption[Example commit messages that underline the inconsistency in commit message naming.]
-    {Example commit messages from different repositories. Those examples highlight (1) the missing naming convention, (2) inclusion of additional performance improvements, and (3) several edits in multiple files~\cite{pendenque_code_2020, baranski_cleaned_2020, timofeev_lab4_2020}. Those commits were found by searching GitHub for \enquote{clean code improvements} and filtering for results of type commits and language Python. }
+    \caption[Example commit messages that underlines the inconsistency in commit message naming.]{Example commit messages from different repositories. Those examples highlight (1) the missing naming convention, (2) inclusion of additional performance improvements, and (3) several edits in multiple files~\cite{pendenque_code_2020, baranski_cleaned_2020, timofeev_lab4_2020}. Those commits were found by searching GitHub for \enquote{clean code improvements} and filtering for results of type commits and language Python. }
     \label{fig:commit_messages}
 \end{figure}
 
@@ -349,14 +348,14 @@ TODO per-project analysis table in attachments?
     \multirow{2}{*}{Condition Comparison}        & [0] & 95.13\%  & 95.21\%  & 94.9\%  \\
                                                  & [1] & 4.87\%   & 4.79\%  & 5.1\%    \\ \bottomrule
     \end{tabularx}
-    \caption{Class frequencies for all problem types on the train, validation and holdout set. We observe a compareable class distribution amoung the datasets for each problem type.}
+    \caption[Class frequencies for all problem types.]{Class frequencies for all problem types on the train, validation and holdout set. We observe a compareable class distribution amoung the datasets for each problem type.}
     \label{tab:class_distribution}
 \end{table}
 
 
 \begin{figure}
     \includegraphics[width=1\textwidth]{img/ML/Data_split.pdf}
-    \caption{Split of the dataset. First, 20\% of all files are seperated into a holdout set for later testing. The remainding 80\% of the files are split into 90\% training and 10\% validation data. }
+    \caption[Visualisation of the dataset split.]{Visualisation of the dataset split. First, 20\% of all files are seperated into a holdout set for later testing. The remainding 80\% of the files are split into 90\% training and 10\% validation data. }
     \label{fig:data_split}
 \end{figure}
 
@@ -421,8 +420,7 @@ To modify the original code, we use the preprocessed code with problems detected
 
 The subsequent data encoding step is similar to the one for model training, although this modified samples will only be used during evaluation.
 
-\begin{minipage}[c]{\linewidth}
-\begin{lstlisting}[language=Python, label=lst:return_none_modified, caption={Samples for returning None. The analysis plugin would flag the first return; the second and third return are modified variations that would be ignored by the analysis plugin. The performance of the machine learning models on detecting the latter will be evaluated.}]
+\begin{lstlisting}[float=t, language=Python, label=lst:return_none_modified, caption={Samples for returning None. The analysis plugin would flag the first return; the second and third return are modified variations that would be ignored by the analysis plugin. The performance of the machine learning models on detecting the latter will be evaluated.}]
 def f(a,b):
     #detected by the analysis plugin
     return None 
@@ -432,12 +430,12 @@ def f(a,b):
 
     #not detected by the analysis plugin
     return a if a < b else None \end{lstlisting}
-\end{minipage}
-\paragraph{Condition Comparison}\label{par:manipulation_condition_comparison}
-We want to test the generalisation of the model trained on the CCS types by evaluating on the labelled data for the CC type. 
-Since the dataset for the CC type includes the CCS subset, we manipulate the CC dataset to only contain samples the CCS was not trained on. The sample in \Cref{lst:conidtion_comparison_modified} shows the manipulation to ensure that all CC problems were not part of the CCS training set. The implementation uses a similar regular expression approach as described in \Cref{par:manipulation_return_none}
 
-\begin{lstlisting}[language=Python, label=lst:conidtion_comparison_modified, caption={Sample statements for the differnce between the two analysis plugins CC and CCS.  }]
+    \paragraph{Condition Comparison}\label{par:manipulation_condition_comparison}
+We want to test the generalisation of the model trained on the CCS types by evaluating on the labelled data for the CC type. 
+Since the dataset for the CC type includes the CCS subset, we manipulate the CC dataset to only contain samples the CCS was not trained on. The sample in \Cref{lst:conidtion_comparison_modified} shows the manipulation to ensure that all CC problems were not part of the CCS training set. The implementation uses a similar regular expression approach as described in \Cref{par:manipulation_return_none}.
+
+\begin{lstlisting}[float=t, language=Python, label=lst:conidtion_comparison_modified, caption={Sample statements for the difference between the two analysis plugins CC and CCS.  }]
     def f(a,b):
     #detected by CONDITION COMPARISON SIMPLE
     #detected by CONDITION COMPARISON
@@ -470,7 +468,7 @@ Our neural network consists of five layers (see \Cref{lst:lstm}). First, we use 
 
 We vary the hyperparameters for batch size, number of epochs, embedding size and number of LSTM cells. For implementation, we use Keras in version 2.4.3~\cite{chollet2015keras}.
 
-\begin{lstlisting}[label=lst:lstm, caption={Summary of our LSTM network. We use an embedding layer of size 32, 10 LSTM cells, a dropout layer before and after the LSTM layer with a default dropout ratio of 0.2 and a dense mapping to a single output neuron for binary classification with a threshold of 0.5.}]
+\begin{lstlisting}[float=t, label=lst:lstm, caption={Summary of our LSTM network. We use an embedding layer of size 32, 10 LSTM cells, a dropout layer before and after the LSTM layer with a default dropout ratio of 0.2 and a dense mapping to a single output neuron for binary classification with a threshold of 0.5.}]
 Layer (type)                 Output Shape              Param #
 ============================================
 embedding (Embedding)        (None, 20, 32)            3200064
