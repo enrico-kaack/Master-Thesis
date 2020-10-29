@@ -4,7 +4,7 @@
     \begin{tabularx}{\textwidth}{XXXXX|X|XXX|XXX|XXX}
     \toprule
     \multicolumn{5}{c}{Parameter} & \multicolumn{3}{c}{RN} & \multicolumn{3}{c}{CCS} & \multicolumn{3}{c}{CC} \\ \midrule
-    over-\newline samp. & under-\newline samp. & \#trees & class\newline weight & encode\newline type  & & Train &  Test & Holdout & Train &  Test & Holdout & Train &  Test & Holdout \\ \midrule
+    over-\newline samp. & under-\newline samp. & \#trees & class\newline weight & encode\newline type  & & Train &  Validation & Holdout & Train &  Validation & Holdout & Train &  Validation & Holdout \\ \midrule
     0.5 & - & 100.0 & None & True& & & & & & & & & \\
     & & & & & \textit{F1} & 1.0 & 0.8379 & 0.8486 & 1.0 & 0.9329        & 0.9352        & 1.0        & 0.929        & 0.9351        \\
     & & & & & \textit{Rec} & 1.0 & 0.7221 & 0.7404    & 1.0 & 0.8898    & 0.8936    & 1.0    & 0.8888    & 0.8976    \\
@@ -68,7 +68,7 @@
     \begin{tabularx}{\textwidth}{XXXXXX|X|XXX|XXX|XXX}
     \toprule
     \multicolumn{6}{c}{Parameter} & \multicolumn{3}{c}{RN} & \multicolumn{3}{c}{CCS} & \multicolumn{3}{c}{CC} \\ \midrule
-    over-\newline samp. & under-\newline samp. & stages &learn-\newline rate & sub-\newline sample & encode\newline type & & Train &  Test & Holdout & Train &  Test & Holdout & Train &  Test & Holdout \\ \midrule
+    over-\newline samp. & under-\newline samp. & stages &learn-\newline rate & sub-\newline sample & encode\newline type & & Train &  Validation & Holdout & Train &  Validation & Holdout & Train &  Validation & Holdout \\ \midrule
     - & - & 300 & 0.2 & 1.0 &True & & & & & & & & & \\
     & & & & & & \textit{F1} & 0.9364 & 0.9196 & 0.9328 & 0.8477 & 0.8419        & 0.8489        & 0.9087        & 0.9008        & 0.9088        \\
     & & & & & & \textit{Rec} & 0.9015 & 0.8666 & 0.9005    & 0.7926 & 0.7902    & 0.7953    & 0.8767    & 0.8673    & 0.8766    \\
@@ -124,7 +124,7 @@
     \begin{tabularx}{\textwidth}{XXXXXXX|X|XXX|XXX|XXX}
     \toprule
     \multicolumn{7}{c}{Parameter} & \multicolumn{3}{c}{RN} & \multicolumn{3}{c}{CCS} & \multicolumn{3}{c}{CC} \\ \midrule
-    over-\newline samp. & under-\newline samp. & emb-\newline size & epochs &batch-\newline size & \#lstm-\newline cells & dropout & & Train &  Test & Holdout & Train &  Test & Holdout & Train &  Test & Holdout \\ \midrule
+    over-\newline samp. & under-\newline samp. & emb-\newline size & epochs &batch-\newline size & \#lstm-\newline cells & dropout & & Train &  Validation & Holdout & Train &  Validation & Holdout & Train &  Validation & Holdout \\ \midrule
     - & - & 32 & 2 & 256 &10.0 & 0.2|0.2 & & & & & & & & & \\
     & & & & & & & \textit{F1} & 0.9936 & 0.9894 & 0.9933 & 0.9905 & 0.9782        & 0.981        & 0.9876        & 0.9774        & 0.9778        \\
     & & & & & & & \textit{Rec} & 0.9912 & 0.9851 & 0.9933    & 0.9952 & 0.9864    & 0.9865    & 0.9941    & 0.9857    & 0.9852    \\
@@ -181,7 +181,7 @@
     \begin{tabularx}{\textwidth}{XXXXXX|X|XXX|XXX|XXX}
     \toprule
     \multicolumn{6}{c}{Parameter} & \multicolumn{3}{c}{RN} & \multicolumn{3}{c}{CCS} & \multicolumn{3}{c}{CC} \\ \midrule
-    over-\newline samp. & under-\newline samp. & kernel &sub-\newline sample & class\newline weight & encode\newline type & & Train &  Test & Holdout & Train &  Test & Holdout & Train &  Test & Holdout \\ \midrule
+    over-\newline samp. & under-\newline samp. & kernel &sub-\newline sample & class\newline weight & encode\newline type & & Train &  Validation & Holdout & Train &  Validation & Holdout & Train &  Validation & Holdout \\ \midrule
     - & 0.5 & rbf & 0.5 & None &True & & & & & & & & & \\
     & & & & & & \textit{F1} & 0.0364 & 0.0066 & nan & nan & nan        & nan        & nan        & nan        & nan        \\
     & & & & & & \textit{Rec} & 0.0187 & 0.0134 & nan    & nan & nan    & nan    & nan    & nan    & nan    \\
