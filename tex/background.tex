@@ -40,7 +40,7 @@ Chaotic code, on the other hand, is harder to read and understand. The author ar
 
 
 
-The following sections explain the clean code guidelines following the book by Robert C. Martin~\cite{martin_clean_2009}.TODO give a more detailed overview of the next chapters
+The following sections explain the clean code guidelines as described by Robert C. Martin~\cite{martin_clean_2009}. First, we describe rules for naming and functions. Then we recap rules regarding comments, data structures and objects. Finally, we conclude with suggestions for classes and error handling.
 
 \subsection{Naming}\label{sec:naming}
 The naming section covers several rules for naming variables, functions, types and classes.
@@ -50,14 +50,31 @@ To come up with a descriptive name, it is helpful to include a verb or verb expr
 
 Another helpful property of a name is an easy pronunciation since it is easier to read and to talk about the code with other developers. For reading, the pronounciation is necessary for the inner subvocalization\footnote{the internal speech when reading}. Non-dictionary words or unusual abbreviations are harder to pronounce. Consequently, it is useful to make longer but descriptive and pronounceable names, especially since the autocomplete feature of IDEs will free the developer from typing the long name. Additionally, searching for long names works better than for short names, because long names are more likely to be unambiguous compared to shorter names. An acceptable exception to this rule are short variables in a small scope (e.g. variable \textit{i} in a loop), but using \textit{i} in a large scope could be ambiguous and troublesome for searching and understanding.
 
-An old naming convention is the Hungarian naming convention. In Hungarian naming, the type is encoded as a prefix of a variable name. TODO sample and source. Nowadays, the type encoding is redundant to the automatic type inference of IDEs. The automatic type inference also prevents confusion for the reader if the type in the notation and the actual type are inconsistent. The same logic applies to a prefix for member variables and methods, since an IDE can automatically highlight those different tokens.
+An old naming convention is the Hungarian notation TODO source \url{https://scholar.google.com/scholar?hl=de&as_sdt=0%2C5&q=hungarian+notation&btnG=}. In Hungarian notation, the type is encoded as a prefix of a variable name as the names in \Cref{lst:hungarian_notation} shows. Nowadays, the type encoding is redundant to the automatic type inference of IDEs. The automatic type inference also prevents confusion for the reader if the type in the notation and the actual type are inconsistent. The same logic applies to a prefix for member variables and methods, since an IDE can automatically highlight those different tokens.
+
+
+\begin{lstlisting}[float=t , language=Python, label=lst:hungarian_notation, caption={Example for the Hungerian notation in an adaption to use the prefix to indicate the type.}]
+def fnFunctionName():
+    dbValue = 0.1 #double
+    iSize = 5 #integer
+    u32Time = 20001000 #unsigned 32-bit integer
+\end{lstlisting}
+
 
 \subsection{Functions}\label{sec:functions}
 This chapter describes several rules regarding functions, that Robert C. Martin charactericze~\cite{martin_clean_2009}. 
 
 First, functions should be small in length. Exceeding 20 lines should not be necessary in most cases. If a function is small, it can be read more easily and without scrolling. 
 
-Second, inside a function, if-, else- and while-statements should contain a function call for the condition and one function call for the body. With a descriptive naming (see \Cref{sec:naming}), a function call document the condition and body in a concise and readable way. In sample TODO, reading a condition with function calls does not require the reader to decrypt the logical expression. This can also save additional comments that explain the meaning of the condition. Furthermore, if the body also contains a function call, it is fast to understand the cause-effect relation of the if expression. 
+Second, inside a function, if-, else- and while-statements should contain a function call for the body and if applicable one function call for hard to understand condition. With a descriptive naming (see \Cref{sec:naming}), a function call document the condition and body in a concise and readable way. In \Cref{lst:function_method_call}, reading a condition with function calls does not require the reader to decrypt the logical expression. This can also save additional comments that explain the meaning of the condition. Furthermore, if the body also contains a function call, it is fast to understand the cause-effect relation of the if expression. 
+
+\begin{lstlisting}[float=t , language=Python, label=lst:function_method_call, caption={Sample for using functions with if-statements with increased documentary value of the cause effect relationship.}]
+if person.is_authorized():
+    modify_data()
+else:
+    redirect_to_login()
+\end{lstlisting}
+
 
 Third, functions should fulfil one purpose. Since functions may have to call several functions subsequently to perform the required computation, Robert C. Martin expands the rule that functions should only operate on one abstraction level~\cite{martin_clean_2009}. This would result in the following structure:
 Functions with a low abstraction level handle data access and manipulation, e.g. string manipulation. Functions on a middle abstraction layer orchestrate the low-level operations. On the next higher level, the mid-level functions are orchestrated etc. Following this structure, a function has one purpose on the low level and one orchestration function on a higher abstraction layer. 
@@ -67,7 +84,26 @@ If a function requires more arguments, it may be advisable to bundle those in a 
 
 Fifth, side-effects in a function body should be avoided. Side-effects happen if a function modifies a variable outside its scope without explicitly mentioning this in the function name. This leads to dependencies between the functions that are not obvious to a developer who checks the signature, i.e. the name, input arguments and return type, to use the function. To spot a side-effect, the developer would have to read through the function, although reading the signature should be enough to use the function. With side-effects, the function behaves unexpected and time-consuming mistakes are the consequence. Especially side-effects that initialise other objects result in a time-dependency that is hard to identify and could be overseen at all.
 
-The next rule forbids the returning of error codes and suggests raising an exception if the programming language supports it. Raising an exception allows better separation between application logic and error handling code since the error code checking interrupts the reading flow of code. On the other hand, catching a raised exception is separated from the logic for a non-error execution and can be separated into an additional function for an even cleaner structure. TODO: see example In this case, error handling counts as the one purpose of this function.
+The next rule forbids the returning of error codes and suggests raising an exception if the programming language supports it. Raising an exception allows better separation between application logic and error handling code since the error code checking interrupts the reading flow of code. Additionally, catching a raised exception is separated from the logic for a non-error execution and can be separated into an additional function for an even cleaner structure. \Cref{lst:error_catching} shows an implementation of a simple function with exception raising and error code return in the \texttt{database.read_all_users()} method. The former error handling shows the seperation between the application logic and the error handling logic, whereas the error handling in the latter interrupts the reading flow of the code.
+
+\begin{lstlisting}[float=t , language=Python, label=lst:error_catching, caption={Sample listing for error handling with try and except statements vs error codes.}]
+def query_all_admins():
+    try:
+        all_users = database.read_all_users()
+        admins = [user for user in all_users if user.is_admin]
+        return admins
+    except DatabaseError as error:
+        print("Database error", error)
+
+def query_all_admins():
+    all_users = database.read_all_users()
+    if all_users == -1: #-1 is database error
+        print("Database error code -1")
+    else:
+        admins = [user for user in all_users if user.is_admin]
+        return admins
+\end{lstlisting}
+
 
 Last, the important principle for software engineering applies directly to functions: Don't repeat yourself~\cite{haoyu_basic_2012}. Repeated code is dangerous and chaotic since it requires changes in multiple locations if it has to be modified. This makes duplicated code very prone to copy and paste errors and small mistakes that may not be obvious during development but will lead to a fatal crash at runtime. Code clone detection is an active research field, especially for finding semantic clones without syntactic similarity. For instance, Büch and Andrzejak suggest an AST-based recursive neural network~\cite{buch_learning-based_2019} and Saini et al. present an approach that can even detect duplications with just minor syntactic similarities~\cite{saini_oreo_2018}.
 
@@ -137,7 +173,7 @@ The first rule specifies the recommended size of a class. Unlike counting lines 
 Second, changing one functionality should only require changes in the one class that is responsible for this specific function. And last, we can reuse the class in different projects if we need that functionality. If the class fulfilled two responsibilities, we would have to remove the unnecessary functionality before reusing the class in a different project. Reaching back to the examples of one responsibility being data manipulation and one is writing data to a file, reusing the latter functionality would require us to strip out the data manipulation.
 The Single-Responsibility-Principle lead to a system of many small classes with one, clearly defined responsibility.
 
-The second rule recommends classes to have high cohesion. Cohesion is high if a method manipulates many instance variables. If all methods of a class manipulate all instance variables, the class has peak cohesion. With a high cohesion, the methods and the class are a logical unit. A low cohesion indicates to split the class into multiple classes since the methods are not a logical unit. As a result of splitting classes into smaller logical units, will more likely comply with the Single-Responsibility-Principle. (TODO add metric for cohesion)
+The second rule recommends classes to have high cohesion. Cohesion is high if a method manipulates many instance variables. If all methods of a class manipulate all instance variables, the class has peak cohesion. With a high cohesion, the methods and the class are a logical unit. A low cohesion indicates to split the class into multiple classes since the methods are not a logical unit. As a result of splitting classes into smaller logical units, will more likely comply with the Single-Responsibility-Principle.
 
 The last rule provides a guideline on how to handle internal or third-party class dependencies. If a dependency changes, the class depending on it should not change. To accomplish this decoupling from the implementation of a dependency, classes should not depend on the dependency directly but instead on an abstract class (or interface). That abstract class describes the concept of the dependency that is unlikely to change. For example, for a database dependency, the abstract class defines the concepts of storing and retrieving an entry. For the specific database, a specific class implements the abstract class or interface and provides the functionality. Changing the database only changes the implementation in the specific class but not the concept. Therefore, there is no need to modify a class that depends on the concepts from the abstract class. This isolation of dependencies is especially useful if the dependencies are not under the developer's control and may be changed any time by a third party. The abstraction is also valuable for testing, since the dependency can be replaced by a so-called mock class that only simulates the behaviour. This allows testing to be independent of the dependency and to locate potential errors in the own system or the dependency.
 
@@ -203,7 +239,7 @@ Naming&Pronunciation&X&X& \\
 Naming&Names in Small Scope&&X& \\
 Naming&Hungarian Notation&X&& \\
 Functions&Length&X&&\\
-Functions&Conditional Function Call&X&& \\
+Functions&Conditional Function Calls&X&X& \\
 Functions&Purpose&&&X\\
 Functions&Levels of Abstraction&&&X\\
 Functions&Number of Arguements&X&& \\
@@ -236,7 +272,7 @@ Detecting Hungarian notation could be accomplished with regular expressions on t
 For functions, the clean code principles define multiple rules. 
 First, functions should be smaller than 20 lines of code. A checker for this rule would be at the basic level of complexity since the AST contains all the necessary information about the function body. If the metadata such as line number is retained during AST construction, a checker can calculate the lines of code for the function body.
 
-The next rule covers the function call in the condition and body part of a conditional such as an if-statement. An if-statement is represented as a node with a condition, body and an \texttt{else} descendant. An algorithm can scan the AST to check the condition and body nodes of the conditional statement. Such an checker would have a basic level of complexity.
+The next rule covers the function call in the condition and body part of a conditional such as an if-statement. An if-statement is represented as a node with a condition, body and an \texttt{else} descendant. An algorithm can scan the AST to check the condition and body nodes of the conditional statement. Such an checker would have a basic level of complexity. Since a function call mainly increases the understandability of more complex conditions, some sort of threshold such as a maximum number of allowed logical sub-expressions could be applied. With this enhancement, an automated checker would be in the advanced level of complexity.
 
 Regarding the purpose of a function, the clean code rules suggest a function to have one purpose and to operate on one abstraction level. Counting the number of purposes requires an understanding of the semantic of the code. Similar understanding would be necessary for the level of abstraction. We argue such a checker would be in the high level of complexity category since the understanding of code could only be achieved with machine learning. The aforementioned research field of code summarisation could be beneficial for this task, too. A natural language description of a function may require the model to \enquote{understand} the purpose and task in order to articulate it in natural language. It may be possible to use work in this field to detect functions with multiple purposes or abstraction levels.
  
