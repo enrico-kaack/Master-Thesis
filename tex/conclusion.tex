@@ -1,21 +1,21 @@
 
 
-Detecting violations of the clean code rules automatically can improve the understandability and readability of source code. 
+Automatically detecting violations of the clean code rules automatically can improve the understandability and readability of source code. 
 
 Our first contribution was the proposal of a taxonomy for clean code rules based on the assumed level of complexity for an automated checker.
 We used this taxonomy to classify common clean code rules and identify areas of interest for our research questions.
 
-Next, we designed and implemented a tool that can run multiple automated checkers on source code (CCAP) with a focus on extensibility, useability and integration. In \hyperref[rq:1]{RQ1}, we compared the CCAP with existing tools for code checking. We found a high value for users and extension developers in its useability and extensibility, whereas it lacks the implementation for integration in different workflows or IDEs of compared tools. We see the CCAP as a useful addition to Sonarqube to supplement the more complex extensibility of Sonarqube.
+Next, we designed and implemented a tool that can run multiple automated checkers on source code (CCAP) with a focus on extensibility, useability and integration. In \hyperref[rq:1]{RQ1}, we compared the CCAP with existing tools for code checking. We found a high value for users and extension developers in its useability and extensibility, whereas it lacks the implementation for integration in different workflows or IDEs of compared tools. We see the CCAP as a useful addition to Sonarqube to supplement its more complex extensibility.
 
-In our taxonomy, we identified clean code rules that we assume could not be checked without the help of machine learning algorithms. In \hyperref[rq:2]{RQ2}, we trained and compared multiple machine learning models to detect code patterns that violate clean code rules. A support vector classifier was not able to detect the pattern with acceptable performance. The LSTM-based neural network outperforms all other models on the task, but it is sensitive towards less training data.
-A random forest classifier fulfiled our acceptance criteria. It can handle a moderate class imbalance in the training data and profit from oversampling the training samples. The gradient boosting classifier also fulfils our acceptance criteria and performs better than the random forest on two out of three problematic code patterns. Additionally, it is insensitive towards class imbalance which is a useful advantage for the imbalanced classification of problematic code patterns.
+In our taxonomy, we identified clean code rules that we assume could not be checked without the help of machine learning algorithms. In \hyperref[rq:2]{RQ2}, we trained and compared multiple machine learning models to detect code patterns that violate clean code rules. A support vector classifier was not able to detect the pattern with acceptable performance. The LSTM-based neural network outperformed all other models on the task, but it is sensitive towards less training data.
+A random forest classifier fulfiled our acceptance criteria. It can handle a moderate class imbalance in the training data and profits from oversampling the training samples. The gradient boosting classifier also fulfiled our acceptance criteria and performed better than the random forest on two out of three problematic code patterns. Additionally, it is insensitive towards class imbalance which is a useful advantage for the imbalanced classification of problematic code patterns.
 
 Last, we evaluated in \hyperref[rq:3]{RQ3} if our models can cover a larger variety of cases than in the collected training samples. On unseen variations of code patterns, all models performed below an acceptable level. Our analysis indicates that our models did learn detecting the pattern but not the structure behind it.
 
 \medskip
-For future work, we suggest analysing a different encoding approach that incorporates the structural information of the source code and to increase the number of variations in the training and validation dataset. Furthermore, evaluating more machine learning models like a more recent Transformer model. We can even think of changing the premise of the task from classification to anomaly detection and evaluate if those techniques could be superior.
+For future work, we suggest analysing a different encoding approach that incorporates the structural information of the source code and to increase the number of variations in the training and validation dataset. Furthermore, evaluating more machine learning models like a more recent transformer model. We can even think of changing the premise of the task from classification to anomaly detection and evaluate if those techniques could be superior.
 
-For the CCAP, future work can be done in its integrations into different IDEs and additional analysis and output plugins. Additional functionality such as different warn levels and the ability to ignore a problem can further increase the useability and usefulness for developers.
+For the CCAP, future work can be done in its integrations into different IDEs and additional analysis/output plugins. Additional functionality such as different warning levels and the ability to ignore a problem can further increase the useability and usefulness for developers.
 
 
 
