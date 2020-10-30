@@ -20,7 +20,6 @@ Several tools are established that aim to improve code quality and detect unclea
 To answer this research question, we compare the CCAP with existing tools based on the design goals extensibility, useability and integration. Additionally, we will mention and compare useful features unique to existing tools. Finally, we assess if it can supplement or replace existing tools. As described in \Cref{sec:tool_comparison}, the compared tools are Sonarcube, PMD Source Code Analyser Project, Codacy and PyLint.
 
 \paragraph{Results}
-TODO vergleichstabelle
 
 \subparagraph{Finding 1: Extensibility}
 The extensibility of CCAP with analysis plugins is comparable to PyLint, that also offer plugins to analyse the raw string, the token stream or the AST. PMD allows plugins to analyse the AST or define XPath rules. Since XPath rules can be used in the CCAP as well (using a third-party library in the plugin), PMD offers fewer expansion possibilities. Sonarqube, on the other hand, provides the most possibilities for extension. Not only can developers analyse the AST or specify XPath rules, but they have access to an additional semantic model of the code that provides direct access to structures such as methods, parameters, and return values. This semantic model simplifies an analysis in comparison to the AST analysis.
@@ -169,18 +168,18 @@ We analysed the classification of the holdout samples, especially the false-posi
 
 
 \begin{lstlisting}[float=h, language=Python, label=lst:gbc_false_positive, caption={False-positive samples for the best performing random forest classifier with 300 boosting stages, a learning rate of 0.2, type encoding and without resampling for the CCS type. We removed spaces between tokens if necessary, but leave the intendation as in the sample.}]
-    if self . _supported_features & support_color : 
-    self . _hs_color = ( 
-<UNKNOWN> ( self .
+    if self._supported_features & support_color : 
+    self._hs_color = ( 
+<UNKNOWN> ( self.
 DEDENT,NAME,NAME,OP,NAME,OP,NAME,OP,NEWLINE,INDENT,NAME,OP,NAME,OP,OP,NL,NAME,OP,NAME,OP
 ########################
 
-if self . state is not none and self . _sensor_type [ 0 ] == "battery" : 
+if self.state is not none and self._sensor_type [ 0 ] == "battery" : 
    
 NEWLINE,NAME,NAME,OP,NAME,NAME,NAME,NAME,NAME,NAME,OP,NAME,OP,NUMBER,OP,OP,STRING,OP,NEWLINE,INDENT
 ########################
-if isinstance ( <UNKNOWN> , datetimearray ) and <UNKNOWN> . tz is not none : 
-    pytest .
+if isinstance ( <UNKNOWN> , datetimearray ) and <UNKNOWN>.tz is not none : 
+    pytest.
 INDENT,NAME,NAME,OP,NAME,OP,NAME,OP,NAME,NAME,OP,NAME,NAME,NAME,NAME,OP,NEWLINE,INDENT,NAME,OP
 \end{lstlisting}
 
@@ -333,10 +332,7 @@ The LSTM-based neural network results draw a similar picture. The undersampling 
 
 We would explain this observation separate for the RN and CCS type:
 For the RN type, the models probably only learnt the direct token sequence (as described in \hyperref[finding:return_none_manipulated_bad]{Finding 1}). The better it learnt this sequence, the better its performance on the previous experiment. For this experiment, learning the direct token sequence would result in a low performance. Instead, the model would have to learn the structure of the problem. 
-
 We analysed the false-positive samples of the random forest classifier that performed best in this experiment and its false-positives in the previous experiment. It failed in the previous experiment, since it used the \texttt{return} token as an indicator to label samples positive in 19 out of 20 samples. The \texttt{None} token was not important, since it was only in 4 out of the 20 samples. This resulted in a low precision of 0.158. We see the same result with the manipulated RN data with 19 out of 20 samples containing a \texttt{return} token and 3 out of 20 samples containing a \texttt{None} token. For the best gradient boosting classifier in this experiment, 16 out of 20 false-positive samples contain a \texttt{return} token and 14 out of 20 for the best LSTM in this experiment.
-TODO maybe move to the finding for the RN
-
 
 
 The CCS problem type, simulating scenario (2), offered more variety to learn from, as discussed. If the model learnt a general problem structure from this variety, fine-tuning the hyperparameters for the previous experiment would restrict this generality to only CCS patterns. We assumed in \Cref{finding:rq2_gbc} that the gradient boosting classifier get restricted by the CCS type and is more likely to learn the CC pattern. In this experiment, the best gradient boosting classifier configuration surpasses all other models. Additionally, it surpasses the baseline performance measure of the model trained on the unmodified CC type that we assumed to perform better. This solidifies our assumptions about the learning of the CCS type. We think this explanation applies to other models as well(TODO false positives from previous experiment anschauen und sehen ob da CC type die indikatoren waren, data available).
