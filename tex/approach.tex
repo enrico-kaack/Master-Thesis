@@ -275,7 +275,7 @@ A second challenge is a major imbalance between the samples labelled as problema
 
 We combined the following solutions:
 \subparagraph{Solution 1:}
-Due to the imbalance, we do not choose accuracy as a suitable evaluation metric, since classifying all samples as clean code would result in an accuracy of 99.79\% for the RN problem type. Instead, we use precision and recall as metrics, with an f1 score as a single, weighted metric. More details about the metrics are in \Cref{par:approach}.
+Due to the imbalance, we do not choose accuracy as a suitable evaluation metric, since classifying all samples as clean code would result in an accuracy of 99.79\% for the RN problem type. Instead, we use precision and recall as metrics, with an F1 score as a single, weighted metric. More details about the metrics are in \Cref{par:approach}.
 
 \subparagraph{Solution 2:}
 We will apply undersampling and oversampling techniques on the data and evaluate the difference in model performance. Undersampling removes random samples from the majority class and thus balance class labels. Oversampling replicates random samples from the minority class to balance class labels while also increasing the overall amount of data. This technique is only used for the training data since it would distort the evaluation results when applied to validation data as well.
