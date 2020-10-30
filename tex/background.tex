@@ -49,7 +49,7 @@ Another valuable property of a name is an easy pronunciation since it is easier 
 An old naming convention is the Hungarian notation~\cite{simonyi1999hungarian}. In Hungarian notation, the type is encoded as a prefix of a variable name as the names in \Cref{lst:hungarian_notation} shows. Nowadays, the type encoding is redundant to the automatic type inference of IDEs. The automatic type inference also prevents confusion for the reader if the type in the notation and the actual type are inconsistent. The same logic applies to a prefix for member variables and methods, since an IDE can automatically highlight those different tokens.
 
 
-\begin{lstlisting}[float=t , language=Python, label=lst:hungarian_notation, caption={Example for the Hungerian notation in an adaption to use the prefix to indicate the type.}]
+\begin{lstlisting}[float=t , language=Python, label=lst:hungarian_notation, caption={Example for the Hungarian notation in an adaption to use the prefix to indicate the type.}]
 def fnFunctionName():
     dbValue = 0.1 #double
     iSize = 5 #integer
@@ -64,7 +64,7 @@ First, functions should be small in length. Exceeding 20 lines should not be nec
 
 Second, inside a function, if-, else- and while-statements should contain a function call for the body. Additionally, the rule of descriptive naming can apply to the condition of the if statement: If the condition becomes hard to understand, a function call can simplify the understanding of the condition. With a descriptive naming, a function call documents the condition and body in a concise and readable way. In \Cref{lst:function_method_call}, reading a condition with function calls does not require the reader to decrypt the logical expression. This can also save additional comments that explain the meaning of the condition. Furthermore, since the body also contains a function call, it is fast to understand the cause-effect relation of the if expression. 
 
-\begin{lstlisting}[float=t , language=Python, label=lst:function_method_call, caption={Sample for using functions with if-statements with increased documentary value of the cause effect relationship.}]
+\begin{lstlisting}[float=t , language=Python, label=lst:function_method_call, caption={Sample for using functions with if-statements with the increased documentary value of the cause-effect relationship.}]
 if person.is_authorized():
     modify_data()
 else:
@@ -399,7 +399,7 @@ Last, the number of bugs correlates with the following relation~\cite{yu_survey_
 \end{displaymath}
 
 HCM focus on the complexity introduced by data manipulation but ignores complexity from the control-flow. Since the cyclomatic complexity focuses on the control-flow complexity but not on the data-flow complexity, it is practical to use both together to supplement each drawback~\cite{yu_survey_2010}.
-). Additionally, the correlation with the number of bugs is based on the programmer's skill estimation with a fixed value of 3000. Since this varies between projects, such an experiential and fixed number is doubtable~\cite{yu_survey_2010}.
+Additionally, the correlation with the number of bugs is based on the programmer's skill estimation with a fixed value of 3000. Since this varies between projects, such an experiential and fixed number is doubtable~\cite{yu_survey_2010}.
 
 \subsection{Software Maintainability Index}
 The software maintainability index was developed by Dan Coleman and Paul Oman in 1994. 16 HP engineers evaluated 16 software systems and scored it in a range from 0 to 100, with 100 representing best maintainability~\cite{coleman_using_1994}. 

@@ -167,7 +167,7 @@ We analysed the classification of the holdout samples, especially the false-posi
 \textit{Subsampling the train data for the individual base learner during training has no impact.} The performance for all subsampling ratios are identical, so the individual base learners are trained with the same data as before.
 
 
-\begin{lstlisting}[float=h, language=Python, label=lst:gbc_false_positive, caption={False-positive samples for the best performing random forest classifier with 300 boosting stages, a learning rate of 0.2, type encoding and without resampling for the CCS type. We removed spaces between tokens if necessary, but leave the intendation as in the sample.}]
+\begin{lstlisting}[float=h, language=Python, label=lst:gbc_false_positive, caption={False-positive samples for the best performing random forest classifier with 300 boosting stages, a learning rate of 0.2, type encoding and without resampling for the CCS type. We removed spaces between tokens if necessary, but leave the indentation as in the sample.}]
     if self._supported_features & support_color : 
     self._hs_color = ( 
 <UNKNOWN> ( self.
@@ -256,7 +256,7 @@ We found a weakness in the way we labelled samples with the rule checkers. We de
 To improve this weakness, we would strip out all \texttt{DEDENT} and possibly \texttt{NEWLINE} tokens from the data before applying the sliding window. Due to time constraints, we are not able to retrain all models with an improved approach. However, the problematic line will occur in at least another sample, if the line is shorter than 16 tokens. It will most likely not impact the variety of problem patterns, but it will slightly reduce our performance score due to false-positives.
 
 
-\begin{lstlisting}[float,floatplacement=H, language=Python, label=lst:weaknes_end_start_sliding_window, caption={False-positives of the best gradient boosting classifier with 300 boosting stages, a learning rate of 0.2, type encoding and without resampling for the CCS type. In the first sample, not all preceding \texttt{DEDENT} tokens are in this window. For the second example, the trailing \texttt{NEWLINE} token is missing in the window. Without this encoding issue, both samples would have been detected correctly.}]
+\begin{lstlisting}[float,floatplacement=H, language=Python, label=lst:weaknes_end_start_sliding_window, caption={False-positive samples of the best gradient boosting classifier with 300 boosting stages, a learning rate of 0.2, type encoding and without resampling for the CCS type. In the first sample, not all preceding \texttt{DEDENT} tokens are in this window. For the second example, the trailing \texttt{NEWLINE} token is missing in the window. Without this encoding issue, both samples would have been most likely detected correctly.}]
 if 'add_host' in <UNKNOWN> : 
 <UNKNOWN> 
                             <UNKNOWN> = <UNKNOWN> . get ( 'add_host' ,

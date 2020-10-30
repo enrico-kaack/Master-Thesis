@@ -160,7 +160,7 @@ The Standard Output Plugin writes the formatted output to the \texttt{stdout} st
 The output is divided into a general part and the problem list. The former contains the input path, all executed plugins, and a summary field with the number of problems in total. The latter displays the list with problems, grouped by analysis plugin.  
 For each problem, the problem name, file path, line number and description is printed. A colon separates the file path and line number. Some terminals parse the path and line number so that a user can click the path and it opens the default editor with the cursor in the correct line. A sample output is printed in \Cref{lst:stdout}.
 
-\begin{lstlisting}[float, floatplacement=h, label=lst:stdout, caption={Example output to \texttt{stdout} of the Standard Output Plugin. Besides a list of problems, it also outputs additional }]
+\begin{lstlisting}[float, floatplacement=h, label=lst:stdout, caption={Example output to \texttt{stdout} of the Standard Output Plugin. Besides a list of problems, it also outputs further information such as input directory and analysis plugins. }]
 Analysis Report on /Users/enrico/MA_CleanCodeAnalyser/test_programs.
 Analyse Plugins: Condition Method Call Plugin, Simple Condition Method Call Plugin, Return None (Null) Plugin, Sample Plugin.
 Summary: Found 16 problem(s)
@@ -208,7 +208,7 @@ To achieve our objectives, we will train our models on the dection of three prob
 \end{enumerate}
 From the three problem types, we think the RN type is the easiest type to spot since the model only has to spot the same statement in every sample. The CC type is more complex to spot, and the model would have to learn the connection between the if-statement and the possible logic expressions. The same applies to the CCS type, that should be easier to detect than the CC type due to fewer variations. Additionally, we use the trained model on the CCS subset and test it with a manipulated CC superset to assess the generalisation to unseen variations in \hyperref[rq:3]{RQ3}.
 
-In the following, we describe the approach in detail. First, we describe the challenges and our solutions. Second, we describe our dataset and our split in train, validation and holdout set. Afterwards, we describe our pipeline of processing the raw files into samples with a fixed size, our encoding approach and our code manipulation for \hyperref[rq:3]{RQ3}. In the final section, we describe the machine learning models and parameters we use for all research questions.
+In the following, we describe the approach for the machine learning part in detail. First, we discuss the challenges and our solutions. Second, we introduce our dataset and our split in train, validation and holdout set. Afterwards, we describe our pipeline of processing the raw files into samples with a fixed size, our encoding approach and our code manipulation for \hyperref[rq:3]{RQ3}. In the final section, we describe the machine learning models and parameters we use for all research questions.
 
 \subsection{Challenges}
 \paragraph{Lack of datasets}
@@ -399,7 +399,7 @@ In \Cref{chap:clean_code_classification_dataset}, we described to create a train
 If we would do a train/validation split on a sample level, we may introduce samples covering one problematic pattern in both datasets. \Cref{fig:encoding_sliding_window} illustrates multiple windows covering one sample. 
 
 This unclean separation would diminish the validity of metrics calculated from the validation and holdout dataset. Therefore, we split on file level and perform the previous preprocessing separately for training and validation dataset. Only the vocabulary generation happens on the training file for both processing steps. In \texttt{TaskPrepareXY} in the pipeline, we then merge those two pipelines for training and validation (see \Cref{fig:pipeline_rq2}).
-\begin{figure}
+\begin{figure}[t]
     \includegraphics[width=1\textwidth]{img/ML/encoding_sliding_window_problem.pdf}
     \caption{Sliding window approach on source code containing a problematic \texttt{return None}. Multiple windows will contain the problematic sample. Consequently, we can not split on a sample level, since the same problem would be in the train and validation set. Instead, we split on file level to have a clean separation between the datasets.}
     \label{fig:encoding_sliding_window}
@@ -437,7 +437,7 @@ def f(a,b):
 We want to test the generalisation of the model trained on the CCS types by evaluating on the labelled data for the CC type. 
 Since the dataset for the CC type includes the CCS subset, we manipulate the CC dataset to only contain samples the CCS was not trained on. The sample in \Cref{lst:conidtion_comparison_modified} shows the manipulation to ensure that all CC problems were not part of the CCS training set. The implementation uses a similar regular expression approach, as described in \Cref{par:manipulation_return_none}.
 
-\begin{lstlisting}[float=t, language=Python, label=lst:conidtion_comparison_modified, caption={Sample statements for the difference between the two analysis plugins CC and CCS.  }]
+\begin{lstlisting}[float=t, language=Python, label=lst:conidtion_comparison_modified, caption={Sample statements for the difference between the two analysis plugins CC and CCS.}]
     def f(a,b):
     #detected by CONDITION COMPARISON SIMPLE
     #detected by CONDITION COMPARISON
