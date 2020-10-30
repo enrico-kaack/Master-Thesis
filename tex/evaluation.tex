@@ -111,7 +111,7 @@ The different performance decrease between the CCS and CC type can also result f
 \toprule
                     & \multicolumn{3}{c}{Test F1 Score} & \multicolumn{3}{c}{Dataset}   \\ \midrule
                     & RN        & CCS        & CC     & RN            & CCS         & CC          \\ \midrule
-No resampling     &  0.7699   &  0.9208    &  0.9211  &  4,950,329    & 4,950,329   & 4,950,329   \\
+No resampling     &  0.7699   &  0.9208    &  0.9211  &  4,950,329    & 4,950,329   & 4,950,329   \\ \midrule
 0.5 oversampling  &  0.8379   &  0.9329    &  0.929   &  7,409,925    & 7,228,141   & 7,064,008   \\
 1.0 oversampling  &  0.8358   &  0.9287    &  0.9273  &  9,879,900    & 9,637,522   & 9,418,678   \\ \midrule
 0.1 undersampling &  0.6857   &  0.9268    &  0.929   &  114,169      & 1,447,248   & 2,650,890   \\
@@ -149,7 +149,7 @@ Second, the larger performance drop for the RN problem type and the smaller decr
     \toprule
                         & \multicolumn{3}{c}{Test F1 Score} & \multicolumn{3}{c}{Dataset}   \\ \midrule
                         & RN        & CCS        & CC     & RN            & CCS         & CC          \\ \midrule
-    No resampling     &  0.8306   &  0.773    &  0.8567  &  4,950,329    & 4,950,329   & 4,950,329   \\
+    No resampling     &  0.8306   &  0.773    &  0.8567  &  4,950,329    & 4,950,329   & 4,950,329   \\ \midrule
     0.5 oversampling  &  0.4847   &  0.6948   &  0.7933  &  7,409,925    & 7,228,141   & 7,064,008   \\
     0.5 undersampling &  0.4545   &  0.6836   &  0.7925  &  31,137       & 394,704     & 722,970     \\ \bottomrule
     \end{tabularx}
@@ -167,7 +167,7 @@ We analysed the classification of the holdout samples, especially the false-posi
 \textit{Subsampling the train data for the individual base learner during training has no impact.} The performance for all subsampling ratios are identical, so the individual base learners are trained with the same data as before.
 
 
-\begin{lstlisting}[float=h, language=Python, label=lst:gbc_false_positive, caption={False-positive samples for the best performing random forest classifier with 300 boosting stages, a learning rate of 0.2, type encoding and without resampling for the CCS type. We removed spaces between tokens if necessary, but leave the indentation as in the sample.}]
+\begin{lstlisting}[float=h, language=Python, label=lst:gbc_false_positive, caption={False-positive samples for the best performing gradient classifier with 300 boosting stages, a learning rate of 0.2, type encoding and without resampling for the CCS type. We removed spaces between tokens if necessary, but leave the indentation as in the sample.}]
     if self._supported_features & support_color : 
     self._hs_color = ( 
 <UNKNOWN> ( self.
@@ -232,7 +232,7 @@ Responsible for the performance drop is a decrease in precision, whereas the rec
     \toprule
                         & \multicolumn{3}{c}{Test F1 Score} & \multicolumn{3}{c}{Dataset}   \\ \midrule
                         & RN        & CCS        & CC     & RN            & CCS         & CC          \\ \midrule
-    No resampling     &  0.987   &  0.9808    &  0.9782  &  4,950,329    & 4,950,329   & 4,950,329   \\
+    No resampling     &  0.987   &  0.9808    &  0.9782  &  4,950,329    & 4,950,329   & 4,950,329   \\ \midrule
     0.5 oversampling  &  0.9859   &  0.9781   &  0.9745  &  7,409,925    & 7,228,141   & 7,064,008   \\
     0.5 undersampling &  0.6294   &  0.9564   &  0.9561  &  31,137       & 394,704     & 722,970     \\ \bottomrule
     \end{tabularx}
@@ -250,7 +250,7 @@ Second, a variation of the epochs and batch size for the training yields no sign
     \end{minipage}}
 \end{center}
 
-\subparagraph{Finding 6}
+\subparagraph{Finding 5}
 We found a weakness in the way we labelled samples with the rule checkers. We decided to label a sample as a rule violation if all tokens of the problematic line are present. With the sliding window approach, it is possible to have all tokens for the detection in the sample, but missing the first or last newline or indentation tokens. The sample would therefore be labelled as clean code, although the problematic pattern is there. In the analysis of the false-positives for the gradient boosting classifier, we found samples for both cases in the false-positives, as seen in \Cref{lst:weaknes_end_start_sliding_window}. In the first sample, not all preceding \texttt{DEDENT} types are within the window, whereas the trailing \texttt{NEWLINE} token is missing in the second sample.
 
 To improve this weakness, we would strip out all \texttt{DEDENT} and possibly \texttt{NEWLINE} tokens from the data before applying the sliding window. Due to time constraints, we are not able to retrain all models with an improved approach. However, the problematic line will occur in at least another sample, if the line is shorter than 16 tokens. It will most likely not impact the variety of problem patterns, but it will slightly reduce our performance score due to false-positives.

@@ -111,7 +111,7 @@ In brief, before writing a comment, the developer should think about expressing 
 \subsection{Data Structures and Objects}
 This chapter describes the rules of data structures and objects. Both store data but the way this data get exposed differ. Objects hide data behind abstractions and have functions that work with these data. Data structures expose the data and do not provide functionality. 
 
-For objects, I. Holland defined the Law of Demeter (LoD)~\cite{lieberherr_assuring_1989}.
+For objects, I. Holland defined the Law of Demeter (LoD) that is part of the clean code rules~\cite{lieberherr_assuring_1989}.
 In object-oriented programming, a method $m$ of an object $O$ may only call methods of the following components:
 \begin{itemize}
     \item The object $O$ itself.
@@ -149,7 +149,7 @@ def test():
 
 
 
-Data structures are often used as Data Transfer Objects (DTO) to communicate with other processes or services. These objects do not contain any functions; instead, they only have accessible member variables. Specializations of DTOs are Active Records that contain additional methods for data storage. They are used to represent a data source like a database. For DTOs and Active Records, it is a bad practice to insert business logic into these objects~\cite{martin_clean_2009}. With business logic, the data structure becomes a hybrid between an object and a data structure. It becomes unclear if the purpose of a hybrid is to store data or to expose methods to modify those data in a controlled way. Without the clear purpose of the object or data structure, it becomes harder to understand for developers.
+Data structures are often used as data transfer objects (DTO) to communicate with other processes or services. These objects do not contain any functions; instead, they only have accessible member variables. Specializations of DTOs are active records that contain additional methods for data storage. They are used to represent a data source like a database. For DTOs and active records, it is a bad practice to insert business logic into these objects~\cite{martin_clean_2009}. With business logic, the data structure becomes a hybrid between an object and a data structure. It becomes unclear if the purpose of a hybrid is to store data or to expose methods to modify those data in a controlled way. Without the clear purpose of the object or data structure, it becomes harder to understand for developers.
 
 
 \subsection{Classes}\label{sec:classes}
@@ -172,7 +172,7 @@ In section \Cref{sec:functions}, we described the clean code rule that prefers t
 Notwithstanding the clean code rules, Go as more recent programming language\footnote{designed in 2007 as a response to problems with C++, Java and Python~\cite{noauthor_go_nodate}} returns explicit error types instead of throwing an exception. This was designed to \enquote{encourage you to explicitly check for errors where they occur}, instead of \enquote{throwing exceptions and sometimes catching them}~\cite{gerrand_error_2011}.   
 So the practical application of the clean code rule for throwing exception depends on the design of the programming language.
 
-The third method of error handling is returning a null value. Instead of checking for a specific error code, the caller would check for a null return value. If a developer misses the check, the program will terminate with an unhandled NullPointerException at runtime. Tony Hoare introduced the null reference in 1965 and later called it his \enquote{billion-dollar mistake}~\cite{hoare_null_2009}, since it leads to many bugs and security vulnerabilities throughout the decades. Languages like Kotlin are designed with null safety enforced. Kotlin distinguishes between nullable and non-nullable references, with a compiler enforcing null checking~\cite{noauthor_null_nodate}. If a language does not enforce null safety with a compiler, a special case like an empty collection or an optional type can be returned. 
+The third method of error handling is returning a null value. Instead of checking for a specific error code, the caller would check for a null return value. If a developer misses the check, the program will terminate with an unhandled NullPointerException at runtime. In other programming languages, the null value can be named differently like \texttt{None} in Python and the exception may differ. Despite the different naming, the problem remains. Tony Hoare introduced the null reference in 1965 and later called it his \enquote{billion-dollar mistake}~\cite{hoare_null_2009}, since it leads to many bugs and security vulnerabilities throughout the decades. Languages like Kotlin are designed with null safety enforced. Kotlin distinguishes between nullable and non-nullable references, with a compiler enforcing null checking~\cite{noauthor_null_nodate}. If a language does not enforce null safety with a compiler, a special case like an empty collection or an optional type can be returned. 
 Returning null introduce the same problems like error code handling such as mixing application and error handling logic and is additionally not explicitly marked as an error code. From a function signature, it may not be evident that the return value may be null if the language does not support compile-time checking or optional types. Robert C. Martin describes returning null as a violation of the clean code rules~\cite{martin_clean_2009}. For Python, the null value is named as \texttt{None} and calling a method a \texttt{None} results in an exception. 
 
 Independent of the error handling method is the next rule for error handling with a third-party library. In section \Cref{sec:classes}, we described wrapping dependencies like third-party libraries to decrease the coupling to the dependency. The wrapping concept also applies to error handling, since the wrapper can unify the exceptions, so the application does not check for dependency-specific error types. Changing the dependency requires only a change in the wrapper implementation but not everywhere this wrapper is used. 
@@ -227,13 +227,13 @@ Functions&Length&X&&\\
 Functions&Conditional Function Calls&X&X& \\
 Functions&Purpose&&&X\\
 Functions&Levels of Abstraction&&&X\\
-Functions&Number of Arguements&X&& \\
+Functions&Number of Arguments&X&& \\
 Functions&Side-Effects&&X&X\\
 Functions&Error Code Detection&&&X \\
 Functions&Duplicated Code&&&X \\
 Comments&Detecting Necessary Comments&&&X \\
 Objects&Law Of Demeter&&X& \\
-Objects&Mix with Data Structures&X&& \\
+Objects&Mix with Data Structures&&X& \\
 Classes&Single Responsibility&&X&X \\
 Classes&Decouple Dependencies&&X& \\
 Errors&Return None&X&& \\
@@ -274,7 +274,7 @@ The clean code rules suggest to not use comments except for legal notes, explain
 
 For objects, the clean code principles require compliance with the Law of Demeter that restrict methods allowed to be called inside an object's method. An automated checker may find violations by analyzing the ASTs of all classes. It can then assess if a method call is violating the LoD. Due to the analysis of multiple AST to determine allowed \enquote{neighbours} of an object, we see this checker on the advanced level of complexity.
 
-The next rule discourages the mixing of data structures with objects by introducing logic. Such a hybrid would have accessible member variables and methods. An algorithm can detect those hybrids based on an analysis of the AST. We see such a checker in the basic level of complexity.
+The next rule discourages the mixing of data structures with objects by introducing logic. An algorithm could analyse the AST and detect data structures by searching for public variables and accessor methods. For objects, the algorithm would expect no public variables and no accessor methods. To determine, if a method is a an accessor method, a data flow and control-flow analysis could be sufficient. If a method only reads or writes to a single member variable, it would be an accessor method, whereas methods with more complicated control and data flow would not be seen as accessor method. This determination process would be an advanced level of complexity.
 
 For classes, the clean code rule enforces a single responsibility per class. As discussed for detecting a single purpose of a function, detecting a single responsibility of a class requires an understanding of the code. Similarly, a checker would fall into the high level of complexity. On the contrary, it may be possible to use the cohesion metric as an indicator for too many responsibilities of a class. A high cohesion will result in smaller classes that form a logical unit. Smaller logical units can be expected to have fewer responsibilities. Cohesion can be measured as \textit{Lack of Cohesion in Methods} (LCOM) as described by Hitz and Montazeri~\cite{Hitz95measuringcoupling}. An analysis of the AST and call graph should provide all information to calculate the LCOM number. Therefore, we see an automated checker for cohesion on the advanced level. Using the cohesion as a heuristic for the responsibilities of a class, we could detect potential violations against the Single-Responsibility-Principle with an advanced level of complexity.
 
@@ -319,21 +319,21 @@ def function(a,b):
 \end{lstlisting}
 \end{minipage}
 \end{tabular}
-\caption{Control-flow graph visualisation for a code sample. The graph has six edges, five nodes and one connected component. The cyclomatic complexity is 3.}
+\caption{Control-flow graph visualisation for a code sample. The graph has six edges, five nodes and one connected component. The Cyclomatic Complexity is 3.}
 \label{fig:background_control_flow_graph}
 \end{figure}
 
-The cyclomatic complexity on a control-flow graph as the number of linearly independent execution paths is defined as:
+The Cyclomatic Complexity on a control-flow graph as the number of linearly independent execution paths is defined as:
 \begin{equation}\label{eq:cyclomatic_complexity}
 M = E - N + 2P
 \end{equation}
 
-$E$ is the number of edges, $N$ the number of nodes and $P$ the number of connected components.  A connected graph is a subgraph, in which all nodes are connected to each other by a path. Following this definition, the cyclomatic complexity can be calculated. \Cref{fig:background_control_flow_graph} shows a visualisation of a sample python function. The control-flow graph has six edges, five nodes and is one connected component. Using \Cref{eq:cyclomatic_complexity}, the cyclomatic complexity is 3.
+$E$ is the number of edges, $N$ the number of nodes and $P$ the number of connected components.  A connected graph is a subgraph, in which all nodes are connected to each other by a path. Following this definition, the Cyclomatic Complexity can be calculated. \Cref{fig:background_control_flow_graph} shows a visualisation of a sample python function. The control-flow graph has six edges, five nodes and is one connected component. Using \Cref{eq:cyclomatic_complexity}, the Cyclomatic Complexity is 3.
 
-MacCabe recommends limiting the cyclomatic complexity to 10~\cite{mccabe_complexity_1976}. A lower cyclomatic complexity improves testability since the complexity represents the number of execution paths that need to be tested. Therefore, $M$ is the upper bound for the number of test cases for full branch coverage. 
-Software that has to comply with safety standards like ISO 26262 (for electronics in automobiles) or IEC 62304 (for medical devices) are mandated to have a low cyclomatic complexity~\cite{isotc_22sc_32_iso_2018, isotc_210_iec_2006}.
+MacCabe recommends limiting the Cyclomatic Complexity to 10~\cite{mccabe_complexity_1976}. A lower Cyclomatic Complexity improves testability since the complexity represents the number of execution paths that need to be tested. Therefore, $M$ is the upper bound for the number of test cases for full branch coverage. 
+Software that has to comply with safety standards like ISO 26262 (for electronics in automobiles) or IEC 62304 (for medical devices) are mandated to have a low Cyclomatic Complexity~\cite{isotc_22sc_32_iso_2018, isotc_210_iec_2006}.
 
-Although cyclomatic complexity is used throughout the industry, several shortcomings are under critique. First, complexity from data flow is ignored. Working with a larger number of variables and operations, the code becomes more complicated, but the cyclomatic complexity does not take this into account. Second, nested code structures are not considered by the metric, although it adds additional difficulty for understanding~\cite{yu_survey_2010}.
+Although Cyclomatic Complexity is used throughout the industry, several shortcomings are under critique. First, complexity from data flow is ignored. Working with a larger number of variables and operations, the code becomes more complicated, but the Cyclomatic Complexity does not take this into account. Second, nested code structures are not considered by the metric, although it adds additional difficulty for understanding~\cite{yu_survey_2010}.
 
 \subsection{Halstead Complexity Measures}
 Maurice Halstead introduced the Halstead complexity measures (HCM) in 1977~\cite{halstead1977elements}. Halstead approached the complexity measure with an empirical approach by defining observable and measurable properties and put them into relations.
@@ -386,7 +386,7 @@ Last, the number of bugs correlates with the following relation~\cite{yu_survey_
     B = \frac{V}{3000}
 \end{displaymath}
 
-HCM focus on the complexity introduced by data manipulation but ignores complexity from the control-flow. Since the cyclomatic complexity focuses on the control-flow complexity but not on the data-flow complexity, it is practical to use both together to supplement each drawback~\cite{yu_survey_2010}.
+HCM focus on the complexity introduced by data manipulation but ignores complexity from the control-flow. Since the Cyclomatic Complexity focuses on the control-flow complexity but not on the data-flow complexity, it is practical to use both together to supplement each drawback~\cite{yu_survey_2010}.
 Additionally, the correlation with the number of bugs is based on the programmer's skill estimation with a fixed value of 3000. Since this varies between projects, such an experiential and fixed number is doubtable~\cite{yu_survey_2010}.
 
 \subsection{Software Maintainability Index}
@@ -400,7 +400,7 @@ $\overline{V}$ is the average Halstead Volume, $\overline{M}$ the average cyclic
 The software maintainability index was defined many years ago with a limited sample size of developers and projects. Additionally, programming languages have changed significantly over time. A study by Sjøberg et al. suggests no correlation between the software maintainability index and actual maintenance effort in a controlled environment~\cite{sjoberg_questioning_nodate}. Although the study only analyes four software projects and lacks generalization, they found a strong anti-correlation with different maintainability metrics. Only the code size seems to correlate with the actual maintainability. The former seems to be consistent with a systematic review on software maintainability predictions and metrics by Riaz et. al~\cite{riaz_systematic_2009}.
 
 \subsection{Application on Clean Code}
-The described metrics are used to quantify the code quality. Since the clean code principles have a positive impact on code quality, lower code quality metrics may indicate more rule violations. The Halstead Metric derives the understandability of different parts of the code but does not explain the reason for it. Similarly, a high cyclomatic complexity of a function can indicate a violation against the recommended single purpose per function. In other words, the metrics indicate parts of code with low quality without pinpointing a specific violation of clean code rules. 
+The described metrics are used to quantify the code quality. Since the clean code principles have a positive impact on code quality, lower code quality metrics may indicate more rule violations. The Halstead Metric derives the understandability of different parts of the code but does not explain the reason for it. Similarly, a high Cyclomatic Complexity of a function can indicate a violation against the recommended single purpose per function. In other words, the metrics indicate parts of code with low quality without pinpointing a specific violation of clean code rules. 
 
 
 \section{Tools for Code Quality Analysis}\label{sec:tool_comparison}
@@ -432,7 +432,7 @@ PMD is an "extensible cross-language static code analyzer"~\cite{noauthor_pmd_no
 Depending on the target language, PMD supports different rules. For Java, PMD has rules in the following categories~\cite{noauthor_documentation_nodate}.
 \begin{description}
     \item[Best practices:] Best practices include rules like one declaration per line or using a logger instead of a \textit{System.out.print()} in production systems.  
-    \item[Coding Style and Design] Several rules to improve the readability of the code like naming conventions, ordering of declarations and design problems like a violation of the Law of Demeter, Cyclomatic complexity calculation and detection of god classes.
+    \item[Coding Style and Design] Several rules to improve the readability of the code like naming conventions, ordering of declarations and design problems like a violation of the Law of Demeter, Cyclomatic Complexity calculation and detection of large classes.
     \item[Multithreading:]  Rules to mainly prevent the use of not thread-safe objects or methods. Due to the nature of multithreading and unpredictable scheduling of threads, problems like unpredictable values of variables or deadlocks may occur. Since they may not occur in every execution, they are hard to spot and to debug. Consequently, warnings of using non-thread-safe code may save hours of debugging.
     \item[Performance:] These rules flag known operations that have hidden performance implications. For example, string concatenation with the plus operator in Java causes the Java Virtual Machine to create an internal string buffer. This can slow down the program execution if numerous string concatenations are performed.
     \item[Security:] Security-wise, PMD only checks for hardcoded values for cryptographic operations like keys and initialization vectors.
@@ -452,7 +452,7 @@ Depending on the language, Codacy supports scanning for common security and main
 Codacy allows customization by disabling specific rules and changing rule parameters like the pattern to fit the rules to the project~\cite{noauthor_codacy_nodate}. 
 
 \subsection{Sonarqube}
-Sonarqube is an analysis tool to maintain high code quality and security. It supports 15 programming languages in the open-source version licensed under the GNU Lesser General Public License, Version 3.0. In the Developer Edition, Sonarqube supports 22 languages and 27 languages in the enterprise edition. Sonarqube is a self-hostable server application with a SonarScanner client module that can be integrated into build pipelines like Gradle and Maven as well as a command-line tool for other build pipelines. The SonarScanner reports the result to the server, that serves a website to review the results. With the Developer Edition, branch and pull request analysis are possible, and a pull request will be annotated with the analysis results~\cite{noauthor_code_nodate}.
+Sonarqube is an analysis tool to maintain high code quality and security. It supports 15 programming languages in the open-source version licensed under the GNU Lesser General Public License, Version 3.0. In the Developer Edition, Sonarqube supports 22 languages and 27 languages in the enterprise edition. Sonarqube is a self-hostable server application with a SonarScanner client module that can be integrated into build pipelines like Gradle and Maven as well as a command-line tool for other build pipelines. Additionally, an IDE plugin allows code scanning and reviewing inside the editor. The SonarScanner reports the result to the server, that serves a website to review the results. With the Developer Edition, branch and pull request analysis are possible, and a pull request will be annotated with the analysis results~\cite{noauthor_code_nodate}.
 
 For Python, Sonarqube offers more than 170 rules. These rules are in the following categories~\cite{noauthor_python_nodate}:
 \begin{description}
@@ -476,7 +476,7 @@ The calculation is based on three rules~\cite{campbell2018cognitive}:
     \item[Break in the linear control flow]: A break in the expected linear control flow by loop structures and conditionals adds to Cognitive Complexity as well as to Cyclomatic Complexity. Additionally, catches, switches, sequences of logical operators, recursion, and jumps also adds to Cognitive Complexity, since these structures break the linear control flow.
     \item[Nested flow-breaking strcutures]: Flow-breaking structures that are nested additionally increase the Cognitive Complexity, since it is harder to understand than non-nested structures.  
 \end{description}
-The method-level Cognitive Complexity score represents a relative complexity difference between methods that would have the same Cyclomatic Complexity. Furthermore, the aggregated Cognitive Complexity on a class or module level differentiates between classes with many, simple methods and classes with a few, but complex methods. As a result, domain classes (containing mainly getters/setters) have a lower score compared to classes with complex code behaviour~\cite{campbell2018cognitive}.
+The method-level Cognitive Complexity score represents a relative complexity difference between methods that would have the same Cyclomatic Complexity. Furthermore, the aggregated Cognitive Complexity on a class or module level differentiates between classes with many, simple methods and classes with a few, but complex methods. As a result, data transfer objects (containing mainly getters/setters) have a lower score compared to classes with complex code behaviour~\cite{campbell2018cognitive}.
 
 Developers can extend Sonarqube similarly to PMD. They can write a Java plugin that can access the AST but also a semantic model of the code. Additional, extensions can be created that provide the functionality to other extensions. The Java plugin is compiled into a \texttt{.jar} file and placed into the plugin dir of the Sonarqube installation. For more straightforward rules, XPath expressions are possible through the web interface and allow a quick extension. For instance, if developers observe bad code style during a pull request review, they can quickly write a rule to enforce this rule in all subsequent pull requests automatically.
 

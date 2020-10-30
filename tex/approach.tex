@@ -20,23 +20,27 @@ The main part consists of four components: A core component to act as an orchest
     \label{fig:overview_ccap}
 \end{figure}
 
+\paragraph{Core Component}
 The core component contains the main function and handles argument validation and parsing. Furthermore, it orchestrates other components by initialising and executing those. This process is divided into the argument parsing, initialisation and execution phase:
 In the argument parsing phase, the command line arguments are parsed and validated. It validates the existence of the required input directory argument and the optional plugin path configuration for the analysis plugins and the output plugins. Additionally, the logging level and the output format can be defined. The latter determines, which output plugin will be used, although the existence of the specified plugin is not validated in this phase. A parsing or validation error will cause a program termination without further processing.
 The initialisation phase instantiates all components, and the analysis plugin handler will scan the specified directories for plugins and keeps an index of all found plugins in memory. The output plugin manager scans for an output plugin, that satisfies the specified argument. If no plugin matches the output argument, the program will terminate and display a failure message to indicate the problem.
 In the execution phase, the input handling component scans the input directory for files ending with \texttt{.py} and parses the source code into an Abstract Syntax Tree (AST) per file. In the next step, the core passes the parsed data to the analysis plugin handler. The latter will execute all plugins for all files and collects the results. Afterwards, the core component calls the output plugin component to output the results. If no exceptions occur during the execution phase, the program will be terminated successfully.
 
+\paragraph{Input Component}
 The input component scans the given input directory for all Python source code files and parse the source code into an AST. 
 For scanning the input directory, an algorithm will walk recursively over all folders and files. The detection of Python source code files is based on the file ending \texttt{.py}. The algorithm will return a list of file paths and the corresponding file content. 
 Next, the AST parser is called and will add a parsed AST object to the list besides the file path and content. This list will be passed to the analysis plugins by the analysis plugin handler.  An alternative approach would be to not read and parse the code in the input component, but instead, let the plugins read and parse the file content if needed. With many files to scan, the latter approach would have a lower memory footprint since the file content and the AST will not be held in memory. However, every analysis plugin has to perform an expensive read operation from disk and the performance scales with the number of files and the number of analysis plugins. 
 If the input component reads all files, the information is held in the main memory, and the performance only scales with the number of files. Since the files are text-based, we expect the number of files needed to exceed the main memory to be high enough to fit most projects.
 
+\paragraph{Analysis Plugin Handler}
 The analysis plugin handler manages all analysis plugins. This component finds all plugins, executes the plugins and collects the reported results.
 During the initialisation phase of the core component, the analysis plugin handler will scan the plugin directory for all Python files. It imports all Python files and scans those for classes, that inherit from an abstract \texttt{AbstractAnalysisPlugin} class. The abstract class defines all methods that need to be implemented in the specific plugin subclass. The analysis plugin handler instantiates all found classes.
 During the core execution phase, the core receives a list with the file name, file content and the parsed AST. All plugins are called on a specific entry point method that is defined in \texttt{AbstractAnalysisPlugin} with the aforementioned list. The plugin will return an instance of \texttt{AnalysisReport} with the plugins metadata and a collection of problems. The report is collected for every plugin into a \texttt{FullReport}. Additionally, the report contains information about the overall plugin execution time and run arguments. After all plugins have been executed for all files, the analysis plugin handler returns the \texttt{FullReport} to the core component.
 
+\paragraph{Output Plugin Handler}
 The last component in the execution chain is the output plugin handler that will pass the \texttt{FullReport} to the specified output plugin. It implements the same algorithm as the analysis plugin handler to find all plugins that inherit from \texttt{AbstractOutputPlugin}. Instead of keeping track of all plugins, only the plugin that corresponds to the output format argument is instantiated. The output plugin has an entry point as defined in \texttt{AbstractOutputPlugin}  that is called with all the collected results.
 
-\subsubsection{Analysis Plugins}\label{sec:analysis_plugins}
+\subsection{Analysis Plugins}\label{sec:analysis_plugins}
 Analysis plugins provide the easy extensibility of the platform by developers. All users of the tool can extend the set of problems it can detect by implementing a plugin in Python and placing it into the plugin directory of the tool. In order to be compatible with the core components, a plugin has to inherit from the \texttt{AbstractAnalysisPlugin} class. First, the abstract class introduces a class member variable \texttt{metadata} of the class \texttt{PluginMetaData}. A specific plugin class sets this class member in the constructor to provide a plugin name, author and optional website. This metadata is used in the output to show more information about the plugin that reported a problem. Second, \texttt{AbstractAnalysisPlugin} specifies a \texttt{do\_analysis} method as an entry point that the platform will call. It accepts a list of \texttt{ParsedSourceFile} objects that contains the file path, the file content and the corresponding AST for all input files. With this information, the plugin can implement any logic to detect problems. 
 For example, the plugin can traverse the AST to look for specific node types, it can use a tokenizer on the content of the files and analyse the token stream, or it can run sophisticated machine learning algorithms on the source code.
 
@@ -52,7 +56,7 @@ These problems are instances of a problem class inheriting from \texttt{Abstract
 Although it is possible to use one plugin for multiple, different problem types, having one plugin for one problem type helps to reuse and share the plugin. Additionally, it can be disabled easily by removing the plugin from the plugin folder and complies to the Single-Responsibility Rule.
 
 
-\begin{lstlisting}[language=Python, label=lst:return_none_problem_override, caption={Example for overwriting the \texttt{AbstractAnalysisProblem} with a specific implementation. The problem name and description are overwritten.}]
+\begin{lstlisting}[float=h, language=Python, label=lst:return_none_problem_override, caption={Example for overwriting the \texttt{AbstractAnalysisProblem} with a specific implementation. The problem name and description are overwritten.}]
     class ReturnNoneProblem(AbstractAnalysisProblem):
         def __init__(self, file_path, line_number):
             self.name = "Returned None"
@@ -72,7 +76,7 @@ In order to extend the CCAP with an analysis plugin, the following steps are req
 While these are the minimum required steps to implement the plugin, the developer is free to add additional methods, classes or import libraries as necessary.
 Furthermore, it is advisable to implement several tests to ensure the plugins correctness. CCAP uses the pytest\footnote{\url{https://docs.pytest.org/en/stable/}} library for testing. Implementing a test is as easy as writing a function with a \enquote{test\_} prefix and running the \texttt{pytest} command. The plugin can be tested by simulating a call from the CCAP core with a mocked \texttt{ParsedSourceFile}. 
 
-\subsection{Return None Plugin}\label{sec:return_none_ccap_implementation}
+\subsubsection{Return None Plugin}\label{sec:return_none_ccap_implementation}
 A rather simple analysis plugin demonstrates the capabilities of the CCAP: The Return None Plugin scans the source code for functions that return the \texttt{None} value. Returning texttt{None} may result in runtime exceptions if the function caller does not expect and handle a potential \texttt{None} return. Although \texttt{None} can be returned directly or as a value of the returning variable, this plugin only focuses on the explicit \texttt{return None} statement to showcase the options for the developer to analyse the source code. We will later refer to this problem type as \texttt{RETURN\_NONE} (RN).
 
 Detecting a \texttt{return None} statement is possible in multiple ways. The following shows the possibilities for a developer to implement such a detector:
@@ -97,7 +101,7 @@ matches = re.finditer(r"return None", source_file.content, re.MULTILINE | re.DOT
     Analysing the AST works best to find problems in the code structure since the AST represents the code structure in a well-defined, traversable data structure. Although simpler patterns like the \texttt{return None} could be detected using regular expressions, a detection on AST level allows detecting the semantic meaning instead of the syntactic representation of a problem. For more complex problems, it is inevitable to use the AST most of the time.
 \end{description}
 
-\begin{lstlisting}[float,floatplacement=h, language=Python, label=lst:return_none_detection_algorithm, caption={Detecting a \texttt{return None} by analsing the AST data structure.}]
+\begin{lstlisting}[float=t, language=Python, label=lst:return_none_detection_algorithm, caption={Detecting a \texttt{return None} by analsing the AST data structure.}]
 for node in ast.walk(a.ast):
     if isinstance(node, ast.Return):
         return_value = node.value
@@ -111,7 +115,7 @@ This implementation covers only the simple case, in which \texttt{return None} i
 Since detection alone is not a great help for the user, a useful description of the problem is necessary. 
 As described in \Cref{sec:background:returning_none_and_error_handling}, there are some alternatives to returning none. If returning \texttt{None} indicates an error, it is better to raise an exception and provoke an explicit error handling in order to prevent runtime errors. If the standard return type is a collection, an empty list is more appropriate, since the function caller will most likely write the logic for an unknown amount of list items. However, if the standard return type is a single object, it is not apparent what to return. With PEP484, an optional type was introduced as a type hint in Python 3.5~\cite{van2014pep}. A static type checker for Python like mypy outputs a warning if a developer forgets to check an optional for not being \texttt{None}~\cite{lehtosalomypy}. 
 
-\paragraph{Condition with Comparison}\label{sec:condition_comparison}
+\subsubsection{Condition with Comparison}\label{sec:condition_comparison}
 The second plugin detects a direct comparison in a conditional statement. 
 The clean code rules suggest using a function call in the body and the condition if the logic expression becomes more complicated. A function call allows a natural reading of the conditional statement without deciphering the meaning of the boolean logic or the effect in the body. As described in \Cref{sec:cc_complexity_levels}, checking for function calls in the body or condition is a basic level of complexity. Designing a heuristic to decide when the expression in the condition is an advanced level of complexity that is out of scope for this thesis.
 
@@ -137,7 +141,7 @@ def _check_if_direct_comparison(self, node):
 
     return not isinstance(node, ast.Call)\end{lstlisting}
 
-\subsubsection{Output Plugins}
+\subsection{Output Plugins}
 With output plugins, CCAP adds additional flexibility towards the output format. Depending on environmental requirements, the output can be adapted with custom logic by defining an output plugin. For instance, an output plugin could write the results to the standard output in a human-readable way or create a formatted HTML file to be displayed in the browser. A machine-readable JSON output may be preferred when running inside an automated workflow.
 
 Output plugins follow similar concepts as analysis plugins. A plugin class inherits from \texttt{AbstractOutputPlugin}. The abstract class introduces the metadata member of the \texttt{PluginMetaData} class to encapsulate plugin name and author information. Additionally, a second member variable \texttt{output\_format} has to be defined with a short abbreviation for the output format. This field is used by the output plugin handler to select the output plugin by the run arguments. It should be globally unique, or the first found plugin will precede other plugins with equal naming. We suggest using a custom prefix to the format name to maintain global uniqueness.
@@ -175,7 +179,7 @@ PLUGIN NAME: Return None (Null) Plugin by Enrico Kaack <e.kaack@live.de>
             Returning None is dangerous since the caller has to check for None. Otherwise, a runtime exception may occur.
 \end{lstlisting} 
 
-\paragraph{HTML Output Plugin}
+\subsubsection{HTML Output Plugin}
 For larger projects, the Standard Output Plugin may not be sufficient to get an overview of the project or to generate a report. Therefore, the HTML Output Plugin creates a \texttt{report.html} file that can be opened in every browser. The report provides a cleaner overview and the scrolling capabilities of a browser. It has similar general data at the top as the Standard Output Plugin, but it moves the problem description into a tooltip to offer a more compact overview. See \Cref{fig:screen_html_output} for an example screenshot.
 
 \begin{figure}
@@ -191,7 +195,7 @@ Another feature would be a configuration to disable specific analysis plugins fo
 
 Continuing on configuration possibilities, having configuration possibilities for plugins would increase the flexibility for a plugin developer. Introducing configurable warn levels like \texttt{warning} or \texttt{error} could help in continuous integration pipelines to decide if a build succeeds with warnings or if a build should fail because of error-level problems. Some rule violation could be seen as recommendations to improve (warning level), whereas other violations may be unacceptable (error level).
 
-Last, a feature to disable problem reporting for a specific code location could bring a boost in user acceptance. While some clean code rules are objective and can be measured precisely, some rules may not apply to every occurrence of the situation. For instance, the clean code guidelines generally suggest not to have more than three function arguments; it may be necessary or even inevitable to have four arguments. The CCAP would report this as a problem, but the user should be able to decide if it is acceptable. In this case, the problem type on this specific location should not be reported in the future. In the current version, the user has no way to ignore a specific problem. Consequently, the number of problems the user has to ignore will accumulate over time until the user abandons the tool since it does not provide an added value over the frustration of manually ignoring problems.
+Last, a feature to disable problem reporting for a specific code location could bring a boost in user acceptance. While some clean code rules are objective and can be measured precisely, some rules may not apply to every occurrence of the situation. For instance, the clean code guidelines generally suggest not to have more than three function arguments; it may be necessary or even inevitable to have four arguments. The CCAP would report this as a problem, but the user should be able to decide if it is acceptable. In this case, the problem type on this specific location should not be reported in the future. In the current version, the user has no way to ignore a specific problem or mark it as false alarm. Consequently, the number of problems the user has to ignore will accumulate over time until the user abandons the tool since it does not provide an added value over the frustration of manually ignoring problems.
 
 \section{Clean Code Classification}\label{chap:clean_code_classification}
 In the previous chapter, we presented a platform to check for clean code rules. This platform requires analysis plugins to detect specific problems. These handwritten rules work well for rules with a basic level of complexity. However, certain rules of an advanced level of complexity may require a complicated analysis of the AST, the data-flow or the inter-module dependencies. Furthermore, rules with a high level of complexity can be subjective, and we do not see a way of detecting those rule violations with a deterministic algorithm.
@@ -211,14 +215,14 @@ From the three problem types, we think the RN type is the easiest type to spot s
 In the following, we describe the approach for the machine learning part in detail. First, we discuss the challenges and our solutions. Second, we introduce our dataset and our split in train, validation and holdout set. Afterwards, we describe our pipeline of processing the raw files into samples with a fixed size, our encoding approach and our code manipulation for \hyperref[rq:3]{RQ3}. In the final section, we describe the machine learning models and parameters we use for all research questions.
 
 \subsection{Challenges}
-\paragraph{Lack of datasets}
+\subsubsection{Lack of Datasets}
 The most crucial preconditions of supervised machine learning experiments are labelled datasets. For clean code detection, we did not find a suitable dataset with labelled clean code violations in our research. 
 As a result, we evaluated different approaches to create such a dataset:
 
-\subparagraph{Solution 1:}
+\paragraph{Solution 1:}
 Related research fields like code completion often use the py150 dataset to train models~\cite{raychev2016probabilistic}. This dataset contains 150.000 python files, sourced from GitHub. For our supervised classification tasks, this dataset is inadequate due to its missing labels.  
 
-\subparagraph{Solution 2:}
+\paragraph{Solution 2:}
 Another possible data source could be git commit histories. We could scan the history for commits that fixed unclean code. The previous code could then be labelled \enquote{unclean} and the committed code would be \enquote{clean}.
 Same applies to issues and referenced pull requests on GitHub.
 We dismissed this approach for several reasons:
@@ -244,7 +248,7 @@ We dismissed this approach for several reasons:
 \end{figure}
 
 
-\subparagraph{Solution 3:}
+\paragraph{Solution 3:}
 Since Python code is available in abundance in the form of open-source projects, it is possible to manually label source code that violates clean code rules. 
 For the following reasons, we dismissed this approach:
 \begin{enumerate}
@@ -252,13 +256,13 @@ For the following reasons, we dismissed this approach:
     \item Manual labelling does not ensure correct labelling. A human can make mistakes or can subjectively misinterpret chaotic code as clean code. The quality of the dataset could suffer and limit the machine learning models performance.
 \end{enumerate}
 
-\subparagraph{Solution 4:}
+\paragraph{Solution 4:}
 Given any amount of Python files, we could use the analysis plugins from \Cref{sec:analysis_plugins} to reliably detect violations of the corresponding rule. Based on this labelled data, we could train the classifier to detect those rule violations. The analysis plugins only cover rule violations of basic level of complexity, so the trained classifier could only detect rule violations that could also be detected by a basic checker. However, if there would be a labelled dataset for more complex clean code rules, we could transfer the findings to these more complex rules. 
 
 We choose this solution to solve the dataset problem and train classifier. We can automatically generate labelled data with correct and consistent labels. Furthermore, this solution allows for scaling the dataset size if necessary. We will use the analysis plugins to label the three problem types: \texttt{RETURN NONE} (RN), \texttt{CONDITION COMPARISON SIMPLE} (CCS) and \texttt{CONDITION COMPARISON} (CC). However, this implies that we train the classifier to detect rule violations that could be detected by simple analysis plugins. If a labelled dataset for rules with a high level of complexity becomes available, we hope to transfer our findings to those rule violations as well.
 In \hyperref[rq:3]{RQ3}, we will then test those classifiers on unseen variations of the rule violations to test the generalisation of the models. This gives an outlook on the transfer the training on rules with a high-level complexity by simulating a hand-labelled training set that is limited in problem variations.
 
-\paragraph{Imbalanced Dataset}\label{sec:inbalanced_dataset}
+\subsubsection{Imbalanced Dataset}\label{sec:inbalanced_dataset}
 A second challenge is a major imbalance between the samples labelled as problematic code and clean code. For the three different problem types, RN, CCS, and CC, the class distribution is shown in \Cref{tab:class_distribution_in_dataset}. The imbalance is especially severe for the RN type since only two out of 1000 samples contain the rule violation. For the CCS and CC type, the class are slightly more balanced with 26 and 49 samples with rule violations out of 1000.
 
 \begin{table}[b]
@@ -274,18 +278,18 @@ A second challenge is a major imbalance between the samples labelled as problema
     \end{table}
 
 We combined the following solutions:
-\subparagraph{Solution 1:}
+\paragraph{Solution 1:}
 Due to the imbalance, we do not choose accuracy as a suitable evaluation metric, since classifying all samples as clean code would result in an accuracy of 99.79\% for the RN problem type. Instead, we use precision and recall as metrics, with an F1 score as a single, weighted metric. More details about the metrics are in \Cref{par:approach}.
 
-\subparagraph{Solution 2:}
+\paragraph{Solution 2:}
 We will apply undersampling and oversampling techniques on the data and evaluate the difference in model performance. Undersampling removes random samples from the majority class and thus balance class labels. Oversampling replicates random samples from the minority class to balance class labels while also increasing the overall amount of data. This technique is only used for the training data since it would distort the evaluation results when applied to validation data as well.
 
-\subparagraph{Solution 3:}
+\paragraph{Solution 3:}
 Our approach of training different classifier is a solution to the data imbalance since different classifiers have a different sensitivity to data balance. 
 
-\paragraph{SVM quadratic complexity in training}\label{sec:svm_quadratic_complexity}
+\subsubsection{SVM Quadratic Complexity in Training}\label{sec:svm_quadratic_complexity}
 The implementation of the support vector machine has a quadratic time complexity on the number of training data~\cite{abdiansah_time_2015}. Consequently, the training takes much time, and the oversampling strategy worsens the training time further since it introduces more samples.
-\subparagraph{Solution:}
+\paragraph{Solution:}
 We reduce the number of experiments with SVM and just evaluate some simple cases for baseline performance. 
 
 
@@ -362,7 +366,7 @@ The number of problems per file is lower in the validation set for the CCS and C
 \end{figure}
 
 \subsection{Processing}
-For the processing steps, we create a pipeline with the d6tflow framework\footnote{\url{https://github.com/d6t/d6tflow}}. Each processing step is a task that stores its results depending on the parameter configuration in a pickle file. This allows to define a pipeline once and run it with different parameter combinations. The scheduler automatically determines what tasks to run and what task outputs are already stored. Consequently, running the pipeline is more efficient and repeatable.
+For the processing steps, we create a pipeline with the d6tflow framework\footnote{\url{https://github.com/d6t/d6tflow}}. Each processing step is a task that stores its results depending on the parameter configuration on the disk. This allows to define a pipeline once and run it with different parameter combinations. The scheduler automatically determines what tasks to run and what task outputs are already stored. Consequently, running the pipeline is more efficient and repeatable.
 
 The processing pipeline consists of tasks to read the files into a data structure, to process source code and find the problems, to create a vocab dictionary, to convert the data into labelled samples. In \Cref{fig:pipeline_rq2}, we provide a schematic representation of the pipeline.
 
@@ -391,7 +395,7 @@ Therefore, the occurrence of each token value is counted and sorted based on the
 \paragraph{Index-Based Encoding}
 The textual token values are encoded with an Index-Based encoding. The most common token values have a numerical representation based on their index in a vocabulary (created with all token values of the train data). Optional, the type of each token is encoded by its numerical representation in the standard library (see \Cref{fig:tokenizer_types}). The type and value encodings are then combined alternating in a final encoding vector $x_i$ for every sample $i$.
 \paragraph{Label Extraction}
-With the internal representation, the ground truth is encoded as a line number. This representation has to be transformed in a label $y_i$ for the given input vector $x_i$ for sample $i$. Label 1 is assigned if the sample contains the given problem type. A sample contains a problem type if it contains all tokens from the problematic line. If the sample is missing a token of the problematic line at the beginning or end, the label is 0 for non-problematic code.
+With the internal representation after the problem detection step, the ground truth is encoded as a line number. This representation has to be transformed in a label $y_i$ for the given input vector $x_i$ for sample $i$. Label 1 is assigned if the sample contains the given problem type. A sample contains a problem type if it contains all tokens from the problematic line. If the sample is missing a token of the problematic line at the beginning or end, the label is 0 for non-problematic code.
 After the label extraction in the pipeline step \texttt{TaskPrepareXY}, we have a list of input vectors $x$ and a list of ground truth labels $y$. With this, we can train and test our models.
 
 \subsubsection{Train/Validation Split}\label{sec:train_test_split}
