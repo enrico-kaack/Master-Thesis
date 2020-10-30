@@ -412,7 +412,7 @@ $\overline{V}$ is the average Halstead Volume, $\overline{M}$ the average cyclic
 The software maintainability index was defined many years ago with a limited sample size of developers and projects. Additionally, programming languages have changed significantly over time. A study by Sjøberg et al. suggest no correlation between the software maintainability index and actual maintenance effort in a controlled environment~\cite{sjoberg_questioning_nodate}. Although the study only analyzes four software projects and lacks generalization, they find a strong anti-correlation with different maintainability metrics. Only the code size seems to correlate with the actual maintainability. The former seems to be consistent with a systematic review on software maintainability predictions and metrics by Riaz et. al~\cite{riaz_systematic_2009}.
 
 \subsection{Application on Clean Code}
-TODO
+The described metrics are used to quantify the code quality. Since the clean code principles have a positive impact on code quality, lower code quality metrics may indicate more rule violations. The Halstead Metric derrives the understandability of different parts of the code but does not explain the reason for it. Similarly, a high cyclomatic complexity of a function can indicate a violation against the recommended single purpose per function. In other words, the metrics indicate parts of code with low quality without pinpointing a specific violation of clean code rules. 
 
 
 \section{Tools for Code Quality Analysis}\label{sec:tool_comparison}
