@@ -14,9 +14,9 @@ Reliability is the ability of a system to run without critical exceptions that w
 
 Software maintainability consists mainly of those activities that involve changing source code:
 \begin{enumerate}
-    \item Adding code for new features
-    \item Implementing changed requirements by modifying code
-    \item Fixing bugs to ensure correct functionality of the software
+    \item Adding code for new features.
+    \item Implementing changed requirements by modifying code.
+    \item Fixing bugs to ensure correct functionality of the software.
 \end{enumerate}
 The importance of good maintainability of source code is based on the associated cost. 
 For project planning, different sources suggest, that project manager should estimate 66\% or even 75\% of the total software costs for maintenance~\cite{yip_software_1994, galorath_accurately_2019}. A recent study from 2018, conducted by Stripe and Harris Poll highlights that developers spent 42\% of their work time maintaining code~\cite{stripe_developer_2018}. Increasing the effectiveness of maintaining code is consequently cost-relevant. The easiness of code changeability due to code quality becomes a business-critical requirement and can positively impact the maintainability in the following ways~\cite{baggen_standardized_2012}:
@@ -105,7 +105,7 @@ In brief, before writing a comment, the developer should think about expressing 
     \item[Explaining comments:] Some explaining comments can be helpful and are not easy to encode in regular code. For instance, an explanation of a complex regular expression may be too complicated for a function name, and a comment provides the space for a sufficient explanation. This increase the readability since the developer does not need to interpret the regular expression manually.
     \item[Intention:] Explaining an intention which does not become evident by reading the source code might also be a valid use-case for a comment. 
     \item[Warning for consequences:] Some parts of the code can have extraordinary consequences like not being thread-safe or using many system resources. A warning can spare a developer from having trouble when using the function.
-    \item[Emphasise :] A comment to emphasise the importance of a seemingly unimportant part of the code prevents breaking modifications of the code. 
+    \item[Emphasise:] A comment to emphasise the importance of a seemingly unimportant part of the code prevents breaking modifications of the code. 
 \end{description}
 
 \subsection{Data Structures and Objects}
@@ -114,10 +114,10 @@ This chapter describes the rules of data structures and objects. Both store data
 For objects, I. Holland defined the Law of Demeter (LoD)~\cite{lieberherr_assuring_1989}.
 In object-oriented programming, a method $m$ of an object $O$ may only call methods of the following components:
 \begin{itemize}
-    \item the object $O$ itself
-    \item the parameters of the method
-    \item objects that are created within $m$'s scope
-    \item instance variables of $O$
+    \item The object $O$ itself.
+    \item The parameters of the method.
+    \item Objects that are created within $m$'s scope.
+    \item Instance variables of $O$.
 \end{itemize}
 In other words, the object $O$ only calls methods on direct \enquote{neighbours} or on itself. The object does not call a method of its neighbour to subsequently call a method on the returned object from the neighbour. By restricting the allowed method calls outside the object itself to direct \enquote{neighbours}, the dependencies between objects are reduced, and the modularity increased. As a consequence, changing methods only affects the direct neighbours and not objects in potentially different parts of the software. 
 \Cref{fig:LoD} shows an example for the LoD. In the method \texttt{test}, a function call on \texttt{B} returns a reference to \texttt{C}. Since \texttt{C} is not a direct neighboor of \texttt{A}, the function call violates the LoD. The modularity of objects suffer, since a change of the method \texttt{do\_something()} would require changes in object \texttt{A}. This close coupling of an \texttt{A} and \texttt{C} is circumvented with a method \texttt{do\_something\_on\_C} that wraps the functionality of \texttt{C}, so a change in \texttt{C} would only require a change in B. With that common layer, \texttt{A} and \texttt{C} are decoupled. Object \textit{A} in this case does not know how the certain functionality is performed and it does not matter.  
@@ -207,9 +207,9 @@ We described the clean code rules in \Cref{sec:clean_code}. This work focus on t
 
 We define the taxonomy of complexity in three levels, based on the different source code analysis techniques and effort needed:
 \begin{description}
-    \item[Basic Level] The level of basic complexity covers all rules that can be checked by a single analysis of the text, token stream, or AST of the program.
-    \item[Advanced Level] Rules with medium complexity require a control flow, data flow, call graph analysis or more advanced, deterministic analysis techniques. Furthermore, a combination of different analysis methods from the basic complexity level will be categorised as medium complexity. 
-    \item[High Level] The high level of complexity covers the clean code rules we assume can not be checked with traditional, deterministic analysis techniques such as those described in \Cref{sec:code_analysis}. For this level, it may be indispensable to use statistical methods like machine learning approaches to create an automated checker. It is important to note that we do not prove that no deterministic algorithm exists. 
+    \item[Basic Level:] The level of basic complexity covers all rules that can be checked by a single analysis of the text, token stream, or AST of the program.
+    \item[Advanced Level:] Rules with medium complexity require a control flow, data flow, call graph analysis or more advanced, deterministic analysis techniques. Furthermore, a combination of different analysis methods from the basic complexity level will be categorised as medium complexity. 
+    \item[High Level:] The high level of complexity covers the clean code rules we assume can not be checked with traditional, deterministic analysis techniques such as those described in \Cref{sec:code_analysis}. For this level, it may be indispensable to use statistical methods like machine learning approaches to create an automated checker. It is important to note that we do not prove that no deterministic algorithm exists. 
 \end{description}
 
 Based on these levels, we categorise the clean code rules introduced in \Cref{sec:clean_code}. \Cref{tab:complexity_level_overview} gives an overview of all rules and our assigned complexity level. In the following, we explain the reasoning behind the categorisation for all rules:
@@ -342,10 +342,10 @@ The measurable properties are operators and operands. Operators are symbols in e
 
 The sum and number of distinc operators and operands are counted as:
 \begin{itemize}
-    \item $\eta_1$ as the number of distinct operators 
-    \item $\eta_2$ as the number of distinct operands
-    \item $N_1$ is the sum of all operators
-    \item $N_2$ is the sum of all operands  
+    \item $\eta_1$ as the number of distinct operators.
+    \item $\eta_2$ as the number of distinct operands.
+    \item $N_1$ is the sum of all operators.
+    \item $N_2$ is the sum of all operands. 
 \end{itemize}
 
 From these base properties, Halstead derrived additional properties:
@@ -433,7 +433,7 @@ Depending on the target language, PMD supports different rules. For Java, PMD ha
 \begin{description}
     \item[Best practices:] Best practices include rules like one declaration per line or using a logger instead of a \textit{System.out.print()} in production systems.  
     \item[Coding Style and Design] Several rules to improve the readability of the code like naming conventions, ordering of declarations and design problems like a violation of the Law of Demeter, Cyclomatic complexity calculation and detection of god classes.
-    \item[Multithreading :]  Rules to mainly prevent the use of not thread-safe objects or methods. Due to the nature of multithreading and unpredictable scheduling of threads, problems like unpredictable values of variables or deadlocks may occur. Since they may not occur in every execution, they are hard to spot and to debug. Consequently, warnings of using non-thread-safe code may save hours of debugging.
+    \item[Multithreading:]  Rules to mainly prevent the use of not thread-safe objects or methods. Due to the nature of multithreading and unpredictable scheduling of threads, problems like unpredictable values of variables or deadlocks may occur. Since they may not occur in every execution, they are hard to spot and to debug. Consequently, warnings of using non-thread-safe code may save hours of debugging.
     \item[Performance:] These rules flag known operations that have hidden performance implications. For example, string concatenation with the plus operator in Java causes the Java Virtual Machine to create an internal string buffer. This can slow down the program execution if numerous string concatenations are performed.
     \item[Security:] Security-wise, PMD only checks for hardcoded values for cryptographic operations like keys and initialization vectors.
     \item[Error Prone Code:] PMD checks for several known code structures that will or may cause a bug at execution. Some rules are part of the clean code principles described in \Cref{sec:clean_code}, and some rules are specific to the target language.
