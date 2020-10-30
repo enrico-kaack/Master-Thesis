@@ -1,9 +1,11 @@
-The rise of information technology with computers over the last decades allowed humanity to process data and solve problems in unprecedented performance. Computers require instruction in order to fulfil its purpose. The common language between humans and computers are programming languages. Software developers use programming languages to write source code that instructs computers to process data and solve problems. While the machine only follows the instructions described by the source code, the humans have to understand the purpose of the instructions. 
+The rise of information technology with computers over the last decades allowed humanity to process data and solve problems in unprecedented performance. Computers require instructions in order to fulfil their purpose. The common language between humans and computers are programming languages. Software developers use programming languages to write source code that instructs computers to process data and solve problems. While the machine only follows the instructions described by the source code, the humans have to understand the purpose of the instructions. 
 
 In today's world, software becomes a vast market with a revenue of over 450 billion U.S. dollars in 2019~\cite{statista_software_nodate,costello_gartner_2019}. Creating new code often requires to read and understand preexisting code. As a consequence, it is essential to make code as readable and understandable as possible. 
 
-The objectives of the clean code principles are readability and understandability of source code. A set of rules and recommendations about writing code to be easy to read and understand. For the computer, it is irrelevant if the human can understand the code since it only executes the instructions. However, any developer who reads clean code profits from it. In \Cref{list:motivating_example}, the upper listing shows an implementation of an algorithm without paying attention to clean code rules. In the bottom listing, the same algorithm is implemented following the clean code rules such as having one purpose per function or method calls in if-conditions. Executing the code will yield the same result. However, it is far simpler to understand the bottom than the top code. Reading the clean \texttt{get\_students\_eligible\_for\_exam} function let the developer immediately understand the two eligibility criteria for the exam. The comments like in the upper example are not even necessary, since the code is self-describing.
-Consequently, using or modifying the right code is much easier and time-saving.
+The objectives of the clean code principles are a high level of readability and understandability of source code. Thus, the clean code principles comprise a set of rules and recommendations about writing code to be easy to read and understand. For the computer, it is irrelevant wether or not the human can understand the code since it only executes the instructions. However, any developer who reads code written in accordance to the clean code principles profits from it. 
+
+In \Cref{list:motivating_example}, the upper listing shows an implementation of an algorithm without paying attention to clean code rules. In the bottom listing, the same algorithm is implemented following the clean code rules such as having one purpose per function or method calls in if-conditions. Executing the code will yield the same result. However, it is far simpler to understand the bottom than the top code. Reading the clean \texttt{get\_students\_eligible\_for\_exam} function let the developer immediately understand the two eligibility criteria for the exam. The comments like in the upper example are not even necessary, since the code is self-describing.
+Consequently, using or modifying the lower code is much easier and time-saving.
 
 \begin{figure}[h]
 \begin{tabular}{p{\textwidth}}
@@ -75,35 +77,35 @@ Furthermore, it can teach students about clean code rules. In practical works, a
 
 
 \section{Objectives and Contributions}
-This thesis focus on the automated detection of clean code violations on Python source code. 
+This thesis focus on the automated detection of clean code violations in Python source code. 
 We have the following main objectives:
 \begin{itemize}
     \item Design and implement a platform that can be extended with different automated checkers.
     \item Compare machine learning models on detecting code patterns that violate the clean code rules.
-    \item Evaluate the generalisation capabilities of unseen pattern variations.  
+    \item Evaluate the generalisation capabilities to unseen pattern variations.  
 \end{itemize}
 
 To fulfil the objectives, we made the following contributions:
 \begin{itemize}
-    \item We provide an overview of code quality, clean code rules, quantitative metrics and existing tools.
-    \item We introduce a taxonomy for implementation complexity of automated checker for clean code violations.
-    \item We contribute a design and implementation of the clean code analysis platform (CCAP) with focus on extensibility, useability and integration capabilities.
-    \item We extend the CCAP with checkers for returning \texttt{None} and using direct comparisons in conditionals.
-    \item We compare our CCAP with preexisting tools.
-    \item We collect a dataset and evaluate a support-vector classifier, random forest classifier, gradient boosting classifier and an LSTM-based neural network on detecting problematic code patterns for that we may not find a deterministic checker.
-    \item We introduce an automated way to manipulate the code to contain unseen problem variations.
-    \item We simulate the impact of having a hand-collected dataset on the machine-learning models if the samples do not contain all possible variations of a problem pattern. We give ideas on how to handle the situation in a time-optimising way.
+    \item Overview of code quality, clean code rules, quantitative metrics and existing tools.
+    \item Proposal for a taxonomy of the implementation complexity of automated checker for clean code violations.
+    \item Design and implementation of the clean code analysis platform (CCAP) with focus on extensibility, useability and integration capabilities.
+    \item Extension of CCAP with checkers for returning \texttt{None} and using direct comparisons in conditionals.
+    \item Comparison of our CCAP with preexisting tools.
+    \item Creation of a dataset and evaluation of a support-vector classifier, random forest classifier, gradient boosting classifier and an LSTM-based neural network on detecting problematic code patterns for that we may not find a deterministic checker.
+    \item Introduction of an automated way to manipulate the code to contain unseen problem variations.
+    \item Simulation of the impact of having a hand-collected dataset on the machine-learning models if the samples do not contain all possible variations of a problem pattern. We give ideas on how to handle the situation in a time-optimising way.
 \end{itemize}
 
 Based on our main objectives, we will evaluate the following research question:
 \begin{description}
     \setlength{\itemsep}{1pt}
     \item[RQ1]What is the utility of the CCAP besides existing tools? 
-    \item[RQ2]How do different models compare on the task of detecting non-clean code?
+    \item[RQ2]How do different machine learning models compare on the task of detecting non-clean code?
     \item[RQ3]Do machine-learning-based models cover a larger variety of cases than rule-based checker? 
 \end{description}
 
 
 \section{Structure}
-This thesis is organised as follows: In \Cref{chap:background}, we introduce code quality and clean code principles. We then classify the clean code principles depending on the implementation complexity of an automated checker. We introduce several quantitative metrics to measure code quality and provide an overview of existing tools that can determine the code quality and clean code violations to an extend. 
+This thesis is organised as follows: In \Cref{chap:background} we introduce code quality and clean code principles. We then classify the clean code principles depending on the implementation complexity of an automated checker. We introduce several quantitative metrics to measure code quality and provide an overview of existing tools that can determine the code quality and clean code violations to an extend. 
 In \Cref{chap:approach}, we describe our approach for the CCAP and the machine-learning-based clean code classification. We evaluate the CCAP and machine-learning models and answer the research questions in \Cref{chap:evaluation}. Finally, we conclude our work with a summary and outlook in \Cref{chap:conclusion}.
