@@ -16,7 +16,7 @@ The CCAP architecture is divided into the main part and two extension possibilit
 The main part consists of four components: A core component to act as an orchestration unit, a component for handling the source code input and a component for handling the analysis plugins as well as output plugins. The design follows the requirements and goals for the platform. \Cref{fig:overview_ccap} provides a high-level overview of the components.
 \begin{figure}
     \includegraphics[width=1\textwidth]{img/CCAP/overview_diagram.pdf}
-    \caption[High-level schematic overview of the CCAP.]{High-level schematic overview of the CCAP. The core component is the orchestration unit, the source handler parse the source code files and the two plugin handler search for and execute the analysis and output plugins. }
+    \caption{High-level schematic overview of the CCAP. The core component is the orchestration unit, the source handler parses the source code files, and the two plugin handlers search for and execute the analysis and output plugins. }
     \label{fig:overview_ccap}
 \end{figure}
 
@@ -180,7 +180,7 @@ For larger projects, the Standard Output Plugin may not be sufficient to get an 
 
 \begin{figure}
     \includegraphics[width=1\textwidth]{img/CCAP/screenshot_html_output.png}
-    \caption{Output of the HTML Output Plugin, displayed in a browser.}
+    \caption{The output of the HTML Output Plugin, displayed in a browser.}
     \label{fig:screen_html_output}
 \end{figure}
 
@@ -239,7 +239,7 @@ We dismissed this approach for several reasons:
     \begin{subfigure}{\textwidth}
         \includegraphics[width=1\linewidth]{img/ML/commit_messages/screen_3.png}
     \end{subfigure}
-    \caption[Example commit messages that underlines the inconsistency in commit message naming.]{Example commit messages from different repositories. Those examples highlight (1) the missing naming convention, (2) inclusion of additional performance improvements, and (3) several edits in multiple files~\cite{pendenque_code_2020, baranski_cleaned_2020, timofeev_lab4_2020}. Those commits were found by searching GitHub for \enquote{clean code improvements} and filtering for results of type commits and language Python. }
+    \caption{Example commit messages from different repositories. Those examples highlight (1) the missing naming convention, (2) inclusion of additional performance improvements, and (3) several edits in multiple files~\cite{pendenque_code_2020, baranski_cleaned_2020, timofeev_lab4_2020}. Those commits were found by searching GitHub for \enquote{clean code improvements} and filtering for results of type=commits and language=Python. }
     \label{fig:commit_messages}
 \end{figure}
 
@@ -269,7 +269,7 @@ A second challenge is a major imbalance between the samples labelled as problema
     0 & 99.79\%     & 97.36\%          & 95.14\%              \\
     1 & 0.21\%      & 2.64\%           & 4.86\%               \\ \bottomrule
     \end{tabular}
-    \caption[Class distribution for the dataset.]{Class distribution for the dataset. Label [0] represents clean code and label [1] marks problematic code of the corresponding category.}
+    \caption{Class distribution for the dataset. Label [0] represents clean code and label [1] marks problematic code of the corresponding category.}
     \label{tab:class_distribution_in_dataset}
     \end{table}
 
@@ -335,7 +335,7 @@ The number of problems per file is lower in the validation set for the CCS and C
     \multirow{2}{*}{Condition Comparison}        & LOCs containing problem & 2.34\%  & 2.31\%  & 2.44\%  \\
                                                  & Problems per File       & 4.44    & 3.85  & 4.42    \\ \bottomrule
     \end{tabularx}
-    \caption{General and problem specific metrics for the train, validation and holdout set.}
+    \caption{General and problem-specific metrics for the train, validation and holdout set.}
     \label{tab:general_data_distribution}
 \end{table}
 
@@ -350,14 +350,14 @@ The number of problems per file is lower in the validation set for the CCS and C
     \multirow{2}{*}{Condition Comparison}        & [0] & 95.13\%  & 95.21\%  & 94.9\%  \\
                                                  & [1] & 4.87\%   & 4.79\%  & 5.1\%    \\ \bottomrule
     \end{tabularx}
-    \caption[Class frequencies for all problem types.]{Class frequencies for all problem types on the train, validation and holdout set. We observe a compareable class distribution amoung the datasets for each problem type.}
+    \caption{Class frequencies for all problem types on the train, validation and holdout set. We observe a comparable class distribution among the datasets for each problem type.}
     \label{tab:class_distribution}
 \end{table}
 
 
 \begin{figure}
     \includegraphics[width=1\textwidth]{img/ML/Data_split.pdf}
-    \caption[Visualisation of the dataset split.]{Visualisation of the dataset split. First, 20\% of all files are seperated into a holdout set for later testing. The remainding 80\% of the files are split into 90\% training and 10\% validation data. }
+    \caption{Visualisation of the dataset split. First, 20\% of all files are separated into a holdout set for later testing. The remaining 80\% of the files are split into 90\% training and 10\% validation data. }
     \label{fig:data_split}
 \end{figure}
 
@@ -368,7 +368,7 @@ The processing pipeline consists of tasks to read the files into a data structur
 
 \begin{figure}
     \includegraphics[width=1\textwidth]{img/ML/Pipeline_RQ2.pdf}
-    \caption[Schematic representation of the pipeline to train and validate models.]{Schematic representation of the pipeline for \hyperref[rq:2]{RQ2} to train and validate models with configurable parameters. First, the pipeline reads the source code into memory, extract the vocabulary (\texttt{TaskVocabCreator}) and identify all problem types (\texttt{TaskRuleProcessor}). It the converts the code of dynamic length into fixed-size samples (\texttt{TaskPrepareXY}). This sub-pipeline runs seperate for the train and validation set. In \texttt{TaskTrainValidationSplit}, both datasets are combined and over- or undersampling is applied to the train set. The train set is used to train different classifiers wheras the train and validation set are used for evaluation.}
+    \caption{Schematic representation of the pipeline for \hyperref[rq:2]{RQ2} to train and validate models with configurable parameters. First, the pipeline reads the source code into memory, extract the vocabulary (\texttt{TaskVocabCreator}) and identify all problem types (\texttt{TaskRuleProcessor}). It then converts the code of dynamic length into fixed-size samples (\texttt{TaskPrepareXY}). This sub-pipeline runs separately for the train and validation set. In \texttt{TaskTrainValidationSplit}, both datasets are combined and over- or undersampling is applied to the train set. The train set is used to train different classifiers, whereas the train and validation set are used for evaluation.}
     \label{fig:pipeline_rq2}
 \end{figure}
 
@@ -401,7 +401,7 @@ If we would do a train/validation split on a sample level, we may introduce samp
 This unclean separation would diminish the validity of metrics calculated from the validation and holdout dataset. Therefore, we split on file level and perform the previous preprocessing separately for training and validation dataset. Only the vocabulary generation happens on the training file for both processing steps. In \texttt{TaskPrepareXY} in the pipeline, we then merge those two pipelines for training and validation (see \Cref{fig:pipeline_rq2}).
 \begin{figure}
     \includegraphics[width=1\textwidth]{img/ML/encoding_sliding_window_problem.pdf}
-    \caption[Sliding window approach on source code containing a problematic \texttt{return None}]{Sliding window approach on source code containing a problematic \texttt{return None}. Multiple windows will contain the problematic sample. Consequently, we can not split on a sample level, since the same problem would be in the train and validation set. Instead, we split on file level to have a clean separation between the datasets.}
+    \caption{Sliding window approach on source code containing a problematic \texttt{return None}. Multiple windows will contain the problematic sample. Consequently, we can not split on a sample level, since the same problem would be in the train and validation set. Instead, we split on file level to have a clean separation between the datasets.}
     \label{fig:encoding_sliding_window}
 \end{figure}
 
@@ -410,7 +410,7 @@ In research question \hyperref[rq:3]{RQ3}, we evaluate the models' generalisatio
 
 \begin{figure}
     \includegraphics[width=1\textwidth]{img/ML/Pipeline_RQ3.pdf}
-    \caption[Pipeline for code manipulation and evaluation.]{Pipeline for code manipulation and evaluation. The prerpocessing part is like in \Cref{fig:pipeline_rq2} but with an additional \textit{TaskCodeManipulator} to manipulate the code as described in \Cref{sec:approach_code_manipulation}. The random forest classifier, svm and gradient boosting classifier require different evaluation code as the LSTM, so two \textit{TaskEval*} are used. }
+    \caption{Pipeline for code manipulation and evaluation. The preprocessing part is like in \Cref{fig:pipeline_rq2} but with an additional \textit{TaskCodeManipulator} to manipulate the code as described in \Cref{sec:approach_code_manipulation}. The random forest classifier, support vector classifier and gradient boosting classifier require different evaluation code as the LSTM, so two \textit{TaskEval*} are used.}
     \label{fig:pipeline_RQ3}
 \end{figure}
 
