@@ -295,14 +295,14 @@ An automated check for the decoupling of dependencies can be performed with an a
 Last, the clean code rule prevents the return of the null value as an error code or as an indication for no result. A checker could prevent this with a basic level of complexity. It could search for all \texttt{return} statements in the AST and check for the \texttt{null} constant.
 
 \section{Quantitative Metrics for Code Quality}
-To define the quality of a software product, it is necessary to have methods to express the code quality as quantitative units. This has multiple advantages:
+Quantitative metrics represent the code quality as quantitative unit. We see the following advantages when using quantitative metrics in software projects:
 \begin{itemize}
     \item A metric sums up the quality of a project in a single unit.
     \item A quantitative approach tracks the changes in code quality over time. Therefore, it is evident if code quality improves or not. In case the quality undercuts a threshold, special measures like mandatory refactoring can be undertaken.
     \item A developers performance can be evaluated based on the code quality. Since the maintainability and reliability of the software depends on the code quality, this is a good incentive to enforce high-quality work.
     \item A certain level of code quality may be required by a contract. As a result, a customer may have fewer bugs and a smaller maintenance effort.
 \end{itemize}
-Metrics for code quality are a subset of general software metrics. The following sections describe common software metrics that express code quality.
+The following sections describe common software metrics that express code quality.
 
 \subsection{Cyclomatic Complextiy}\label{sec:cyclomatic_complexity}
 Cyclomatic Complexity is a metric for the complexity of a section of code that was introduced by Thomas McCabe~\cite{mccabe_complexity_1976}. It measures the complexity by counting the number of linearly independent execution paths~\cite{mccabe_complexity_1976}. 
