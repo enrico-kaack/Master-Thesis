@@ -111,7 +111,7 @@ In brief, before writing a comment, the developer should think about expressing 
 \subsection{Data Structures and Objects}
 This chapter describes the rules of data structures and objects. Both store data but the way this data get exposed differ. Objects hide data behind abstractions and have functions that operate with their data. Data structures expose the data and do not provide functionality. 
 
-For objects, I. Holland defined the Law of Demeter (LoD) that is part of the clean code rules~\cite{lieberherr_assuring_1989}.
+For objects, I. Holland defined the \high{Law of Demeter}Demeter (LoD) that is part of the clean code rules~\cite{lieberherr_assuring_1989}.
 In object-oriented programming, a method $m$ of an object $O$ may only call methods of the following components:
 \begin{itemize}
     \item The object $O$ itself.
@@ -143,7 +143,7 @@ def test():
 \end{lstlisting}
 \end{minipage}
 \end{tabular}
-\caption{A sample illustration of the Law of Demeter. The figure on the left shows a class diagram for the classes \textit{A}, \textit{B} and \textit{C}. The listing on the right shows the implementation of the \textit{test} method of class \textit{A}. }
+\caption{A sample illustration of the \high{Law of Demeter}Demeter. The figure on the left shows a class diagram for the classes \textit{A}, \textit{B} and \textit{C}. The listing on the right shows the implementation of the \textit{test} method of class \textit{A}. }
 \label{fig:LoD}
 \end{figure}
 
@@ -155,11 +155,11 @@ Data structures are often used as data transfer objects (DTO) to communicate wit
 \subsection{Classes}\label{sec:classes}
 For classes, the clean code principles describe multiple rules that improve the readability and understandability of classes.
 
-The first rule specifies the recommended size of a class. Unlike counting lines as for functions, the size of a class is the number of responsibilities. A responsibility of a class can be manipulating data or writing data to a file. A single responsibility per class is described as Single-Responsibility-Principle and offers several advantages: First, the naming can reflect this responsibility, so the class functionality is easy to understand.
+The first rule specifies the recommended size of a class. Unlike counting lines as for functions, the size of a class is the number of responsibilities. A responsibility of a class can be manipulating data or writing data to a file. A single responsibility per class is described as \high{Single-Responsibility-Principle} and offers several advantages: First, the naming can reflect this responsibility, so the class functionality is easy to understand.
 Second, changing one functionality should only require changes in the one class that is responsible for this specific function. And last, we can reuse the class in different projects if we need that functionality. If the class fulfilled two responsibilities, we would have to remove the unnecessary functionality before reusing the class in a different project. Reaching back to the examples of one responsibility being data manipulation and one being file writing, reusing the latter functionality would require us to strip out the data manipulation.
-The Single-Responsibility-Principle leads to a system of many small classes with one, clearly defined responsibility.
+The \high{Single-Responsibility-Principle} leads to a system of many small classes with one, clearly defined responsibility.
 
-The second rule recommends classes to have high cohesion. The cohesion is high if a method manipulates many instance variables. If all methods of a class manipulate all instance variables, the class has its peak cohesion. With a high cohesion, the methods and the class are a logical unit. A low cohesion indicates the need to split the class into multiple classes since the methods are not a logical unit. As a result of splitting classes into smaller logical units, they will more likely comply with the Single-Responsibility-Principle.
+The second rule recommends classes to have high cohesion. The cohesion is high if a method manipulates many instance variables. If all methods of a class manipulate all instance variables, the class has its peak cohesion. With a high cohesion, the methods and the class are a logical unit. A low cohesion indicates the need to split the class into multiple classes since the methods are not a logical unit. As a result of splitting classes into smaller logical units, they will more likely comply with the \high{Single-Responsibility-Principle}.
 
 The last rule provides a guideline on how to handle internal or third-party class dependencies. If a dependency changes, the class depending on it should not change. To accomplish this decoupling from the implementation of a dependency, classes should not depend on the dependency directly but instead on an abstract class (or interface). That abstract class describes the concept of the dependency that is unlikely to change. For example, for a database dependency, the abstract class defines the concepts of storing and retrieving an entry. For the specific database, a specific class implements the abstract class or interface and provides the functionality. Changing the database only changes the implementation in the specific class but not the concept. Therefore, there is no need to modify a class that depends on the concepts from the abstract class. This isolation of dependencies is especially useful if the dependencies are not under the developer's control and may be changed any at time by a third party. The abstraction is also valuable for testing since the dependency can be replaced by a so-called mock class that only simulates the behaviour. This allows testing to be independent of the dependency and to locate potential errors in the own system or the dependency.
 
@@ -271,11 +271,11 @@ The automated checking for repeated code is an active research topic, as describ
 
 The clean code rules suggest to not use comments except for legal notes, explaining comments, comments stating intention, warnings for consequences and emphasizing comments. An automated checker would need to flag all comments, except the allowed ones as stated by the rules. Finding all code comments is possible on the token stream. While this has a basic level of complexity, detecting the exceptions is harder. The first comment at the start of a file could be seen as a legal note, and a warning for consequences may include the term \enquote{warning}. However, distinguishing necessary explanations or intentions from useless comments is a task in the high level of complexity category.
 
-For objects, the clean code principles require compliance with the Law of Demeter that restrict methods allowed to be called inside an object's method. An automated checker may find violations by analyzing the ASTs of all classes. It can then assess if a method call is violating the LoD. Due to the analysis of multiple AST to determine allowed \enquote{neighbours} of an object, we see this checker on the advanced level of complexity.
+For objects, the clean code principles require compliance with the \high{Law of Demeter}Demeter that restrict methods allowed to be called inside an object's method. An automated checker may find violations by analyzing the ASTs of all classes. It can then assess if a method call is violating the LoD. Due to the analysis of multiple AST to determine allowed \enquote{neighbours} of an object, we see this checker on the advanced level of complexity.
 
 The next rule discourages the mixing of data structures with objects by introducing logic. An algorithm could analyse the AST and detect data structures by searching for public variables and accessor methods. For objects, the algorithm would expect no public variables and no accessor methods. To determine, if a method is a an accessor method, a data flow and control-flow analysis could be sufficient. If a method only reads or writes to a single member variable, it would be an accessor method, whereas methods with more complicated control and data flow would not be seen as accessor method. This determination process would be an advanced level of complexity.
 
-For classes, the clean code rule enforces a single responsibility per class. As discussed for detecting a single purpose of a function, detecting a single responsibility of a class requires an understanding of the code. Similarly, a checker would fall into the high level of complexity. On the contrary, it may be possible to use the cohesion metric as an indicator for too many responsibilities of a class. A high cohesion will result in smaller classes that form a logical unit. Smaller logical units can be expected to have fewer responsibilities. Cohesion can be measured as \textit{Lack of Cohesion in Methods} (LCOM) as described by Hitz and Montazeri~\cite{Hitz95measuringcoupling}. An analysis of the AST and call graph should provide all information to calculate the LCOM number. Therefore, we see an automated checker for cohesion on the advanced level. Using the cohesion as a heuristic for the responsibilities of a class, we could detect potential violations against the Single-Responsibility-Principle with an advanced level of complexity.
+For classes, the clean code rule enforces a single responsibility per class. As discussed for detecting a single purpose of a function, detecting a single responsibility of a class requires an understanding of the code. Similarly, a checker would fall into the high level of complexity. On the contrary, it may be possible to use the cohesion metric as an indicator for too many responsibilities of a class. A high cohesion will result in smaller classes that form a logical unit. Smaller logical units can be expected to have fewer responsibilities. Cohesion can be measured as \textit{Lack of Cohesion in Methods} (LCOM) as described by Hitz and Montazeri~\cite{Hitz95measuringcoupling}. An analysis of the AST and call graph should provide all information to calculate the LCOM number. Therefore, we see an automated checker for cohesion on the advanced level. Using the cohesion as a heuristic for the responsibilities of a class, we could detect potential violations against the \high{Single-Responsibility-Principle} with an advanced level of complexity.
 
 An automated check for the decoupling of dependencies can be performed with an advanced level of complexity. All required information is in the code. Finding all class dependencies is possible by combining several ASTs. Following the dependencies, it is possible to determine whether they inherit from an abstract class or implement an interface. In that case, the checker would assume a dependency decoupling. Based on our classification schema, this checker would be in the advanced level of complexity.
 
@@ -292,7 +292,7 @@ Quantitative metrics represent the code quality as quantitative unit. We see the
 The following sections describe common software metrics that express code quality.
 
 \subsection{Cyclomatic Complextiy}\label{sec:cyclomatic_complexity}
-Cyclomatic Complexity is a metric for the complexity of a code section, which was introduced by Thomas McCabe~\cite{mccabe_complexity_1976}. It measures the complexity by counting the number of linearly independent execution paths~\cite{mccabe_complexity_1976}. 
+\high{Cyclomatic Complexity} is a metric for the complexity of a code section, which was introduced by Thomas McCabe~\cite{mccabe_complexity_1976}. It measures the complexity by counting the number of linearly independent execution paths~\cite{mccabe_complexity_1976}. 
 
 An execution path is the subsequent execution of instructions. With control flow structures such as if statements, two execution paths are possible, depending on the evaluation of the if condition. An execution path is linearly independent if it includes one subpath that is not part of any other path. A control flow graph represents all possible control flows as described in \Cref{sec:code_analysis}. \Cref{fig:background_control_flow_graph} shows a control flow graph for a sample function.
 
@@ -318,24 +318,24 @@ def function(a,b):
 \end{lstlisting}
 \end{minipage}
 \end{tabular}
-\caption{Control-flow graph visualisation for a code sample. The graph has six edges, five nodes and one connected component. The Cyclomatic Complexity is 3.}
+\caption{Control-flow graph visualisation for a code sample. The graph has six edges, five nodes and one connected component. The \high{Cyclomatic Complexity} is 3.}
 \label{fig:background_control_flow_graph}
 \end{figure}
 
-The Cyclomatic Complexity on a control-flow graph as the number of linearly independent execution paths is defined as:
+The \high{Cyclomatic Complexity} on a control-flow graph as the number of linearly independent execution paths is defined as:
 \begin{equation}\label{eq:cyclomatic_complexity}
 M = E - N + 2P
 \end{equation}
 
-$E$ is the number of edges, $N$ the number of nodes and $P$ the number of connected components.  A connected graph is a subgraph, in which all nodes are connected to each other by a path. Following this definition, the Cyclomatic Complexity can be calculated. \Cref{fig:background_control_flow_graph} shows a visualisation of a sample python function. The control-flow graph has six edges, five nodes and is one connected component. Using \Cref{eq:cyclomatic_complexity}, the Cyclomatic Complexity is 3.
+$E$ is the number of edges, $N$ the number of nodes and $P$ the number of connected components.  A connected graph is a subgraph, in which all nodes are connected to each other by a path. Following this definition, the \high{Cyclomatic Complexity} can be calculated. \Cref{fig:background_control_flow_graph} shows a visualisation of a sample python function. The control-flow graph has six edges, five nodes and is one connected component. Using \Cref{eq:cyclomatic_complexity}, the \high{Cyclomatic Complexity} is 3.
 
-MacCabe recommends limiting the Cyclomatic Complexity to 10~\cite{mccabe_complexity_1976}. A lower Cyclomatic Complexity improves testability since the complexity represents the number of execution paths that need to be tested. Therefore, $M$ is the upper bound for the number of test cases for full branch coverage. 
-Software that has to comply with safety standards like ISO 26262 (for electronics in automobiles) or IEC 62304 (for medical devices) are mandated to have a low Cyclomatic Complexity~\cite{isotc_22sc_32_iso_2018, isotc_210_iec_2006}.
+MacCabe recommends limiting the \high{Cyclomatic Complexity} to 10~\cite{mccabe_complexity_1976}. A lower \high{Cyclomatic Complexity} improves testability since the complexity represents the number of execution paths that need to be tested. Therefore, $M$ is the upper bound for the number of test cases for full branch coverage. 
+Software that has to comply with safety standards like ISO 26262 (for electronics in automobiles) or IEC 62304 (for medical devices) are mandated to have a low \high{Cyclomatic Complexity}~\cite{isotc_22sc_32_iso_2018, isotc_210_iec_2006}.
 
-Although Cyclomatic Complexity is used throughout the industry, several shortcomings are under critique. First, complexity from data flow is ignored. Working with a larger number of variables and operations, the code becomes more complicated, but the Cyclomatic Complexity does not take this into account. Second, nested code structures are not considered by the metric, although it adds additional difficulty for understanding~\cite{yu_survey_2010}.
+Although \high{Cyclomatic Complexity} is used throughout the industry, several shortcomings are under critique. First, complexity from data flow is ignored. Working with a larger number of variables and operations, the code becomes more complicated, but the \high{Cyclomatic Complexity} does not take this into account. Second, nested code structures are not considered by the metric, although it adds additional difficulty for understanding~\cite{yu_survey_2010}.
 
 \subsection{Halstead Complexity Measures}
-Maurice Halstead introduced the Halstead complexity measures (HCM) in 1977~\cite{halstead1977elements}. Halstead approached the complexity measure with an empirical approach by defining observable and measurable properties and put them into relations.
+Maurice Halstead introduced the \high{Halstead complexity measures} (HCM) in 1977~\cite{halstead1977elements}. Halstead approached the complexity measure with an empirical approach by defining observable and measurable properties and put them into relations.
 
 The measurable properties are operators and operands. Operators are symbols in expressions like an addition, subtraction or multiplication symbol. Operands are the values and variables that are manipulated by the operators. 
 
@@ -385,31 +385,31 @@ Last, the number of bugs correlates with the following relation~\cite{yu_survey_
     B = \frac{V}{3000}
 \end{displaymath}
 
-HCM focus on the complexity introduced by data manipulation but ignores complexity from the control-flow. Since the Cyclomatic Complexity focuses on the control-flow complexity but not on the data-flow complexity, it is practical to use both together to supplement each drawback~\cite{yu_survey_2010}.
+HCM focus on the complexity introduced by data manipulation but ignores complexity from the control-flow. Since the \high{Cyclomatic Complexity} focuses on the control-flow complexity but not on the data-flow complexity, it is practical to use both together to supplement each drawback~\cite{yu_survey_2010}.
 Additionally, the correlation with the number of bugs is based on the programmer's skill estimation with a fixed value of 3000. Since this varies between projects, such an \enquote{experiential and fixed value [...] is doubtable}~\cite{yu_survey_2010}.
 
 \subsection{Software Maintainability Index}
-The software maintainability index was developed by Dan Coleman and Paul Oman in 1994. 16 HP engineers evaluated 16 software systems and scored them in a range from 0 to 100, with 100 representing best maintainability~\cite{coleman_using_1994}. 
+The \high{software maintainability index} was developed by Dan Coleman and Paul Oman in 1994. 16 HP engineers evaluated 16 software systems and scored them in a range from 0 to 100, with 100 representing best maintainability~\cite{coleman_using_1994}. 
 Following a regression analysis, they identified the following equation to match the maintainability of the evaluated systems:
 \begin{displaymath}
 MI = 171 - 5.2 *\ln{\overline{V}} - 0.23 * \overline{M} - 16.2 * \ln{\overline{LOC}} + 50 * \sin{\sqrt{2.4 * C}}
 \end{displaymath}
 $\overline{V}$ is the average Halstead Volume, $\overline{M}$ the average cyclic complexity, $LOC$ the lines of code and $C$ as fraction of comments.
 
-The software maintainability index was defined many years ago with a limited sample size of developers and projects. Additionally, programming languages have changed significantly over time. A study by Sjøberg et al. suggests no correlation between the software maintainability index and actual maintenance effort in a controlled environment~\cite{sjoberg_questioning_nodate}. Although the study only analyes four software projects and lacks generalization, they found a strong anti-correlation with different maintainability metrics. Only the code size seems to correlate with the actual maintainability. The former seems to be consistent with a systematic review on software maintainability predictions and metrics by Riaz et. al~\cite{riaz_systematic_2009}.
+The \high{software maintainability index} was defined many years ago with a limited sample size of developers and projects. Additionally, programming languages have changed significantly over time. A study by Sjøberg et al. suggests no correlation between the \high{software maintainability index} and actual maintenance effort in a controlled environment~\cite{sjoberg_questioning_nodate}. Although the study only analyes four software projects and lacks generalization, they found a strong anti-correlation with different maintainability metrics. Only the code size seems to correlate with the actual maintainability. The former seems to be consistent with a systematic review on software maintainability predictions and metrics by Riaz et. al~\cite{riaz_systematic_2009}.
 
 \subsection{Application on Clean Code}
-The described metrics are used to quantify the code quality. Since the clean code principles have a positive impact on code quality, lower code quality metrics may indicate more rule violations. The Halstead Metric derives the understandability of different parts of the code but does not explain the reason for it. Similarly, a high Cyclomatic Complexity of a function can indicate a violation against the recommended single purpose per function. In other words, the metrics indicate parts of code with low quality without pinpointing a specific violation of clean code rules. 
+The described metrics are used to quantify the code quality. Since the clean code principles have a positive impact on code quality, lower code quality metrics may indicate more rule violations. The \high{Halstead Metric} derives the understandability of different parts of the code but does not explain the reason for it. Similarly, a high \high{Cyclomatic Complexity} of a function can indicate a violation against the recommended single purpose per function. In other words, the metrics indicate parts of code with low quality without pinpointing a specific violation of clean code rules. 
 
 
 \section{Tools for Code Quality Analysis}\label{sec:tool_comparison}
-With quantitative metrics for software quality, different tools can analyse source code and can inform about the increase or decrease in code quality. It is good practice to use static code analysis tools to improve code quality. A static code analysis examines a program by analyzing an AST, the control or data flow, a pointer analysis or an abstract (approximated) execution. In comparison to dynamic analysis, the code is not executed. The result of static analysis can be based on approximations, so there might be false-positive results. An expert has to examine the result if necessary~\cite{prahofer_static_2017}.
+With quantitative metrics for software quality, different tools can analyse source code and can inform about the increase or decrease in code quality. It is good practice to use static code analysis tools to improve code quality. A static code analysis examines a program by analyzing an AST, the control or data flow, a pointer analysis or an abstract (approximated) execution. In comparison to dynamic analysis, the code is not executed. The result of static analysis can be based on approximations, so there might be false positive results. An expert has to examine the result if necessary~\cite{prahofer_static_2017}.
 
-Besides the use of static code analysis for compiler and optimizations, it is also helpful for analyzing the code quality. The tools in this chapter analyse different categories of code quality-related principles:
+Besides the use of static code analysis for compiler and optimizations, it is also helpful for analysing the code quality. The tools in this chapter analyse different categories of code quality-related principles:
 \begin{description}
     \item[Code Guidelines:] A static code analysis can ensure compliance to structural, naming and formatting code guidelines. 
     \item[Standard Compliance:] A requirement for a software may be compliance to an industry-standard like IEC 61508 or ISO 26262~\cite{tc_65sc_65a_iec_2010-1,isotc_22sc_32_iso_2018}. Static code analysis can ensure or at least assist with the compliance.  
-    \item[Code Smells:] Some code smells follow a known pattern and a static code analysis can detect those smells. Since code smells can be an indication for chaotic code, it is best if these smells are detected and removed early on.
+    \item[Code Smells:] Code smells are characteristics of source code that can indicate a underlying problem~\cite{fowler2018refactoring}. Some code smells follow a known pattern and a static code analysis can detect those smells. Since code smells can be an indication for chaotic code, it is best if these smells are detected and removed early on.
     \item[Bug Detection:] Although bug detection with static analysis can not detect all bugs, every detected bug before a software release is essential. Examples for detected bugs are unhandled exceptions or concurrency issues~\cite{delaitre_evaluating_2015}.
     \item[Security Vulnerability Detection:] Static code analysis tools can detect some security vulnerabilities like SQL Injection Flaws, buffer overflows and missing input validation with high confidence. Since these are some common, easy to exploit vulnerabilities, an analysis for security vulnerabilities can increase the security of the overall software~\cite{wichers_source_nodate}.  
 \end{description}
@@ -430,7 +430,7 @@ PMD is an \enquote{extensible cross-language static code analyzer}~\cite{noautho
 Depending on the target language, PMD supports different rules. For Java, PMD has rules in the following categories~\cite{noauthor_documentation_nodate}.
 \begin{description}
     \item[Best practices:] Best practices include rules like one declaration per line or using a logger instead of a \textit{System.out.print()} in production systems.  
-    \item[Coding Style and Design] Several rules to improve the readability of the code like naming conventions, ordering of declarations and design problems like a violation of the Law of Demeter, Cyclomatic Complexity calculation and detection of large classes.
+    \item[Coding Style and Design] Several rules to improve the readability of the code like naming conventions, ordering of declarations and design problems like a violation of the \high{Law of Demeter}Demeter, \high{Cyclomatic Complexity} calculation and detection of large classes.
     \item[Multithreading:]  Rules to mainly prevent the use of not thread-safe objects or methods. Due to the nature of multithreading and unpredictable scheduling of threads, problems like unpredictable values of variables or deadlocks may occur. Since they may not occur in every execution, they are hard to spot and to debug. Consequently, warnings of using non-thread-safe code may save hours of debugging.
     \item[Performance:] These rules flag known operations that have hidden performance implications. For example, string concatenation with the plus operator in Java causes the Java Virtual Machine to create an internal string buffer. This can slow down the program execution if numerous string concatenations are performed.
     \item[Security:] Security-wise, PMD only checks for hardcoded values for cryptographic operations like keys and initialization vectors.
@@ -442,7 +442,7 @@ A user can expand the PMD ruleset in two ways: A XPath expression can be specifi
 \subsection{Codacy}
 Codacy is a software to \enquote{check your code quality}~\cite{noauthor_codacy_nodate} for more than 30 programming languages. It is available as a cloud-based subscription service with a free tier for open-source projects and a self-host option for enterprise customers.  Codacy runs as cloud software, and a user can connect a GitHub, GitLab or Bitbucket repository that will be scanned automatically on every push or trigger a scan of local files with a command-line program. Additionally, a badge can be added to the readme page to show off the analysis results.
 
-Codacy can be seen as a platform that runs multiple different "analysis engines". These analysis engines combine multiple tools depending on the language. For Python, Codacy uses  PyLint, Bandit (a scanner for security issues) and a metric plugin.
+Codacy can be seen as a platform that runs multiple different \texttt{analysis engines}. These analysis engines combine multiple tools depending on the language. For Python, Codacy uses  PyLint, Bandit (a scanner for security issues) and a metric plugin.
 Due to the licensing of those analysis engines, the engines are open-sourced, whereas the Codacy platform is proprietary.
 
 Depending on the language, Codacy supports scanning for common security and maintainability issues. The later is faced with scanning for Code Standardization, Test Coverage and Code Smells to reduce technical debt.
@@ -460,21 +460,21 @@ For Python, Sonarqube offers more than 170 rules. These rules are in the followi
     \item[Security Vulnerabilities:]  A security vulnerability analysis reveals a code that is at risk of being exploited and has to be fixed immediately. For example, misconfigurations of cryptographic libraries can be revealed quickly, and possible damage can be proactively prevented.   
 \end{description}
 
-Additionally, Sonarqube offers several metrics like test coverage and a custom derivate of Cyclomatic Complexity named Cognitive Complexity~\cite{campbell2018cognitive}. The authors see several shortcomings in the original Cyclomatic Complexity model:
+Additionally, Sonarqube offers several metrics like test coverage and a custom derivate of \high{Cyclomatic Complexity} named Cognitive Complexity~\cite{campbell2018cognitive}. The authors see several shortcomings in the original \high{Cyclomatic Complexity} model:
 \begin{itemize}
-    \item Parts of code with the same Cyclomatic Complexity do not necessarily represent an equal difficulty for maintenance.
-    \item  Cyclomatic Complexity does not include modern language features like exception handling and lambdas. Therefore, the score can not be accurate anymore.
-    \item Cyclomatic Complexity lacks useability on a class or module level. Small classes with complex methods would have the same Cyclomatic Complexity as large classes with low complexity per method (such as getter or setter methods). The informative value of the metric is low.
+    \item Parts of code with the same \high{Cyclomatic Complexity} do not necessarily represent an equal difficulty for maintenance.
+    \item  \high{Cyclomatic Complexity} does not include modern language features like exception handling and lambdas. Therefore, the score can not be accurate anymore.
+    \item \high{Cyclomatic Complexity} lacks useability on a class or module level. Small classes with complex methods would have the same \high{Cyclomatic Complexity} as large classes with low complexity per method (such as getter or setter methods). The informative value of the metric is low.
 \end{itemize}
 Cognitive Complexity addresses these points, especially the incorporation of modern language features and meaningfulness on class and module level.
 
 The calculation is based on three rules~\cite{campbell2018cognitive}:
 \begin{description}
     \item[Ignore Shorthand Structures]: Method calls condense multiple statements into one easy-to-understand statement. Therefore, method calls as shorthand are ignored for the score. Similarly, shorthand structures like the null-coalescing operator reduce the Cognitive Complexity compared to an extensive null check and are therefore ignored for score calculation.
-    \item[Break in the linear control flow]: A break in the expected linear control flow by loop structures and conditionals adds to Cognitive Complexity as well as to Cyclomatic Complexity. Additionally, catches, switches, sequences of logical operators, recursion, and jumps also adds to Cognitive Complexity, since these structures break the linear control flow.
+    \item[Break in the linear control flow]: A break in the expected linear control flow by loop structures and conditionals adds to Cognitive Complexity as well as to \high{Cyclomatic Complexity}. Additionally, catches, switches, sequences of logical operators, recursion, and jumps also adds to Cognitive Complexity, since these structures break the linear control flow.
     \item[Nested flow-breaking structures]: Nested flow-breaking structures additionally increase the Cognitive Complexity, since they harder to understand than non-nested flow-breaking structures.  
 \end{description}
-The method-level Cognitive Complexity score represents a relative complexity difference between methods that would have the same Cyclomatic Complexity. Furthermore, the aggregated Cognitive Complexity on a class or module level differentiates between classes with many, simple methods and classes with a few, but complex methods. As a result, data transfer objects (containing mainly getters/setters) have a lower score compared to classes with complex code behaviour~\cite{campbell2018cognitive}.
+The method-level Cognitive Complexity score represents a relative complexity difference between methods that would have the same \high{Cyclomatic Complexity}. Furthermore, the aggregated Cognitive Complexity on a class or module level differentiates between classes with many, simple methods and classes with a few, but complex methods. As a result, data transfer objects (containing mainly getters/setters) have a lower score compared to classes with complex code behaviour~\cite{campbell2018cognitive}.
 
 Developers can extend Sonarqube similarly to PMD. They can write a Java plugin that can access the AST but also a semantic model of the code. Additional, extensions can be created that provide the functionality to other extensions. The Java plugin is compiled into a \texttt{.jar} file and placed into the plugin dir of the Sonarqube installation. For more straightforward rules, XPath expressions are possible through the web interface and allow a quick extension. For instance, if developers observe bad code style during a pull request review, they can quickly write a rule to enforce this rule in all subsequent pull requests automatically.
 
