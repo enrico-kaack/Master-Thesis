@@ -5,7 +5,7 @@ Nowadays, software has become a vast market with a revenue of over 450 billion U
 The objectives of the clean code principles are a high level of readability and understandability of the source code~\cite{martin_clean_2009}. Thus, the clean code principles comprise a set of rules and recommendations about writing code that is easy to read and understand. For computers, it is irrelevant whether or not a human can understand the code since they only execute the instructions. However, any developer who reads code that is written in accordance to the clean code principles profits from it. 
 
 In \Cref{list:motivating_example}, the first listing shows an implementation of an algorithm without paying attention to clean code rules. In the second listing, the same algorithm is implemented following the clean code rules such as having one purpose per function or method calls in if-conditions. Executing the code will yield the same result. However, it is far simpler to understand the second than the first code. Reading the clean \texttt{get\_students\_eligible\_for\_exam} function lets the developer immediately understand the two eligibility criteria for the exam. Comments like in the first example are not even necessary, since the code is self-describing.
-Consequently, using or modifying the lower code is much easier and less time-consuming.
+Consequently, using or modifying the second code is much easier and less time-consuming.
 
 \begin{figure}[h]
 \begin{tabular}{p{\textwidth}}
@@ -18,7 +18,7 @@ class Student():
         self.exercises = []
 
 def get_students_eligible_for_exam(students):
-    #filter for students with enough points
+    # filter for students with enough points
     enough_points = []
     for student in students:
       points = 0
@@ -27,7 +27,7 @@ def get_students_eligible_for_exam(students):
       if points >= 60:
         enough_points.append(student)
     
-    #only students with at least 8 completed exercise
+    # only students with at least 8 completed exercise
     eligible = []
     for student in enough_points:
       if len(student.exercises) >= 8:
@@ -61,7 +61,7 @@ def get_students_eligible_for_exam(students):
     eligible_students = []
         for student in students:
         if ExamEligibilityChecker.has_student_enough_points(student) 
-        and ExamEligibilityChecker.has_student_enough_completed_exercises(student):
+            and ExamEligibilityChecker.has_student_enough_completed_exercises(student):
             eligible_students.append(student)
     return eligible_students    
 \end{lstlisting}
@@ -73,7 +73,7 @@ def get_students_eligible_for_exam(students):
 
 
 An automated tool for checking violations of the clean code rules can preserve the readability and understandability of the code for future modifications. Integrated into a build pipeline, it could reject code changes if necessary and act as a quality gate.
-Furthermore, it can teach students about clean code rules. In practical works, an automated checker could assess the students' code and recommend improvements. The students can change the code and get immediate feedback if they bettered or worsen the code. Contrary to manual code review, the automated checkers allow a consistent detection quality.
+Furthermore, it can teach students about clean code rules. In practical works, an automated checker could assess the students' code and recommend improvements. The students can change the code and get immediate feedback if they improved the code. Contrary to manual code review, the automated checkers allow a consistent detection quality.
 
 
 \section{Objectives and Contributions}
@@ -88,13 +88,13 @@ We have the following main objectives:
 To fulfil the objectives, we made the following contributions:
 \begin{itemize}
     \item Overview over code quality, clean code rules, quantitative metrics and existing tools.
-    \item Proposal for a taxonomy of the implementation complexity of automated checker for clean code violations.
+    \item Proposal for a taxonomy of the implementation complexity of automated checkers for clean code violations.
     \item Design and implementation of the clean code analysis platform (CCAP) with focus on extensibility, useability and integration capabilities.
     \item Extension of CCAP with checkers for returning \texttt{None} and using direct comparisons in conditionals.
     \item Comparison of our CCAP with preexisting tools.
     \item Creation of a dataset and evaluation of a support-vector classifier, random forest classifier, gradient boosting classifier and an LSTM-based neural network on detecting problematic code patterns for that we may not find a deterministic checker.
     \item Introduction of an automated way to manipulate the code to contain unseen problem variations.
-    \item Simulation of the impact of having a hand-collected dataset on the machine-learning models if the samples do not contain all possible variations of a problem pattern. We give ideas on how to handle the situation in a time-optimising way.
+    \item Simulation of the impact of having a hand-collected dataset for the machine learning models if the samples do not contain all possible variations of a problem pattern. We give ideas on how to handle the situation in a time-optimising way.
 \end{itemize}
 
 Based on our main objectives, we will evaluate the following research questions:
@@ -108,4 +108,4 @@ Based on our main objectives, we will evaluate the following research questions:
 
 \section{Structure}
 This thesis is organised as follows: In \Cref{chap:background} we introduce code quality and clean code principles. We then classify the clean code principles depending on the implementation complexity of an automated checker. We introduce several quantitative metrics to measure code quality and provide an overview of existing tools that can determine the code quality and clean code violations to an extent. 
-In \Cref{chap:approach}, we describe our approach for the CCAP and the machine-learning-based clean code classification. We evaluate the CCAP and machine-learning models and answer the research questions in \Cref{chap:evaluation}. Finally, we conclude our work with a summary and outlook in \Cref{chap:conclusion}.
+In \Cref{chap:approach}, we describe our approach for the CCAP and the machine learning-based clean code classification. We evaluate the CCAP and machine learning models and answer the research questions in \Cref{chap:evaluation}. Finally, we conclude our work with a summary and outlook in \Cref{chap:conclusion}.
